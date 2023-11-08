@@ -1,47 +1,33 @@
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
-import { useState, useEffect } from 'react';
-import Home from './pages/Home';
-import Login from './pages/Login';
-
-import { initializeApp } from "firebase/app";
-import { getAnalytics } from "firebase/analytics";
-
-const firebaseConfig = {
-  apiKey: "AIzaSyACzy5axRJO9MT_0PAOj_s4jS48LwYzZsU",
-  authDomain: "felloway-30160.firebaseapp.com",
-  projectId: "felloway-30160",
-  storageBucket: "felloway-30160.appspot.com",
-  messagingSenderId: "1001735400507",
-  appId: "1:1001735400507:web:9600cdb2a6c690f5ed801e",
-  measurementId: "G-RZRZE7HY9K"
-};
-
-// Initialize Firebase
-const firebase = initializeApp(firebaseConfig);
-const analytics = getAnalytics(firebase);
+import { useState } from "react";
+import { CssBaseline } from "@mui/material";
+import { Route, Routes, Navigate, useLocation } from "react-router-dom";
+import Home from "./pages/Home";
+import Login from "./pages/Login";
+import Signup from "./pages/Signup";
 
 function App() {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-
-  useEffect(() => {
-    // Vérifie si l'utilisateur est connecté
-    const userIsLoggedIn = checkIfUserIsLoggedIn();
-    setIsLoggedIn(userIsLoggedIn);
-  }, []);
-
-  function checkIfUserIsLoggedIn() {
-    // Vérifie si l'utilisateur est connecté en utilisant Firebase
-    const user = firebase.auth().currentUser;
-    return !!user;
-  }
+  const [auth, setAuth] = useState(false);
+  const location = useLocation();
 
   return (
-    <Router>
+    <>
+      <CssBaseline />
       <Routes>
-        <Route path="/" element={isLoggedIn ? <Home firebase={firebase} /> : <Navigate to="/login" />} />
-        <Route path="/login" element={!isLoggedIn ? <Login firebase={firebase} /> : <Navigate to="/" />} />
+        <Route path="/login" element={<Login setAuth={setAuth} />} />
+        <Route path="/signup" element={<Signup setAuth={setAuth} />} />
+        <Route path="/home" element={<Home setAuth={setAuth} />} />
+        <Route
+          path="/"
+          element={
+            auth ? (
+              <Home setAuth={setAuth} />
+            ) : (
+              <Navigate to="/login" state={{ from: location }} replace />
+            )
+          }
+        />
       </Routes>
-    </Router>
+    </>
   );
 }
 
