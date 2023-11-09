@@ -2,7 +2,7 @@ import { Container } from "@mui/material";
 import NavBar from "../components/BottomNavBar"
 //////////////////////////////////////
 
-const Home = () => {
+const Settings = () => {
 
   return (
     <Container
@@ -14,7 +14,7 @@ const Home = () => {
         minHeight: "100vh",
       }}
     >
-      <h1>Page accueil</h1>
+      <h1>Page Settings</h1>
       <div style={{ marginTop: "auto", display: "flex", width: "100%" }}>
         <NavBar/>
       </div>
@@ -22,4 +22,4 @@ const Home = () => {
   );
 };
 
-export default Home;
+export default Settings;

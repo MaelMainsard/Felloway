@@ -1,38 +1,92 @@
-.App {
-  text-align: center;
+*,
+*:before,
+*:after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+html,
+body {
+  max-width: 100vw;
+  font-size: 16px;
+  font-family: sans-serif;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+.send-message {
+  position: fixed;
+  padding-right: 30px;
+  bottom: 80px;
+  width: 100%;
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+}
+.send-message > input {
+  height: 40px;
+  padding: 10px;
+  border-radius: 5px 0 0 5px;
+  border: 2px;
+  flex-grow: 1;
+  background-color: rgb(219, 210, 210);
+  color: #1c2c4c;
+  font-size: 1rem;
+}
+.send-message > input:placeholder {
+  color: #ddd;
+}
+.send-message > :is(input, button):focus {
+  outline: none;
+  border-bottom: 1px solid #7cc5d9;
+}
+.send-message > button {
+  width: 70px;
+  height: 40px;
+  padding: 10px 10px;
+  border-radius: 0 5px 5px 0;
+  color: #242443;
+  border: 1px solid #7cc5d9;
+  background-color: #7cc5d9;
+  font-weight: 600;
 }
 
-.App-link {
-  color: #61dafb;
+/* chat component */
+.messages-wrapper {
+  padding-top: 30px;
+  margin-bottom: 60px;
 }
-
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.chat-bubble {
+  border-radius: 20px 20px 20px 0;
+  padding: 15px;
+  background-color: #f3f4f9;
+  color: #1c2c4c;
+  width: max-content;
+  max-width: calc(100% - 50px);
+  box-shadow: -2px 2px 1px 1px rgb(219, 210, 210);
+  display: flex;
+  align-items: flex-start;
+  margin-bottom: 20px;
+}
+.chat-bubble.right {
+  margin-left: auto;
+  border-radius: 20px 20px 0 20px;
+  background-color: #7cc5d9;
+  box-shadow: -2px 2px 1px 1px #88dded;
+}
+.chat-bubble__left {
+  width: 35px;
+  height: 35px;
+  border-radius: 50%;
+  margin-right: 10px;
+}
+.user-name {
+  font-weight: bold;
+  margin-bottom: 5px;
+  font-size: 0.9rem;
+  color: #1c2c4c;
+}
+.user-message {
+  word-break: break-all;
+}
+.message-time {
+  display: block;
+  text-align: right;
 }

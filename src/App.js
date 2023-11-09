@@ -4,7 +4,10 @@ import { Route, Routes, Navigate, useLocation } from "react-router-dom";
 import Home from "./pages/Home";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
+import Chat from "./pages/Chat"
+import Settings from "./pages/Settings"
 
+import "./App.css"
 function App() {
   const [auth, setAuth] = useState(false);
   const location = useLocation();
@@ -15,7 +18,9 @@ function App() {
       <Routes>
         <Route path="/login" element={<Login setAuth={setAuth} />} />
         <Route path="/signup" element={<Signup setAuth={setAuth} />} />
-        <Route path="/home" element={<Home setAuth={setAuth} />} />
+        <Route path="/home" element={<Home/>} />
+        <Route path="/chat" element={<Chat/>} />
+        <Route path="/settings" element={<Settings/>} />
         <Route
           path="/"
           element={

@@ -1,8 +1,9 @@
 import { Container } from "@mui/material";
 import NavBar from "../components/BottomNavBar"
+import ChatBox from "../components/ChatBox"
 //////////////////////////////////////
 
-const Home = () => {
+const ChatMenu = () => {
 
   return (
     <Container
@@ -14,7 +15,7 @@ const Home = () => {
         minHeight: "100vh",
       }}
     >
-      <h1>Page accueil</h1>
+      <ChatBox/>
       <div style={{ marginTop: "auto", display: "flex", width: "100%" }}>
         <NavBar/>
       </div>
@@ -22,4 +23,4 @@ const Home = () => {
   );
 };
 
-export default Home;
+export default ChatMenu;

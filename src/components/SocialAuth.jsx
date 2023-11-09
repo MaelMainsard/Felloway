@@ -1,7 +1,7 @@
 import { Icon } from "@iconify/react";
-import { Stack, Button, IconButton } from "@mui/material";
-import { useLocation, useNavigate } from "react-router-dom";
-import { app } from "../Firebase_conf"
+import { Stack, IconButton } from "@mui/material";
+import { useNavigate } from "react-router-dom";
+import { app } from "../config/Firebase"
 import { getAuth, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
 
 const auth = getAuth(app);

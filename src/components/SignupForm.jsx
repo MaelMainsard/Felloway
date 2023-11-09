@@ -13,7 +13,7 @@ import { LoadingButton } from "@mui/lab";
 import { Icon } from "@iconify/react";
 import { motion } from "framer-motion";
 
-import { app } from "../Firebase_conf"
+import { app } from "../config/Firebase"
 import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
 
 const auth = getAuth(app);

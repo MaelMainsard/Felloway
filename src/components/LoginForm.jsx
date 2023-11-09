@@ -2,9 +2,6 @@ import React, { useState } from "react";
 import { Link as RouterLink, useLocation, useNavigate } from "react-router-dom";
 import { Form, FormikProvider, useFormik } from "formik";
 import * as Yup from "yup";
-import { app } from "../Firebase_conf"
-import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
-
 import {
   Box,
   Checkbox,
@@ -18,6 +15,9 @@ import {
 import { LoadingButton } from "@mui/lab";
 import { Icon } from "@iconify/react";
 import { motion } from "framer-motion";
+
+import { app } from "../config/Firebase"
+import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 
 const auth = getAuth(app);
 
