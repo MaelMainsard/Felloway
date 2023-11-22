@@ -10,8 +10,8 @@ import Avatar from '@mui/material/Avatar';
 
 
 
-const Profil = () => {
-  const [image, setImage] = useState("https://cdn.pixabay.com/photo/2015/11/16/14/43/cat-1045782_1280.jpg");
+const Profil = ({user}) => {
+  const [image, setImage] = useState(user.photoURL);
 
   const handleImageChange = (e) => {
     setImage(e.target.value);
