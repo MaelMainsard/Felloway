@@ -7,7 +7,7 @@ import { getAuth, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
 const auth = getAuth(app);
 const provider = new GoogleAuthProvider();
 
-const SocialAuth = ({ setAuth }) => {
+const SocialAuth = ({ setAuth, setUser }) => {
 
   const navigate = useNavigate();
 
@@ -24,7 +24,7 @@ const SocialAuth = ({ setAuth }) => {
         onClick={() => {
           signInWithPopup(auth, provider)
             .then((result) => {
-              const credential = GoogleAuthProvider.credentialFromResult(result);
+              setUser(result.user)
               setAuth(true);
               navigate("/", { replace: true });
             })

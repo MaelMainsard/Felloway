@@ -46,7 +46,7 @@ const fadeInUp = {
   },
 };
 
-const Login = ({ setAuth }) => {
+const Login = ({ setAuth, setUser }) => {
   return (
     <RootStyle>
       <Container maxWidth="sm">
@@ -59,7 +59,7 @@ const Login = ({ setAuth }) => {
           </HeadingStyle>
 
           <Box component={motion.div} {...fadeInUp}>
-            <SocialAuth setAuth={setAuth}/>
+            <SocialAuth setAuth={setAuth} setUser={setUser}/>
           </Box>
 
           <Divider sx={{ my: 3 }} component={motion.div} {...fadeInUp}>
@@ -68,7 +68,7 @@ const Login = ({ setAuth }) => {
             </Typography>
           </Divider>
 
-          <LoginForm setAuth={setAuth} />
+          <LoginForm setAuth={setAuth} setUser={setUser} />
 
           <Typography
             component={motion.p}

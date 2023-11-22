@@ -32,7 +32,7 @@ const animate = {
   },
 };
 
-const LoginForm = ({ setAuth }) => {
+const LoginForm = ({ setAuth, setUser }) => {
   const navigate = useNavigate();
   const location = useLocation();
   const from = location.state?.from?.pathname || "/";
@@ -58,6 +58,7 @@ const LoginForm = ({ setAuth }) => {
         .then((userCredential) => {
           // Signed in 
           const user = userCredential.user;
+          setUser(user);
           setAuth(true);
           navigate(from, { replace: true });
           // ...
