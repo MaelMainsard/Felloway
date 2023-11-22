@@ -69,7 +69,7 @@ const SignupForm = ({ setAuth }) => {
       } catch (error) {
         switch (error.code) {
           case 'auth/email-already-in-use':
-            setErrorText(`Email address already in use.`);
+            setErrorText(`This email is already associated with a Google Account. Please sign in with Google.`);
             break;
           case 'auth/invalid-email':
             setErrorText(`Email address is invalid.`);
