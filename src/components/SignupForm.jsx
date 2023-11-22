@@ -1,4 +1,5 @@
 import * as Yup from "yup";
+import { Typography } from "@mui/material";
 import { useState } from "react";
 import { useFormik, Form, FormikProvider } from "formik";
 import { useNavigate } from "react-router-dom";
@@ -14,7 +15,7 @@ import { Icon } from "@iconify/react";
 import { motion } from "framer-motion";
 
 import { app } from "../config/Firebase"
-import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
+import { getAuth, createUserWithEmailAndPassword, fetchSignInMethodsForEmail } from "firebase/auth";
 
 const auth = getAuth(app);
 
@@ -34,6 +35,7 @@ const SignupForm = ({ setAuth }) => {
   const navigate = useNavigate();
 
   const [showPassword, setShowPassword] = useState(false);
+  const [errorText, setErrorText] = useState("");
 
   const SignupSchema = Yup.object().shape({
     firstName: Yup.string()
@@ -47,7 +49,7 @@ const SignupForm = ({ setAuth }) => {
     email: Yup.string()
       .email("Email must be a valid email address")
       .required("Email is required"),
-    password: Yup.string().required("Password is required"),
+    password: Yup.string().required("Password is required").min(8, "Password must be at least 8 characters"),
   });
 
   const formik = useFormik({
@@ -58,20 +60,23 @@ const SignupForm = ({ setAuth }) => {
       password: "",
     },
     validationSchema: SignupSchema,
-    onSubmit: () => {
-      createUserWithEmailAndPassword(auth, formik.values.email, formik.values.password)
-        .then((userCredential) => {
-          // Signed up 
-          const user = userCredential.user;
-          setAuth(true);
-          navigate("/", { replace: true });
-          // ...
-        })
-        .catch((error) => {
-          const errorCode = error.code;
-          const errorMessage = error.message;
-          // ..
-        });
+    onSubmit: async () => {
+      try {
+        const userCredential = await createUserWithEmailAndPassword(auth, formik.values.email, formik.values.password);
+        const user = userCredential.user;
+        setAuth(true);
+        navigate("/", { replace: true });
+      } catch (error) {
+        const errorCode = error.code;
+        const errorMessage = error.message;
+
+        if (errorCode === 'auth/email-already-in-use') {
+          setErrorText("Email already exists");
+        } else {
+          console.error("Firebase Error:", errorCode, errorMessage);
+        }
+      }
+
     },
   });
 
@@ -147,6 +152,12 @@ const SignupForm = ({ setAuth }) => {
               helperText={touched.password && errors.password}
             />
           </Stack>
+
+          {errorText && (
+            <Typography color="error" variant="body2">
+              {errorText}
+            </Typography>
+          )}
 
           <Box
             component={motion.div}
