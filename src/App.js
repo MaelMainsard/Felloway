@@ -4,8 +4,9 @@ import { Route, Routes, Navigate, useLocation } from "react-router-dom";
 import Home from "./pages/Home";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
-import Chat from "./pages/Chat"
-import Settings from "./pages/Settings"
+import Chat from "./pages/Chat";
+import Settings from "./pages/Settings";
+import Profil from "./pages/Profil";
 
 import "./App.css"
 function App() {
@@ -21,6 +22,7 @@ function App() {
         <Route path="/home" element={<Home/>} />
         <Route path="/chat" element={<Chat/>} />
         <Route path="/settings" element={<Settings/>} />
+        <Route path="/profil" element={<Profil/>} />
         <Route
           path="/"
           element={
