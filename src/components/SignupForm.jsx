@@ -30,7 +30,7 @@ const animate = {
   },
 };
 
-const SignupForm = ({ setAuth }) => {
+const SignupForm = ({ setAuth, setUser }) => {
   const navigate = useNavigate();
 
   const [showPassword, setShowPassword] = useState(false);
@@ -63,6 +63,7 @@ const SignupForm = ({ setAuth }) => {
         .then((userCredential) => {
           // Signed up 
           const user = userCredential.user;
+          setUser(user)
           setAuth(true);
           navigate("/", { replace: true });
           // ...

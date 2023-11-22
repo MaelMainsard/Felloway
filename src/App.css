@@ -12,81 +12,47 @@ body {
   font-size: 16px;
   font-family: sans-serif;
 }
-
-.send-message {
-  position: fixed;
-  padding-right: 30px;
-  bottom: 80px;
-  width: 100%;
+.chatMenuHeader{
   display: flex;
+  padding-top: 10px;
+  justify-content: space-between;
 }
-.send-message > input {
-  height: 40px;
+.chatMenuCircle {
+  background-color: #f8f8f8;
+  border-radius: 10rem;
   padding: 10px;
-  border-radius: 5px 0 0 5px;
-  border: 2px;
-  flex-grow: 1;
-  background-color: rgb(219, 210, 210);
-  color: #1c2c4c;
-  font-size: 1rem;
-}
-.send-message > input:placeholder {
-  color: #ddd;
-}
-.send-message > :is(input, button):focus {
-  outline: none;
-  border-bottom: 1px solid #7cc5d9;
-}
-.send-message > button {
-  width: 70px;
-  height: 40px;
-  padding: 10px 10px;
-  border-radius: 0 5px 5px 0;
-  color: #242443;
-  border: 1px solid #7cc5d9;
-  background-color: #7cc5d9;
-  font-weight: 600;
+  width: 50px;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-/* chat component */
-.messages-wrapper {
-  padding-top: 30px;
-  margin-bottom: 60px;
+.chatMenuCircle img {
+  width: 60%; /* Ajustez la largeur de l'image selon vos besoins */
+  height: auto; /* Maintient le rapport hauteur/largeur de l'image */
+  border-radius: 50%; /* Pour un effet de bord arrondi sur l'image */
 }
-.chat-bubble {
-  border-radius: 20px 20px 20px 0;
-  padding: 15px;
-  background-color: #f3f4f9;
-  color: #1c2c4c;
-  width: max-content;
-  max-width: calc(100% - 50px);
-  box-shadow: -2px 2px 1px 1px rgb(219, 210, 210);
+
+.chatMenuToggle{
+  background-color: #f8f8f8;
+  border-radius: 10rem;
+  padding: 5px;
+  height: 50px;
   display: flex;
-  align-items: flex-start;
-  margin-bottom: 20px;
+  align-items: center;
+  justify-content: center;
 }
-.chat-bubble.right {
-  margin-left: auto;
-  border-radius: 20px 20px 0 20px;
-  background-color: #7cc5d9;
-  box-shadow: -2px 2px 1px 1px #88dded;
+
+.chatMenuToggleButton{
+  padding: 10px;
+  border-radius: 10rem;
+  background-color: blue;
+  cursor: pointer;
 }
-.chat-bubble__left {
-  width: 35px;
-  height: 35px;
-  border-radius: 50%;
-  margin-right: 10px;
-}
-.user-name {
-  font-weight: bold;
-  margin-bottom: 5px;
-  font-size: 0.9rem;
-  color: #1c2c4c;
-}
-.user-message {
-  word-break: break-all;
-}
-.message-time {
-  display: block;
-  text-align: right;
+
+.chatMenuToggleButton h5{
+  color: #c7c7c7;
+  padding-left: 15px;
+  padding-right: 15px;
 }

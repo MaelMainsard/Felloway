@@ -11,16 +11,17 @@ import Profil from "./pages/Profil";
 import "./App.css"
 function App() {
   const [auth, setAuth] = useState(false);
+  const [user, setUser] = useState(null)
   const location = useLocation();
 
   return (
     <>
       <CssBaseline />
       <Routes>
-        <Route path="/login" element={<Login setAuth={setAuth} />} />
-        <Route path="/signup" element={<Signup setAuth={setAuth} />} />
+        <Route path="/login" element={<Login setAuth={setAuth} setUser={setUser}/>} />
+        <Route path="/signup" element={<Signup setAuth={setAuth} setUser={setUser}/>} />
         <Route path="/home" element={<Home/>} />
-        <Route path="/chat" element={<Chat/>} />
+        <Route path="/chat" element={<Chat user={user}/>} />
         <Route path="/settings" element={<Settings/>} />
         <Route path="/profil" element={<Profil/>} />
         <Route
