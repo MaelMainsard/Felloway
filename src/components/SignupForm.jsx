@@ -67,13 +67,19 @@ const SignupForm = ({ setAuth }) => {
         setAuth(true);
         navigate("/", { replace: true });
       } catch (error) {
-        const errorCode = error.code;
-        const errorMessage = error.message;
-
-        if (errorCode === 'auth/email-already-in-use') {
-          setErrorText("Email already exists");
-        } else {
-          console.error("Firebase Error:", errorCode, errorMessage);
+        switch (error.code) {
+          case 'auth/email-already-in-use':
+            setErrorText(`Email address already in use.`);
+            break;
+          case 'auth/invalid-email':
+            setErrorText(`Email address is invalid.`);
+            break;
+          case 'auth/operation-not-allowed':
+            setErrorText(`Error during sign up.`);
+            break;
+          case 'auth/weak-password':
+            setErrorText('Password is not strong enough. Add additional characters including special characters and numbers.');
+            break;
         }
       }
 
