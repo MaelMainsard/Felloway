@@ -20,7 +20,7 @@ function App() {
         <Route path="/login" element={<Login setAuth={setAuth} setUser={setUser}/>} />
         <Route path="/signup" element={<Signup setAuth={setAuth} setUser={setUser}/>} />
         <Route path="/home" element={<Home/>} />
-        <Route path="/chat" element={<Chat user={user}/>} />
+        <Route path="/chat" element={<Chat user={user} setUser={setUser}/>} />
         <Route path="/settings" element={<Settings/>} />
         <Route
           path="/"

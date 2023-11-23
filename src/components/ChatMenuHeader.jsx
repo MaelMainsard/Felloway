@@ -1,3 +1,7 @@
+import { AddMessageIcon } from '../components/Loader'
+import { GetUserAvatar } from '../controller/messagePreviewController'
+import React, { useState, useEffect } from 'react';
+
 const ChatMenuHeader = ({user, setShowMessage, showMessage}) => {
 
   const handleToggleBackground = () => {
@@ -20,10 +24,22 @@ const ChatMenuHeader = ({user, setShowMessage, showMessage}) => {
     color: showMessage ? '#c7c7c7' : '#ffffff', // Changer la couleur du texte
   };
 
+  const [avatarComponent, setAvatarComponent] = useState(null);
+
+
+  useEffect(() => {
+    const fetchAvatar = async () => {
+      const avatar = await GetUserAvatar({ user });
+      setAvatarComponent(avatar);
+    };
+
+    fetchAvatar();
+  }, [user]);
+
   return (
     <div className="chatMenuHeader">
       <div className="chatMenuCircle">
-        <img src={user.photoURL} alt="Avatar" style={{width: '100%'}} />
+        {avatarComponent}
       </div>
       <div className="chatMenuToggle">
         <div className='chatMenuToggleButton' style={buttonStyle} onClick={handleToggleBackground}>
@@ -34,7 +50,7 @@ const ChatMenuHeader = ({user, setShowMessage, showMessage}) => {
         </div>
       </div>
       <div className="chatMenuCircle">
-        <img src="/static/bell.png" className="bell" alt="Bell" />
+        <AddMessageIcon/>
       </div>
     </div>
   );
