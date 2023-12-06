@@ -16,7 +16,7 @@ import { LoadingButton } from "@mui/lab";
 import { Icon } from "@iconify/react";
 import { motion } from "framer-motion";
 
-import { app } from "../config/Firebase"
+import { app } from "../config/Firebase";
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 
 const auth = getAuth(app);
@@ -32,6 +32,9 @@ const animate = {
   },
 };
 
+const INVALID_CREDENTIALS_ERROR = "Email address or password invalid.";
+const WRONG_PASSWORD_ERROR = "Incorrect password. Please try again.";
+
 const LoginForm = ({ setAuth, setUser }) => {
   const navigate = useNavigate();
   const location = useLocation();
@@ -40,9 +43,7 @@ const LoginForm = ({ setAuth, setUser }) => {
   const [showPassword, setShowPassword] = useState(false);
 
   const LoginSchema = Yup.object().shape({
-    email: Yup.string()
-      .email("Provide a valid email address")
-      .required("Email is required"),
+    email: Yup.string().email("Provide a valid email address").required("Email is required"),
     password: Yup.string().required("Password is required"),
   });
 
@@ -53,29 +54,26 @@ const LoginForm = ({ setAuth, setUser }) => {
       remember: true,
     },
     validationSchema: LoginSchema,
-    onSubmit: () => {
-      signInWithEmailAndPassword(auth, formik.values.email, formik.values.password)
-        .then((userCredential) => {
-          // Signed in 
-          const user = userCredential.user;
-          setUser(user);
-          setAuth(true);
-          navigate(from, { replace: true });
-          // ...
-        })
-        .catch((error) => {
-          const errorCode = error.code;
-          const errorMessage = error.message;
+    onSubmit: async (values, { setStatus, setSubmitting }) => {
+      try {
+        const userCredential = await signInWithEmailAndPassword(auth, values.email, values.password);
 
-          formik.setStatus('error')
-          formik.setErrors(errorMessage)
-          formik.setSubmitting(false);
-        });
+        // Signed in
+        const user = userCredential.user;
+        setAuth(true);
+        navigate(from, { replace: true });
+      } catch (error) {
+        if (error.code === "auth/invalid-login-credentials") {
+          setStatus({ error: INVALID_CREDENTIALS_ERROR });
+        } else {
+          setStatus({ error: "An unexpected error occurred. Please try again later." });
+        }
+        setSubmitting(false);
+      }
     },
   });
 
-  const { errors, touched, values, isSubmitting, handleSubmit, getFieldProps } =
-    formik;
+  const { status, errors, touched, isSubmitting, handleSubmit, getFieldProps } = formik;
 
   return (
     <FormikProvider value={formik}>
@@ -119,14 +117,8 @@ const LoginForm = ({ setAuth, setUser }) => {
               InputProps={{
                 endAdornment: (
                   <InputAdornment position="end">
-                    <IconButton
-                      onClick={() => setShowPassword((prev) => !prev)}
-                    >
-                      {showPassword ? (
-                        <Icon icon="eva:eye-fill" />
-                      ) : (
-                        <Icon icon="eva:eye-off-fill" />
-                      )}
+                    <IconButton onClick={() => setShowPassword((prev) => !prev)}>
+                      {showPassword ? <Icon icon="eva:eye-fill" /> : <Icon icon="eva:eye-off-fill" />}
                     </IconButton>
                   </InputAdornment>
                 ),
@@ -147,20 +139,12 @@ const LoginForm = ({ setAuth, setUser }) => {
             >
               <FormControlLabel
                 control={
-                  <Checkbox
-                    {...getFieldProps("remember")}
-                    checked={values.remember}
-                  />
+                  <Checkbox {...getFieldProps("remember")} checked={formik.values.remember} />
                 }
                 label="Remember me"
               />
 
-              <Link
-                component={RouterLink}
-                variant="subtitle2"
-                to="#"
-                underline="hover"
-              >
+              <Link component={RouterLink} variant="subtitle2" to="#" underline="hover">
                 Forgot password?
               </Link>
             </Stack>
@@ -174,9 +158,7 @@ const LoginForm = ({ setAuth, setUser }) => {
             >
               {isSubmitting ? "loading..." : "Login"}
             </LoadingButton>
-            {formik.status === "error" && (
-              <div style={{ color: "red" }}>{formik.errors}</div>
-            )}
+            {status && status.error && <div style={{ color: "red" }}>{status.error}</div>}
           </Box>
         </Box>
       </Form>
