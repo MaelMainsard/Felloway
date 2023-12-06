@@ -2,9 +2,11 @@ import React, { useState } from "react";
 import { Form, FormikProvider, useFormik } from "formik";
 import * as Yup from "yup";
 import { Box, TextField, Button, CircularProgress, Typography } from "@mui/material";
+import { app } from "../config/Firebase";
 import { getAuth, sendPasswordResetEmail } from "firebase/auth";
+import { getFirestore, collection, where, query, getDocs } from "firebase/firestore";
 
-const auth = getAuth();
+const auth = getAuth(app);
 
 const ForgotPasswordForm = () => {
     const [isSubmitting, setSubmitting] = useState(false);
@@ -22,8 +24,24 @@ const ForgotPasswordForm = () => {
         onSubmit: async (values, { setFieldError }) => {
             try {
                 setSubmitting(true);
-                await sendPasswordResetEmail(auth, values.email);
-                setResetEmailSent(true);
+
+                const usersCollection = collection(getFirestore(app), "users");
+                const q = query(usersCollection, where("email", "==", values.email));
+                const querySnapshot = await getDocs(q);
+
+                if (querySnapshot.docs.length === 0) {
+                    setFieldError("email", "No account found with this email address.");
+                    return;
+                }
+
+                const userData = querySnapshot.docs[0].data();
+
+                if (userData.fournisseur === "password") {
+                    await sendPasswordResetEmail(auth, values.email);
+                    setResetEmailSent(true);
+                } else {
+                    setFieldError("email", "This email is associated with a different login method.");
+                }
             } catch (error) {
                 console.error("Error sending password reset email:", error.message);
                 setFieldError("email", "Error sending reset email. Please try again.");
