@@ -20,15 +20,15 @@ function App() {
       <Routes>
         <Route path="/login" element={<Login setAuth={setAuth} setUser={setUser}/>} />
         <Route path="/signup" element={<Signup setAuth={setAuth} setUser={setUser}/>} />
-        <Route path="/home" element={<Home/>} />
+        <Route path="/home" element={<Home user={user}/>} />
         <Route path="/chat" element={<Chat user={user}/>} />
-        <Route path="/settings" element={<Settings/>} />
+        <Route path="/settings" element={<Settings user={user}/>} />
         <Route path="/profil" element={<Profil user={user}/>} />
         <Route
           path="/"
           element={
             auth ? (
-              <Home setAuth={setAuth} />
+              <Home setAuth={setAuth} user={user}/>
             ) : (
               <Navigate to="/login" state={{ from: location }} replace />
             )

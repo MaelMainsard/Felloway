@@ -1,8 +1,29 @@
 import { Container } from "@mui/material";
-import NavBar from "../components/BottomNavBar"
+import NavBar from "../components/BottomNavBar";
+import { useState } from "react";
+import Avatar from '@mui/material/Avatar';
 //////////////////////////////////////
 
-const Home = () => {
+const Home = ({user}) => {
+
+  const [image, setImage] = useState(user.photoURL);
+
+  const handleImageChange = (e) => {
+    setImage(e.target.value);
+  };
+
+  const handleImageUpload = (e) => {
+    const file = e.target.files[0];
+    const reader = new FileReader();
+
+    reader.onloadend = () => {
+      setImage(reader.result);
+    };
+
+    if (file) {
+      reader.readAsDataURL(file);
+    }
+  };
 
   return (
     <Container
@@ -14,7 +35,8 @@ const Home = () => {
         minHeight: "100vh",
       }}
     >
-      <h1>Page accueil</h1>
+      <Avatar alt="User Avatar" src={image} />
+      <h1>Bonjour {user.displayName}</h1>
       <div style={{ marginTop: "auto", display: "flex", width: "100%" }}>
         <NavBar/>
       </div>
