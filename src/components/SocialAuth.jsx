@@ -3,7 +3,10 @@ import { Stack, IconButton } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { app } from "../config/Firebase"
 import { getAuth, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
+import { doc, setDoc, getDoc } from "firebase/firestore";
+import { getFirestore } from "firebase/firestore";
 
+const db = getFirestore(app);
 const auth = getAuth(app);
 const provider = new GoogleAuthProvider();
 
@@ -23,9 +26,37 @@ const SocialAuth = ({ setAuth, setUser }) => {
         }}
         onClick={() => {
           signInWithPopup(auth, provider)
-            .then((result) => {
+            .then(async (result) => {
               setUser(result.user)
               setAuth(true);
+              // Add user to the database if it doesn't exist
+              const userRef = doc(db, "users", result.user.uid);
+              const userDoc = await getDoc(userRef);         
+              if (!userDoc.exists()) {
+                console.log("User does not exist in the database");
+                let firstName;
+                if (auth.currentUser.providerData[0].firstName != null && auth.currentUser.providerData[0].firstName != undefined) {
+                  firstName = auth.currentUser.providerData[0].firstName;
+                } else {
+                  firstName = auth.currentUser.providerData[0].displayName;
+                }
+                let lastName;
+                if (auth.currentUser.providerData[0].lastName != null && auth.currentUser.providerData[0].lastName != undefined) {
+                  lastName = auth.currentUser.providerData[0].lastName;
+                } else {
+                  lastName = "";
+                }
+                await setDoc(doc(db, "users", result.user.uid), {                
+                  firstName: firstName,
+                  lastName: lastName,
+                  email: auth.currentUser.providerData[0].email,
+                  images: {
+                    image0: auth.currentUser.providerData[0].photoURL
+                  },
+                  fournisseur: auth.currentUser.providerData[0].providerId,
+                });
+              }              
+              
               navigate("/", { replace: true });
             })
             .catch((error) => {

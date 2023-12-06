@@ -16,7 +16,9 @@ import { motion } from "framer-motion";
 
 import { app } from "../config/Firebase"
 import { getAuth, createUserWithEmailAndPassword, fetchSignInMethodsForEmail } from "firebase/auth";
+import { collection, addDoc,setDoc, doc, getFirestore } from "firebase/firestore";
 
+const db = getFirestore(app);
 const auth = getAuth(app);
 
 /////////////////////////////////////////////////////////////
@@ -72,6 +74,14 @@ const SignupForm = ({ setAuth, setUser }) => {
         const user = userCredential.user;
         setUser(userCredential.user);
         setAuth(true);
+
+         // Add user to the database
+         await setDoc(doc(db, "users", user.uid), {
+          firstName: formik.values.firstName,
+          lastName: formik.values.lastName,
+          email: formik.values.email,
+          fournisseur: auth.currentUser.providerData[0].providerId,
+        });
         navigate("/", { replace: true });
       } catch (error) {
         switch (error.code) {
