@@ -49,7 +49,13 @@ const SignupForm = ({ setAuth }) => {
     email: Yup.string()
       .email("Email must be a valid email address")
       .required("Email is required"),
-    password: Yup.string().required("Password is required").min(8, "Password must be at least 8 characters"),
+    password: Yup.string()
+      .required("Password is required")
+      .min(8, "Password must be at least 8 characters")
+      .matches(
+        /^(?=.*[A-Z])(?=.*[!@#$%^&*()_+,\-=\[\]{};':"\\|,.<>\/?])/,
+        'Password must contain at least one uppercase letter and one special character'
+      ),
   });
 
   const formik = useFormik({
@@ -69,7 +75,7 @@ const SignupForm = ({ setAuth }) => {
       } catch (error) {
         switch (error.code) {
           case 'auth/email-already-in-use':
-            setErrorText(`This email is already associated with a Google Account. Please sign in with Google.`);
+            setErrorText(`This email is already associated with an existing account.`);
             break;
           case 'auth/invalid-email':
             setErrorText(`Email address is invalid.`);
