@@ -70,6 +70,7 @@ const SignupForm = ({ setAuth, setUser }) => {
       try {
         const userCredential = await createUserWithEmailAndPassword(auth, formik.values.email, formik.values.password);
         const user = userCredential.user;
+        setUser(userCredential.user);
         setAuth(true);
         navigate("/", { replace: true });
       } catch (error) {
