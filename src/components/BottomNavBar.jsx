@@ -6,7 +6,7 @@ import BottomNavigationAction from '@mui/material/BottomNavigationAction';
 
 import HouseIcon from '@mui/icons-material/House';
 import ForumIcon from '@mui/icons-material/Forum';
-import SettingsIcon from '@mui/icons-material/Settings';
+import PersonIcon from '@mui/icons-material/Person';
 
 import Divider from '@mui/material/Divider';
 
@@ -21,8 +21,10 @@ export default function LabelBottomNavigation() {
         return 'home';
       case '/chat':
         return 'chat';
+      case '/profil':
+        return 'profil';
       case '/settings':
-        return 'settings';
+        return 'profil';
       default:
         return 'home'; // Valeur par défaut
     }
@@ -40,8 +42,8 @@ export default function LabelBottomNavigation() {
       case 'chat':
         navigate("/chat", { replace: true });
         break;
-      case 'settings':
-        navigate("/settings", { replace: true });
+      case 'profil':
+        navigate("/profil", { replace: true });
         break;
       default:
         break;
@@ -63,9 +65,9 @@ export default function LabelBottomNavigation() {
         icon={<ForumIcon />}
       />
       <BottomNavigationAction
-        label="Settings"
-        value="settings"
-        icon={<SettingsIcon />}
+        label="Profil"
+        value="profil"
+        icon={<PersonIcon />}
       />
     </BottomNavigation>
     </div>

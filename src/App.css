@@ -11,82 +11,172 @@ body {
   max-width: 100vw;
   font-size: 16px;
   font-family: sans-serif;
-}
+  min-width: 100%;
 
-.send-message {
-  position: fixed;
-  padding-right: 30px;
-  bottom: 80px;
+}*
+/* -------------------------------------------------- */
+.chatMenuHeader{
+  display: flex;
   width: 100%;
-  display: flex;
+  position: fixed;
+  margin-top: 10px;
+  padding-right: 50px;
+  align-items: end;
+  justify-content: space-between;
 }
-.send-message > input {
-  height: 40px;
+.chatMenuCircle {
+  background-color: #f8f8f8;
+  border-radius: 10rem;
   padding: 10px;
-  border-radius: 5px 0 0 5px;
-  border: 2px;
-  flex-grow: 1;
-  background-color: rgb(219, 210, 210);
-  color: #1c2c4c;
-  font-size: 1rem;
-}
-.send-message > input:placeholder {
-  color: #ddd;
-}
-.send-message > :is(input, button):focus {
-  outline: none;
-  border-bottom: 1px solid #7cc5d9;
-}
-.send-message > button {
-  width: 70px;
-  height: 40px;
-  padding: 10px 10px;
-  border-radius: 0 5px 5px 0;
-  color: #242443;
-  border: 1px solid #7cc5d9;
-  background-color: #7cc5d9;
-  font-weight: 600;
+  width: 50px;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-/* chat component */
-.messages-wrapper {
-  padding-top: 30px;
-  margin-bottom: 60px;
+.chatMenuCircle img {
+  width: 60%; /* Ajustez la largeur de l'image selon vos besoins */
+  height: auto; /* Maintient le rapport hauteur/largeur de l'image */
+  border-radius: 50%; /* Pour un effet de bord arrondi sur l'image */
 }
-.chat-bubble {
-  border-radius: 20px 20px 20px 0;
-  padding: 15px;
-  background-color: #f3f4f9;
-  color: #1c2c4c;
-  width: max-content;
-  max-width: calc(100% - 50px);
-  box-shadow: -2px 2px 1px 1px rgb(219, 210, 210);
+
+.chatMenuToggle{
+  background-color: #f8f8f8;
+  border-radius: 10rem;
+  padding: 5px;
+  height: 50px;
   display: flex;
-  align-items: flex-start;
-  margin-bottom: 20px;
+  align-items: center;
+  justify-content: center;
 }
-.chat-bubble.right {
-  margin-left: auto;
-  border-radius: 20px 20px 0 20px;
-  background-color: #7cc5d9;
-  box-shadow: -2px 2px 1px 1px #88dded;
+
+.chatMenuToggleButton{
+  padding: 10px;
+  border-radius: 10rem;
+  background-color: blue;
+  cursor: pointer;
 }
-.chat-bubble__left {
-  width: 35px;
-  height: 35px;
-  border-radius: 50%;
-  margin-right: 10px;
+
+.chatMenuToggleButton h5{
+  color: #c7c7c7;
+  padding-left: 10px;
+  padding-right: 10px;
 }
-.user-name {
+
+@media screen and (max-width: 350px) {
+  .chatMenuCircle {
+    display: none;
+  }
+  .chatMenuHeader{
+    justify-content: center;
+  }
+}
+@media screen and (max-width: 600px) {
+  .chatMenuHeader{
+    padding-right: 35px;
+  }
+}
+
+
+
+/* ----------------------------------------------- */
+
+.chatMessage{
+  margin-top: 20px;
+  padding: 15px;
+  display: flex;
+  justify-content: left;
+  background-color: #f8f8f8;
+  border-radius: 1.2rem;
+}
+
+.chatMessageImg {
+  width: 60px;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: visible; /* Ajout de cette propriété pour cacher une partie de l'image en dehors du conteneur */
+}
+
+.chatMessageImg img {
+  width: 100%; /* Ajustez la largeur de l'image selon vos besoins */
+  height: 100%; /* Ajustez la hauteur de l'image selon vos besoins */
+  object-fit: cover; /* Garantit que l'image couvre la totalité du conteneur tout en conservant son ratio hauteur/largeur */
+  border-radius: 50%; /* Pour un effet de bord arrondi sur l'image */
+}
+
+.chatMessageBody{
+  margin-left: 15px;
+  flex-grow: 1;
+  width: 80%;
+}
+
+.chatMessageBottom{
+  margin-top: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.chatMessageHeader {
+  display: flex;
+  justify-content: space-between;
+  flex-grow: 1;
+}
+
+.chatMessageHeader h4 {
+  color: #636363;
+  display: -webkit-box;
+  overflow: hidden;
+  -webkit-line-clamp: 1; /* Limite le nombre de lignes affichées à 1 */
+  -webkit-box-orient: vertical;
+  max-width: 70%; /* Ajustez selon vos besoins */
+  height: 20px;
+}
+
+.chatMessageBody h6 {
+  color: #c5c5c5;
+}
+
+.chatMessageBody h5 {
+  color: #c5c5c5;
+  display: -webkit-box;
+  overflow: hidden;
+  -webkit-line-clamp: 1; /* Limite le nombre de lignes affichées à 1 */
+  -webkit-box-orient: vertical;
+  max-width: 90%; /* Ajustez selon vos besoins */
+}
+
+.notifiCircle {
+  background-color: #cf3535;
+  border-radius: 10rem;
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.notifiCircle h4 {
+  color: white;
   font-weight: bold;
-  margin-bottom: 5px;
-  font-size: 0.9rem;
-  color: #1c2c4c;
+  font-size: 9px;
 }
-.user-message {
-  word-break: break-all;
+
+/* ----------------------------------------------- */
+
+.loader {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 80vh; /* 100% de la hauteur de la vue (viewport height) */
 }
-.message-time {
-  display: block;
-  text-align: right;
+
+.LoaderPreview {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 30px;
 }

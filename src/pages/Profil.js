@@ -1,11 +1,16 @@
 import { Container } from "@mui/material";
-import NavBar from "../components/BottomNavBar";
+import NavBar from "../components/BottomNavBar"
 import { useState } from "react";
+import IconButton from '@mui/material/IconButton';
+import SettingsIcon from '@mui/icons-material/Settings';
+import { Link } from "react-router-dom";
 import Avatar from '@mui/material/Avatar';
 //////////////////////////////////////
 
-const Home = ({user}) => {
 
+
+
+const Profil = ({user}) => {
   const [image, setImage] = useState(user.photoURL);
 
   const handleImageChange = (e) => {
@@ -35,13 +40,22 @@ const Home = ({user}) => {
         minHeight: "100vh",
       }}
     >
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>       
+        <h1>Profil</h1>
+        <IconButton aria-label="delete">
+          <Link to="/settings" style={{ color: "inherit", textDecoration: "none" }}>
+            <SettingsIcon style={{ color: "inherit" }} />
+          </Link>
+        </IconButton>
+      </div>
       <Avatar alt="User Avatar" src={image} />
-      <h1>Bonjour {user.displayName}</h1>
       <div style={{ marginTop: "auto", display: "flex", width: "100%" }}>
         <NavBar/>
       </div>
+
+      
     </Container>
   );
 };
 
-export default Home;
+export default Profil;

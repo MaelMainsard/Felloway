@@ -33,7 +33,7 @@ const animate = {
   },
 };
 
-const LoginForm = ({ setAuth }) => {
+const LoginForm = ({ setAuth, setUser }) => {
   const navigate = useNavigate();
   const location = useLocation();
   const from = location.state?.from?.pathname || "/";
@@ -70,6 +70,7 @@ const LoginForm = ({ setAuth }) => {
           const userCredential = await signInWithEmailAndPassword(auth, values.email, values.password);
           // Signed in
           const user = userCredential.user;
+          setUser(userCredential.user)
           setAuth(true);
           navigate(from, { replace: true });
         } else if (userData.fournisseur === "google") {
