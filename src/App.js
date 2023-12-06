@@ -6,6 +6,7 @@ import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 import Chat from "./pages/Chat"
 import Settings from "./pages/Settings"
+import ForgotPassword from "./pages/ForgotPassword";
 
 import "./App.css"
 function App() {
@@ -18,9 +19,9 @@ function App() {
       <Routes>
         <Route path="/login" element={<Login setAuth={setAuth} />} />
         <Route path="/signup" element={<Signup setAuth={setAuth} />} />
-        <Route path="/home" element={<Home/>} />
-        <Route path="/chat" element={<Chat/>} />
-        <Route path="/settings" element={<Settings/>} />
+        <Route path="/home" element={<Home />} />
+        <Route path="/chat" element={<Chat />} />
+        <Route path="/settings" element={<Settings />} />
         <Route
           path="/"
           element={
@@ -31,6 +32,7 @@ function App() {
             )
           }
         />
+        <Route path="/forgot-password" element={<ForgotPassword />} />
       </Routes>
     </>
   );
