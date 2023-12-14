@@ -1,15 +1,14 @@
 import React,{useState,useEffect} from 'react';
 import GetUserAvatar from '../fetcher/fetcher-avatar-chat-header'
-import GetModalNewConv from '../modals/modal-create-new-conv'; // Adjust the import path
+import GetModalNewConv from '../modals/modal-new-conv';
 
 const ChatMenuHeader = ({user_id,state_show_message,state_set_show_message}) => {
 
   const [avatar, setAvatar] = useState(null);
-  const [modalContent, setModalContent] = useState(null);
+  const [showModalNewConv, setShowModalNewConv] = useState(false);
 
   useEffect(() => {
     GetUserAvatar({user_id,setAvatar});
-    GetModalNewConv(user_id, setModalContent);
     
   }, [user_id]);
 
@@ -23,7 +22,7 @@ const ChatMenuHeader = ({user_id,state_show_message,state_set_show_message}) => 
               {avatar}
             </div>
             <ul tabIndex={0} className="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-52">
-              <li><a onClick={()=>document.getElementById('my_modal_1').showModal()}>Nouvelle conversation</a></li>
+              <li><a onClick={()=> setShowModalNewConv(true)}>Nouvelle conversation</a></li>
             </ul>
           </div>
         </div>
@@ -40,6 +39,7 @@ const ChatMenuHeader = ({user_id,state_show_message,state_set_show_message}) => 
           </button>
         </div>
       </div>
+      <GetModalNewConv showModal={showModalNewConv} closeModal={()=>setShowModalNewConv(false)} user_id={user_id} />
     </>
   );
 };

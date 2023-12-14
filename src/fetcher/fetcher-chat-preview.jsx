@@ -43,7 +43,7 @@ const GetMessagePreviewDM = async ({ user_id, setMessages, state_show_message })
         ));
 
         setMessages(
-          <div className="flex align-top justify-start items-start mx-auto h-5/6 flex-col">
+          <div className="flex align-top justify-start items-start mx-auto flex-col">
             {chatMenuMessages}
           </div>
         );
@@ -56,6 +56,10 @@ const GetMessagePreviewDM = async ({ user_id, setMessages, state_show_message })
   }
 };
 function formatTimestamp(timestamp) {
+  if (!timestamp) {
+    return 'N/A';
+  }
+
   const { seconds, nanoseconds } = timestamp;
 
   // Convertir les secondes en millisecondes et ajouter les nanosecondes converties en millisecondes
@@ -64,12 +68,10 @@ function formatTimestamp(timestamp) {
   const messageDate = new Date(timestampInMilliseconds);
   const currentDate = new Date();
 
-
   const isToday =
     messageDate.getDate() === currentDate.getDate() &&
     messageDate.getMonth() === currentDate.getMonth() &&
     messageDate.getFullYear() === currentDate.getFullYear();
-
 
   if (isToday) {
     // Si c'est aujourd'hui, retournez l'heure et les minutes
