@@ -1,16 +1,17 @@
+import { AvatarLayoutPreview } from "../layouts/layout-avatar";
 
-export const ChatMenuMessage = ({img_src,chat_name,last_chat_hour,last_chat_message,chat_number}) => {
-  console.log(img_src)
 
+export const ChatMenuMessage = ({message_preview, user_id}) => {
+
+    const id = user_id === Object.keys(message_preview.users)[0] ? Object.keys(message_preview.users)[1] : Object.keys(message_preview.users)[0];
+    const chat_name =  message_preview.group_name ? message_preview.group_name : message_preview.users[id].name;
+    const last_chat_hour =  formatTimestamp(message_preview.last_message_timestamp);
+    const last_chat_message = message_preview.last_message;
+    const chat_number = message_preview.users[user_id].not_view;
 
     return (
       <div className='flex flex-row align-middle items-center justify-start bg-grey_1 rounded-xl p-3 mb-2 w-screen'>
-        {img_src !== '' ? 
-          <img className='w-14 h-14 object-contain rounded-full mr-2' src={img_src} alt="messageImg" /> :
-          <span className=' w-[68.49px] h-14 rounded-full pt-1 mr-2 text-4xl text-white text-center align-middle items-center bg-grey_2'>
-            {chat_name.charAt(0).toUpperCase()}
-          </span>
-        }
+        <AvatarLayoutPreview message_preview={message_preview} other_user={id}/>
         
         <div className="w-full justify-center align-middle flex flex-col mb-1">
           <div className=" justify-between flex flex-row items-start">
@@ -29,4 +30,34 @@ export const ChatMenuMessage = ({img_src,chat_name,last_chat_hour,last_chat_mess
       </div>
     );
   };
+  function formatTimestamp(timestamp) {
+    if (!timestamp) {
+      return 'N/A';
+    }
   
+    const { seconds, nanoseconds } = timestamp;
+  
+    // Convertir les secondes en millisecondes et ajouter les nanosecondes converties en millisecondes
+    const timestampInMilliseconds = seconds * 1000 + nanoseconds / 1e6;
+  
+    const messageDate = new Date(timestampInMilliseconds);
+    const currentDate = new Date();
+  
+    const isToday =
+      messageDate.getDate() === currentDate.getDate() &&
+      messageDate.getMonth() === currentDate.getMonth() &&
+      messageDate.getFullYear() === currentDate.getFullYear();
+  
+    if (isToday) {
+      // Si c'est aujourd'hui, retournez l'heure et les minutes
+      const hours = messageDate.getHours();
+      const minutes = String(messageDate.getMinutes()).padStart(2, '0');
+      return `${hours}:${minutes}`;
+    } else {
+      // Sinon, retournez la date au format jour/mois/année
+      const day = messageDate.getDate();
+      const month = messageDate.getMonth() + 1;
+      const year = messageDate.getFullYear();
+      return `${day}/${month}/${year}`;
+    }
+  }

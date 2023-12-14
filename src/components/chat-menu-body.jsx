@@ -12,7 +12,7 @@ const ChatMenuBody = ({user_id,state_show_message}) => {
 
   return (
     <>
-      {messages}
+        {messages}
     </>
   );
 };

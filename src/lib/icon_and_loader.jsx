@@ -13,25 +13,14 @@ export const BellIcon = () => {
   );
 };
 
-export const PulseLoader = () => {
-  return (
-    <Player
-    className="w-8"
-    autoplay
-    loop
-    src="https://lottie.host/b1b59991-34a6-4740-ab42-6a1fabc35d5f/zgYg7gzlGL.json"
-  >
-  </Player>
-  );
-};
 
-export const CircleLoader = () => {
+export const NoConv = () => {
   return (
     <Player
-    className="w-12"
+    className="w-40"
     autoplay
     loop
-    src="https://lottie.host/327e72f5-6408-4bd7-b9ba-70100de20c67/nMnBJbCOlp.json"
+    src="https://lottie.host/84666113-9828-4ba6-8be2-08afd8c5d1e0/gbCauPb9il.json"
   >
   </Player>
   );

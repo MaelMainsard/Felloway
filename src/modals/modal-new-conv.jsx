@@ -1,9 +1,9 @@
-import { AvatarLayout } from '../layouts/layout-avatar';
+import { AvatarLayoutModal } from '../layouts/layout-avatar';
 import React, { useState, useEffect } from 'react';
 import { firestore } from '../lib/Firebase';
 import { collection, onSnapshot, query, addDoc, serverTimestamp } from 'firebase/firestore';
 
-const ModalNewConv = ({ showModal, closeModal, user_id }) => {
+const ModalNewConv = ({ showModal, closeModal, user_id, show_conv}) => {
   const [checkedUsers, setCheckedUsers] = useState([]); // Utiliser un objet pour stocker les états des cases à cocher
   const [usersList, setUsersList] = useState([]);
   const [groupName, setGroupName] = useState('');
@@ -26,7 +26,11 @@ const ModalNewConv = ({ showModal, closeModal, user_id }) => {
     return () => unsubscribe();
   }, [user_id]);
 
-  const createNewChat = async (array_users) => {
+  const createNewChat = async (array_users, closeModal) => {
+
+    if(array_users.length > 2 && groupName === '') {
+      return;
+    }
     const usersMap = {};
     array_users.forEach((user) => {
       usersMap[user.id] = {
@@ -44,7 +48,31 @@ const ModalNewConv = ({ showModal, closeModal, user_id }) => {
       last_message_timestamp: serverTimestamp(),
       users: usersMap,
     });
+    if(array_users.length > 2){
+      show_conv(false)
+    }
+    else{
+      show_conv(true)
+    }
+    closeModal()
   };
+
+  const handleBadgeClick = (user) => {
+    handleCheckboxChange(user);
+  };
+
+  const selectedUsersBadge = (
+    <div className='overflow-x-auto flex space-x-1 mb-2 overflow-y-hidden'>
+      {checkedUsers.length > 1 &&
+        checkedUsers.slice(1).map((user) => (
+          <div className="badge badge-neutral mr-1 cursor-pointer" key={user.id} style={{ whiteSpace: 'nowrap' }}>
+            <span onClick={() => handleBadgeClick(user)}>
+              {user.firstName}
+            </span>
+          </div>
+        ))}
+    </div>
+  );
 
   const handleCheckboxChange = (user) => {
     setCheckedUsers((prevCheckedUsers) => {
@@ -75,7 +103,7 @@ const ModalNewConv = ({ showModal, closeModal, user_id }) => {
         </th>
         <td>
           <div className="flex items-center gap-3">
-            <AvatarLayout user_array={user} />
+            <AvatarLayoutModal user_array={user} />
             <div>
               <div className="font-bold">{user.firstName}</div>
               <div className="text-sm opacity-50">United States</div>
@@ -96,34 +124,33 @@ const ModalNewConv = ({ showModal, closeModal, user_id }) => {
                         <tbody>{chatMenuMessages}</tbody>
                     </table>
                 </div>
+                {selectedUsersBadge}
                 {checkedUsers.length > 1 &&  checkedUsers.length < 3 ? (
                     <button
                         className="btn w-full"
                         onClick={() => {
-                        createNewChat(checkedUsers);
-                        closeModal();
+                        createNewChat(checkedUsers, closeModal);
                         }}
                     >
                         Créez une nouvelle conversation
                     </button>
                     ) : checkedUsers.length > 2 && (
-                        <div className="join">
-                        <input
-                          className="input input-bordered join-item"
-                          placeholder="Nom du groupe"
-                          value={groupName}
-                          onChange={(e) => setGroupName(e.target.value)}
-                        />
-                        <button
-                          className="btn join-item rounded-l-sm"
-                          onClick={() => {
-                            createNewChat(checkedUsers);
-                            closeModal();
-                          }}
-                        >
-                          Créez le groupe
-                        </button>
-                      </div>
+                      <div className="join flex flex-col md:flex-row lg:flex-row">
+                      <input
+                        className="input input-bordered rounded-sm md:rounded-r-sm join-item w-full md:w-1/2 lg:w-2/3"
+                        placeholder="Nom du groupe"
+                        value={groupName}
+                        onChange={(e) => setGroupName(e.target.value)}
+                      />
+                      <button
+                        className="btn join-item rounded-sm md:rounded-l-sm w-full md:w-1/2 lg:w-1/3"
+                        onClick={() => {
+                          createNewChat(checkedUsers, closeModal);
+                        }}
+                      >
+                        Créez le groupe
+                      </button>
+                    </div>
                     )}
             </div>
             <form method="dialog" className="modal-backdrop">
