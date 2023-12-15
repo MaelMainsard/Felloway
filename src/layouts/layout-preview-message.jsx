@@ -1,7 +1,7 @@
 import { AvatarLayoutPreview } from "../layouts/layout-avatar";
 
 
-export const ChatMenuMessage = ({message_preview, user_id}) => {
+export const ChatMenuMessage = ({message_preview, user_id, open_chat, chat}) => {
 
     const id = user_id === Object.keys(message_preview.users)[0] ? Object.keys(message_preview.users)[1] : Object.keys(message_preview.users)[0];
     const chat_name =  message_preview.group_name ? message_preview.group_name : message_preview.users[id].name;
@@ -10,7 +10,7 @@ export const ChatMenuMessage = ({message_preview, user_id}) => {
     const chat_number = message_preview.users[user_id].not_view;
 
     return (
-      <div className='flex flex-row align-middle items-center justify-start bg-grey_1 rounded-xl p-3 mb-2 w-screen'>
+      <div className='flex flex-row align-middle items-center justify-start bg-grey_1 rounded-xl p-3 mb-2 w-full' onClick={() => { open_chat(true); chat(message_preview.id);}}>
         <AvatarLayoutPreview message_preview={message_preview} other_user={id}/>
         
         <div className="w-full justify-center align-middle flex flex-col mb-1">

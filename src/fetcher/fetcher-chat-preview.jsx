@@ -4,7 +4,7 @@ import { collection, onSnapshot,getDocs, query, where  } from "firebase/firestor
 import {ChatMenuMessage} from '../layouts/layout-preview-message';
 import { NoConv } from '../lib/icon_and_loader';
 
-const GetMessagePreview = async ({ user_id, setMessages, state_show_message }) => {
+const GetMessagePreview = async ({ user_id, setMessages, state_show_message, set_open_chat, set_chat }) => {
   try {
     if (!user_id) {
       setMessages(
@@ -20,12 +20,12 @@ const GetMessagePreview = async ({ user_id, setMessages, state_show_message }) =
       const messages_preview_list = [];
 
       groupSnapshot.forEach(async (docs) => {
-        const messages_preview = docs.data();
+        const messages_preview = { ...docs.data(), id: docs.id };
 
         messages_preview_list.push(messages_preview);
 
         const chatMenuMessages = messages_preview_list.map((item, index) => (
-          <ChatMenuMessage message_preview={item} key={index} user_id={user_id}/>
+          <ChatMenuMessage message_preview={item} key={index} user_id={user_id} open_chat={set_open_chat} chat={set_chat}/>
         ));
 
         setMessages(
@@ -37,7 +37,7 @@ const GetMessagePreview = async ({ user_id, setMessages, state_show_message }) =
 
       if(messages_preview_list.length === 0) {
         setMessages(
-          <div className="flex align-middle justify-center items-center mx-auto h-5/6">
+          <div className="flex align-middle justify-center items-center mx-auto mt-60">
             <NoConv />
           </div>
         );
