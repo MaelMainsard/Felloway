@@ -7,9 +7,11 @@ const ModalNewConv = ({ showModal, closeModal, user_id, show_conv}) => {
   const [checkedUsers, setCheckedUsers] = useState([]); // Utiliser un objet pour stocker les états des cases à cocher
   const [usersList, setUsersList] = useState([]);
   const [groupName, setGroupName] = useState('');
+  const [searchUser, setSearchUser] = useState('');
 
   useEffect(() => {
     const unsubscribe = onSnapshot(query(collection(firestore, 'users')), (usersSnapshot) => {
+
       const usersData = usersSnapshot.docs.map((doc) => ({
         id: doc.id,
         ...doc.data(),
@@ -18,10 +20,13 @@ const ModalNewConv = ({ showModal, closeModal, user_id, show_conv}) => {
       setUsersList(usersData);
 
       const userToCheck = usersData.find((user) => user.id === user_id);
+
       if (userToCheck) {
         setCheckedUsers([userToCheck]); // Initialize with the user's data
       }
+
     });
+
 
     return () => unsubscribe();
   }, [user_id]);
@@ -75,6 +80,7 @@ const ModalNewConv = ({ showModal, closeModal, user_id, show_conv}) => {
   );
 
   const handleCheckboxChange = (user) => {
+
     setCheckedUsers((prevCheckedUsers) => {
       const userIndex = prevCheckedUsers.findIndex((u) => u.id === user.id);
 
@@ -86,10 +92,11 @@ const ModalNewConv = ({ showModal, closeModal, user_id, show_conv}) => {
         return updatedCheckedUsers;
       }
     });
+
   };
 
   const chatMenuMessages = usersList.map((user, index) => (
-    user.id !== user_id && (
+    user.id !== user_id && user.firstName.toUpperCase().includes(searchUser.toUpperCase()) && (
       <tr key={index}>
         <th>
           <label>
@@ -117,8 +124,12 @@ const ModalNewConv = ({ showModal, closeModal, user_id, show_conv}) => {
     return (
         <dialog id="my_modal_1" className="modal" open={showModal}>
             <div className="modal-box max-w-sm" onClick={(e) => e.stopPropagation()}>
-                <h3 className="font-bold text-lg"></h3>
-                <p className="py-4">Press ESC key or click outside to close</p>
+                <input
+                  onChange={(e) => setSearchUser(e.target.value)}
+                  type="text"
+                  placeholder="Recherchez un utilisateur"
+                  className="input input-bordered w-full max-w-xs"
+                />
                 <div className="overflow-x-auto">
                     <table className="table">
                         <tbody>{chatMenuMessages}</tbody>
