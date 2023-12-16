@@ -36,6 +36,7 @@ const ModalNewConv = ({ showModal, closeModal, user_id, show_conv}) => {
     if(array_users.length > 2 && groupName === '') {
       return;
     }
+
     const usersMap = {};
     array_users.forEach((user) => {
       usersMap[user.id] = {
@@ -44,15 +45,6 @@ const ModalNewConv = ({ showModal, closeModal, user_id, show_conv}) => {
         not_view: 0,
       };
     });
-
-    const docRef = await addDoc(collection(firestore, 'groups'), {
-      group_img: '',
-      group_name: groupName,
-      is_chat: array_users.length > 2 ? false : true,
-      last_message: '',
-      last_message_timestamp: serverTimestamp(),
-      users: usersMap,
-    });
     if(array_users.length > 2){
       show_conv(false)
     }
@@ -60,6 +52,15 @@ const ModalNewConv = ({ showModal, closeModal, user_id, show_conv}) => {
       show_conv(true)
     }
     closeModal()
+
+    const docRef = await addDoc(collection(firestore, 'groups'), {
+      group_img: '',
+      group_name: array_users.length > 2 ? groupName : '',
+      is_chat: array_users.length > 2 ? false : true,
+      last_message: '',
+      last_message_timestamp: serverTimestamp(),
+      users: usersMap,
+    });
   };
 
   const handleBadgeClick = (user) => {

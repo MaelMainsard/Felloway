@@ -5,7 +5,7 @@ import { AvatarLayoutModal } from '../layouts/layout-avatar';
 const GetUserAvatar = async ({ user_id, setAvatar }) => {
 
   if (!user_id) {
-    setAvatar();
+    setAvatar(<span className="loading loading-ring loading-md"></span>);
     return;
   }
 

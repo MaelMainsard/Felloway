@@ -1,8 +1,7 @@
 import React,{useState,useEffect} from 'react';
-import GetUserAvatar from '../fetcher/fetcher-avatar-chat-header'
+import GetUserAvatar from '../fetcher/fetcher-avatar-chat-preview-header'
 import GetModalNewConv from '../modals/modal-new-conv';
 import MapsUgcIcon from '@mui/icons-material/MapsUgc';
-import SearchIcon from '@mui/icons-material/Search';
 
 const ChatMenuHeader = ({user_id,state_show_message,state_set_show_message}) => {
 
@@ -32,14 +31,14 @@ const ChatMenuHeader = ({user_id,state_show_message,state_set_show_message}) => 
         <button
           type="button"  // Assurez-vous d'ajuster le type en fonction de vos besoins
           className={`w-20 h-8 rounded-full ${!state_show_message ? ' bg-grey_1 text-font_2' : ' bg-blue_1 text-white'}`}
-          onClick={() => state_set_show_message(!state_show_message)}
+          onClick={() => state_set_show_message(true)}
         >
           DM
         </button>
         <button
           type="button"
           className={` w-20 h-8 rounded-full ${state_show_message ? ' bg-grey_1 text-font_2' : ' bg-blue_1 text-white'}`}
-          onClick={() => state_set_show_message(!state_show_message)}
+          onClick={() => state_set_show_message(false)}
         >
           Groupes
         </button>

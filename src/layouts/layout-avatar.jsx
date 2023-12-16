@@ -19,8 +19,9 @@ export const AvatarLayoutModal = ({ user_array }) => {
     );
 };
 
-export const AvatarLayoutPreview = ({ message_preview, other_user }) => {
+export const AvatarLayoutPreview = ({ message_preview, user_id }) => {
 
+  const other_user = user_id === Object.keys(message_preview.users)[0] ? Object.keys(message_preview.users)[1] : Object.keys(message_preview.users)[0];
 
     return (
         <div className='avatar mr-3'>

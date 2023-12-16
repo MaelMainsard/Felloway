@@ -10,8 +10,8 @@ export const ChatMenuMessage = ({message_preview, user_id, open_chat, chat}) => 
     const chat_number = message_preview.users[user_id].not_view;
 
     return (
-      <div className='flex flex-row align-middle items-center justify-start bg-grey_1 rounded-xl p-3 mb-2 w-full' onClick={() => { open_chat(true); chat(message_preview.id);}}>
-        <AvatarLayoutPreview message_preview={message_preview} other_user={id}/>
+      <div className='flex flex-row align-middle items-center justify-start bg-grey_1 rounded-xl p-3 mb-2 w-full cursor-pointer' onClick={() => { open_chat(true); chat(message_preview.id);}}>
+        <AvatarLayoutPreview message_preview={message_preview} user_id={user_id}/>
         
         <div className="w-full justify-center align-middle flex flex-col mb-1">
           <div className=" justify-between flex flex-row items-start">
