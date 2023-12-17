@@ -19,7 +19,7 @@ export const ChatMenuMessage = ({message_preview, user_id, open_chat, chat}) => 
              <span className='text-font_2 line-clamp-1 text-xs'>{last_chat_hour}</span>
           </div>
           <div className="justify-between flex flex-row items-end">
-            <span className='text-font_2 line-clamp-1 text-xs w-9/12'>{last_chat_message}</span>
+            <span className={`text-font_2 line-clamp-1 text-xs w-9/12 ${chat_number !== 0 ? 'font-bold text-font_1' : ''}`}>{last_chat_message}</span>
             {chat_number !== 0 && (
               <span className='bg-red_1 w-5 h-5 rounded-full align-middle justify-center items-center flex text-white text-xs font-bold'>
                 {chat_number}
