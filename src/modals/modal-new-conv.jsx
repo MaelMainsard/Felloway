@@ -53,7 +53,7 @@ const ModalNewConv = ({ showModal, closeModal, user_id, show_conv}) => {
     }
     closeModal()
 
-    const docRef = await addDoc(collection(firestore, 'groups'), {
+    await addDoc(collection(firestore, 'groups'), {
       group_img: '',
       group_name: array_users.length > 2 ? groupName : '',
       is_chat: array_users.length > 2 ? false : true,

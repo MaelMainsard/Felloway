@@ -3,6 +3,7 @@ import ChatMenuHeader from '../components/chat-preview-header';
 import ChatMenuBody from '../components/chat-preview-body';
 import ChatPageHeader from '../components/chat-page-header';
 import ChatPageFooter from '../components/chat-page-footer'
+import ChatPageBody from '../components/chat-page-body';
 import { useSwipeable } from 'react-swipeable';
 import { NoConv } from '../lib/icon_and_loader';
 
@@ -43,7 +44,7 @@ const ChatMenu = () => {
 
   return (
     <div className="flex flex-row w-screen">
-      {((!openChat && (windowWidth < 640) || (windowWidth > 640))) && (
+       {(((!openChat) && (windowWidth < 640) || (windowWidth > 640))) && ( 
         <div className={`h-screen bg-white sm:w-5/12 w-full`} {...handlers}>
           <ChatMenuHeader
             user_id={user_id}
@@ -59,15 +60,15 @@ const ChatMenu = () => {
           />
         </div> 
       )}
-      {((openChat && (windowWidth < 640) || (chat && (windowWidth > 640)))) && (
+      {((openChat && (windowWidth < 640)) || (chat && (windowWidth > 640))) && (
         <div className={`h-screen bg-grey_1 w-full flex flex-col justify-between`}>
             <ChatPageHeader
               open_chat={setOpenChat}
               chat_id={chat}
               user_id={user_id}
-              set_chat_id={setChat}
             />
-            <ChatPageFooter chat_id={chat} />
+            <ChatPageBody chat_id={chat} user_id={user_id}/>
+            <ChatPageFooter chat_id={chat} user_id={user_id} />
         </div>
       )}
     {(windowWidth > 640) && (!chat) && (

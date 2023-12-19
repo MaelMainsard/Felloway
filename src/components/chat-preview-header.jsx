@@ -23,7 +23,7 @@ const ChatMenuHeader = ({user_id,state_show_message,state_set_show_message}) => 
               {avatar}
             </div>
             <ul tabIndex={0} className="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-52">
-              <li><a>A implémenter</a></li>
+              <li><a href="/#">A implémenter</a></li>
             </ul>
           </div>
         </div>

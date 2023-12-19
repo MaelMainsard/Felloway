@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import GetUserInfo from '../fetcher/fetcher-header-chat-page';
 
-const ChatPageHeader = ({ open_chat, user_id, chat_id, set_chat_id }) => {
+const ChatPageHeader = ({ open_chat, user_id, chat_id }) => {
   const [info, setInfo] = useState(null);
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
 
@@ -16,11 +16,11 @@ const ChatPageHeader = ({ open_chat, user_id, chat_id, set_chat_id }) => {
     return () => {
       window.removeEventListener('resize', handleResize);
     };
-  }, []); 
+  }, [user_id]); 
 
   useEffect(() => {
     GetUserInfo({ user_id, setInfo, chat_id });
-  }, [chat_id]);
+  }, [chat_id,user_id]);
 
   return (
     <div className="navbar bg-white">
