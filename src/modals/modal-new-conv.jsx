@@ -37,13 +37,9 @@ const ModalNewConv = ({ showModal, closeModal, user_id, show_conv}) => {
       return;
     }
 
-    const usersMap = {};
+    const usersMap = [];
     array_users.forEach((user) => {
-      usersMap[user.id] = {
-        avatar: user.images?.image0 || '',
-        name: user.firstName,
-        not_view: 0,
-      };
+      usersMap.push(user.id)
     });
     if(array_users.length > 2){
       show_conv(false)
@@ -57,8 +53,6 @@ const ModalNewConv = ({ showModal, closeModal, user_id, show_conv}) => {
       group_img: '',
       group_name: array_users.length > 2 ? groupName : '',
       is_chat: array_users.length > 2 ? false : true,
-      last_message: '',
-      last_message_timestamp: serverTimestamp(),
       users: usersMap,
     });
   };

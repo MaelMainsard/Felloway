@@ -5,7 +5,7 @@ export const ChatLeft = ({chat_content,chat_params}) => {
     <div className="chat chat-start">
         <AvatarLayoutPage user_id={chat_content.sender_id} message_preview={chat_params}/>
         <div className="chat-header flex flex-row items-center">
-          <span className='mr-2'>{chat_params.users[chat_content.sender_id].name}</span>
+          <span className='mr-2'>{chat_params.title}</span>
           <time className="text-xs opacity-50">{formatTimestamp(chat_content.timestamp)}</time>
         </div>
         <div className="chat-bubble">{chat_content.content}</div>
@@ -21,12 +21,36 @@ export const ChatRight = ({chat_content,chat_params}) => {
     <div className="chat chat-end">
         <AvatarLayoutPage user_id={chat_content.sender_id} message_preview={chat_params}/>
         <div className="chat-header flex flex-row items-center">
-          <span className='mr-2'>{chat_params.users[chat_content.sender_id].name}</span>
+          <span className='mr-2'>{chat_params.title}</span>
           <time className="text-xs opacity-50">{formatTimestamp(chat_content.timestamp)}</time>
         </div>
         <div className="chat-bubble">{chat_content.content}</div>
         <div className="chat-footer opacity-50">
           Delivered
+        </div>
+    </div>
+  );
+};
+
+export const ChatLeftDM = ({chat_content}) => {
+
+  return(
+    <div className="chat chat-start">
+        <div className="chat-bubble">{chat_content.content}</div>
+        <div className="chat-footer opacity-50">
+          <time className="text-xs text-font_1">{formatTimestamp(chat_content.timestamp)}</time>
+        </div>
+    </div>
+  );
+};
+
+export const ChatRightDM = ({chat_content}) => {
+
+  return(
+    <div className="chat chat-end">
+        <div className="chat-bubble">{chat_content.content}</div>
+        <div className="chat-footer opacity-50">
+          <time className="text-xs text-font_1">{formatTimestamp(chat_content.timestamp)}</time>
         </div>
     </div>
   );

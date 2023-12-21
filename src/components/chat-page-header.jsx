@@ -19,7 +19,7 @@ const ChatPageHeader = ({ open_chat, user_id, chat_id }) => {
   }, [user_id]); 
 
   useEffect(() => {
-    GetUserInfo({ user_id, setInfo, chat_id });
+    GetUserInfo({ setInfo, chat_id, user_id });
   }, [chat_id,user_id]);
 
   return (
