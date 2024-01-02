@@ -50,6 +50,8 @@ const ChatMenu = () => {
             user_id={user_id}
             state_show_message={showMessage}
             state_set_show_message={setShowMessage}
+            set_open_chat={setOpenChat}
+            set_chat={setChat}
           />
           <ChatMenuBody
             user_id={user_id}

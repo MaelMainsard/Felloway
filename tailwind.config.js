@@ -7,7 +7,10 @@ module.exports = {
     colors:{
       grey_1: '#f7f7f7',
       grey_2: '#d9d9d9',
-      blue_1: '#004ffe',
+      blue: {
+        1:'#004ffe',
+        2:'#074efd'
+      },
       white: '#ffffff',
       font_1: '#6d7276',
       font_2: '#c5c5c5',

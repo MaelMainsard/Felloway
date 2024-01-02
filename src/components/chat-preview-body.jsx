@@ -9,7 +9,7 @@ const ChatMenuBody = ({ user_id, state_show_message, set_open_chat, set_chat }) 
   }, [user_id, state_show_message, set_open_chat, set_chat]); // Ajoutez les dépendances manquantes ici
 
   return (
-    <div className='p-2 h-max'>
+    <div className='p-2 h-max space-y-5'>
       {messages}
     </div>
   );

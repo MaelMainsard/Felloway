@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { firestore } from '../lib/Firebase';
 import { collection, onSnapshot, query, addDoc, serverTimestamp } from 'firebase/firestore';
 
-const ModalNewConv = ({ showModal, closeModal, user_id, show_conv}) => {
+const ModalNewConv = ({ showModal, closeModal, user_id, show_conv, set_open_chat, set_chat}) => {
   const [checkedUsers, setCheckedUsers] = useState([]); // Utiliser un objet pour stocker les états des cases à cocher
   const [usersList, setUsersList] = useState([]);
   const [groupName, setGroupName] = useState('');
@@ -49,12 +49,15 @@ const ModalNewConv = ({ showModal, closeModal, user_id, show_conv}) => {
     }
     closeModal()
 
-    await addDoc(collection(firestore, 'groups'), {
+    const response = await addDoc(collection(firestore, 'groups'), {
       group_img: '',
       group_name: array_users.length > 2 ? groupName : '',
       is_chat: array_users.length > 2 ? false : true,
       users: usersMap,
     });
+
+    set_chat(response.id)
+    set_open_chat(true)
   };
 
   const handleBadgeClick = (user) => {

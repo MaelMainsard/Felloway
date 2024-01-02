@@ -3,7 +3,7 @@ import GetUserAvatar from '../fetcher/fetcher-avatar-chat-preview-header'
 import GetModalNewConv from '../modals/modal-new-conv';
 import MapsUgcIcon from '@mui/icons-material/MapsUgc';
 
-const ChatMenuHeader = ({user_id,state_show_message,state_set_show_message}) => {
+const ChatMenuHeader = ({user_id,state_show_message,state_set_show_message,set_open_chat,set_chat}) => {
 
   const [avatar, setAvatar] = useState(null);
   const [showModalNewConv, setShowModalNewConv] = useState(false);
@@ -30,14 +30,14 @@ const ChatMenuHeader = ({user_id,state_show_message,state_set_show_message}) => 
         <div className="rounded-full p-1 bg-grey_1">
         <button
           type="button"  // Assurez-vous d'ajuster le type en fonction de vos besoins
-          className={`w-20 h-8 rounded-full ${!state_show_message ? ' bg-grey_1 text-font_2' : ' bg-blue_1 text-white'}`}
+          className={`w-20 h-8 rounded-full ${!state_show_message ? ' bg-grey_1 text-font_2' : ' bg-blue-1 text-white'}`}
           onClick={() => state_set_show_message(true)}
         >
           DM
         </button>
         <button
           type="button"
-          className={` w-20 h-8 rounded-full ${state_show_message ? ' bg-grey_1 text-font_2' : ' bg-blue_1 text-white'}`}
+          className={` w-20 h-8 rounded-full ${state_show_message ? ' bg-grey_1 text-font_2' : ' bg-blue-1 text-white'}`}
           onClick={() => state_set_show_message(false)}
         >
           Groupes
@@ -49,7 +49,7 @@ const ChatMenuHeader = ({user_id,state_show_message,state_set_show_message}) => 
           </button>
         </div>
       </div>
-      <GetModalNewConv showModal={showModalNewConv} closeModal={()=>setShowModalNewConv(false)} user_id={user_id} show_conv={state_set_show_message} />
+      <GetModalNewConv showModal={showModalNewConv} closeModal={()=>setShowModalNewConv(false)} user_id={user_id} show_conv={state_set_show_message} set_open_chat={set_open_chat} set_chat={set_chat}/>
     </>
   );
 };
