@@ -3,8 +3,8 @@ import { Stack, IconButton } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { app } from "../config/Firebase"
 import { getAuth, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
-import { doc, setDoc, getDoc } from "firebase/firestore";
-import { getFirestore } from "firebase/firestore";
+import { doc, setDoc, getDoc, getFirestore, collection, addDoc } from "firebase/firestore";
+
 
 const db = getFirestore(app);
 const auth = getAuth(app);
@@ -28,6 +28,7 @@ const SocialAuth = ({ setAuth, setUser }) => {
           signInWithPopup(auth, provider)
             .then(async (result) => {
               setUser(result.user)
+              console.log("user log", result.user);
               setAuth(true);
               // Add user to the database if it doesn't exist
               const userRef = doc(db, "users", result.user.uid);
@@ -50,13 +51,14 @@ const SocialAuth = ({ setAuth, setUser }) => {
                   firstName: firstName,
                   lastName: lastName,
                   email: auth.currentUser.providerData[0].email,
-                  images: {
-                    image0: auth.currentUser.providerData[0].photoURL
-                  },
+                  avatar: auth.currentUser.providerData[0].photoURL,
                   fournisseur: auth.currentUser.providerData[0].providerId,
                 });
+                const userImagesRef = collection(db, 'users', result.user.uid, 'images');
+                await addDoc(userImagesRef, { url: auth.currentUser.providerData[0].photoURL });
               }              
-              
+              sessionStorage.setItem("loggedUser", JSON.stringify(result.user));
+
               navigate("/", { replace: true });
             })
             .catch((error) => {

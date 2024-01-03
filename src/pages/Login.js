@@ -4,7 +4,7 @@ import { Container, Typography, Link, Box, Divider } from "@mui/material";
 import styled from "@emotion/styled";
 import LoginForm from "../components/LoginForm";
 import SocialAuth from "../components/SocialAuth";
-import Logo from "../components/Logo";
+import LogoText from "../components/LogoText";
 import { motion } from "framer-motion";
 
 //////////////////////////////////
@@ -52,7 +52,7 @@ const Login = ({ setAuth, setUser }) => {
       <Container maxWidth="sm">
         <ContentStyle>
           <HeadingStyle component={motion.div} {...fadeInUp}>
-            <Logo />
+            <LogoText />
             <Typography sx={{ color: "text.secondary", mb: 5 }}>
               Login to your account
             </Typography>

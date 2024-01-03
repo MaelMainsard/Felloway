@@ -2,9 +2,12 @@ import { Container } from "@mui/material";
 import NavBar from "../components/BottomNavBar";
 import { useState } from "react";
 import Avatar from '@mui/material/Avatar';
+import { getLoggedUser } from "../config/util";
 //////////////////////////////////////
 
-const Home = ({user}) => {
+const Home = () => {
+
+  let user = getLoggedUser();
 
   const [image, setImage] = useState(user.photoURL);
 
