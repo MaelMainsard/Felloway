@@ -6,6 +6,8 @@ import SettingsIcon from '@mui/icons-material/Settings';
 import { Link } from "react-router-dom";
 import Avatar from '@mui/material/Avatar';
 import { getLoggedUser } from '../config/util';
+import ImageUploader from '../components/ImageUploader';
+import Badge from '@mui/material/Badge';
 
 //////////////////////////////////////
 
@@ -52,7 +54,22 @@ const Profil = () => {
                 <SettingsIcon style={{ color: "inherit" }} />
               </Link>
             </IconButton>
-          </div><Avatar alt="User Avatar" src={image} /><div style={{ marginTop: "auto", display: "flex", width: "100%" }}>
+          </div>
+          <Badge
+            overlap="circular"
+            anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+            badgeContent={
+              <span> Bonjour</span> 
+            }
+          >
+            <Avatar alt="User Avatar" src={image} sx={{ width: "50%", height: "auto", margin: "auto" }}/>
+          </Badge>
+
+
+          <ImageUploader/>
+
+          <div style={{ marginTop: "auto", display: "flex", width: "100%" }}>
+
               <NavBar />
           </div>
     </Container>
