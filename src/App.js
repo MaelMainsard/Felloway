@@ -4,13 +4,13 @@ import { Route, Routes, Navigate, useLocation } from "react-router-dom";
 import Home from "./pages/Home";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
-import Chat from "./pages/Chat";
+import ChatMenu from "./pages/chat-menu";
 import Settings from "./pages/Settings";
 import Profil from "./pages/Profil";
 import PrivateRoute from "./routes/PrivateRoute";
 import ForgotPassword from "./pages/ForgotPassword";
 
-import "./App.css"
+
 function App() {
   const [auth, setAuth] = useState(false);
   const [user, setUser] = useState(null)
@@ -23,7 +23,7 @@ function App() {
         <Route path="/login" element={<Login setAuth={setAuth} setUser={setUser}/>} />
         <Route path="/signup" element={<Signup setAuth={setAuth} setUser={setUser}/>} />
         <Route path="/home" element={<PrivateRoute><Home/></PrivateRoute>} />
-        <Route path="/chat" element={<PrivateRoute><Chat/></PrivateRoute>} />
+        <Route path="/chat" element={<PrivateRoute><ChatMenu /></PrivateRoute>} />
         <Route path="/settings" element={<PrivateRoute><Settings/></PrivateRoute>} />
         <Route path="/profil" element={<PrivateRoute><Profil/></PrivateRoute>} />
 
