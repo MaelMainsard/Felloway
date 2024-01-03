@@ -1,7 +1,7 @@
 import { AvatarLayoutModal } from '../layouts/layout-avatar';
 import React, { useState, useEffect } from 'react';
 import { firestore } from '../config/Firebase';
-import { collection, onSnapshot, query, addDoc, serverTimestamp } from 'firebase/firestore';
+import { collection, onSnapshot, query, addDoc } from 'firebase/firestore';
 
 const ModalNewConv = ({ showModal, closeModal, user_id, show_conv, set_open_chat, set_chat}) => {
   const [checkedUsers, setCheckedUsers] = useState([]); // Utiliser un objet pour stocker les états des cases à cocher

@@ -26,7 +26,7 @@ export const ChatLeft = ({ content, data }) => {
 
 
     return () => fetchData()
-  }, []); 
+  }, [content,data]); 
 
 
   return (
@@ -64,7 +64,7 @@ export const ChatRight = ({ content, data }) => {
 
 
     return () => fetchData()
-  }, []); 
+  }, [content,data]); 
   
   return (
     <div className="chat chat-end mb-3">
@@ -105,7 +105,7 @@ export const ChatRightDM = ({chat_content}) => {
 
 function formatTimestamp(timestamp) {
   if (!timestamp) {
-    return 'N/A';
+    return '';
   }
 
   const { seconds, nanoseconds } = timestamp;
