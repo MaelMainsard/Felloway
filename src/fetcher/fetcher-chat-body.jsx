@@ -1,4 +1,4 @@
-import React, {useEffect,useRef} from 'react';
+import React from 'react';
 import { firestore } from '../lib/Firebase';
 import { collection, onSnapshot, query, doc, getDoc, orderBy   } from "firebase/firestore";
 
@@ -40,9 +40,7 @@ const GetMessagePage = async ({ user_id, setMessages, chat_id}) => {
 
         messages_preview_list.push(messages_preview);
 
-        const chatMenuMessages = messages_preview_list
-          // .slice()
-          // .sort((a, b) => a.timestamp - b.timestamp)
+        let chatMenuMessages = messages_preview_list
           .map((item, index) => (
             item.sender_id === user_id ? (
               !group_data.is_chat ?
@@ -62,13 +60,15 @@ const GetMessagePage = async ({ user_id, setMessages, chat_id}) => {
               <NoConv />
             </div>
           );
+          return;
         }
 
         setMessages(
           <>
-           {chatMenuMessages}
+            {chatMenuMessages}
           </>
         );
+
 
       });
 

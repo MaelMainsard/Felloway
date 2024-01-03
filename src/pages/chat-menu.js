@@ -13,7 +13,7 @@ const ChatMenu = () => {
   const [openChat, setOpenChat] = useState(false);
   const [chat, setChat] = useState('');
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
-
+  const [messages, setMessages] = useState(null);
 
   useEffect(() => {
     const handleResize = () => {
@@ -29,7 +29,7 @@ const ChatMenu = () => {
 
   useEffect(() => {
     setUserId('72MMTbrxZCRRUHoZFJUnkVOxDNk1');
-  }, [user_id]);
+  }, [user_id,messages]);
 
 
   const handlers = useSwipeable({
@@ -69,7 +69,7 @@ const ChatMenu = () => {
               chat_id={chat}
               user_id={user_id}
             />
-            <ChatPageBody chat_id={chat} user_id={user_id}/>
+            <ChatPageBody chat_id={chat} user_id={user_id} setMessages={setMessages} messages={messages}/>
             <ChatPageFooter chat_id={chat} user_id={user_id} />
         </div>
       )}

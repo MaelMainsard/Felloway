@@ -7,9 +7,9 @@ import { doc, deleteDoc } from "firebase/firestore";
 export const ChatMenuMessage = ({group_preview, open_chat, chat}) => {
 
     return (
-      <div className='flex flex-row align-middle items-center justify-start bg-grey_1 rounded-xl p-3 mb-2 w-full cursor-pointer' onClick={() => { open_chat(true); chat(group_preview.id); }}>
+      <div className='flex flex-row align-middle items-center justify-start bg-grey_1 rounded-xl p-3 mb-2 w-full cursor-pointer'>
         <AvatarLayoutPreview group_preview={group_preview} />
-        <div className="w-full justify-center align-middle flex flex-col mb-1 mr-1">
+        <div className="w-full justify-center align-middle flex flex-col mb-1 mr-1"  onClick={() => { open_chat(true); chat(group_preview.id); }}>
           <div className=" justify-between flex flex-row items-start">
             <span className='text-font_1 line-clamp-1 font-bold text-base w-8/12'>{group_preview.title}</span>
             <span className='text-font_2 line-clamp-1 text-xs'>{group_preview.timestamp}</span>
