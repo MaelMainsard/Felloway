@@ -22,8 +22,8 @@ function App() {
         <Route path="/signup" element={<Signup setAuth={setAuth} setUser={setUser}/>} />
         <Route path="/home" element={<Home user={user}/>} />
         <Route path="/chat" element={<Chat user={user} setUser={setUser}/>} />
-        <Route path="/settings" element={<Settings/>} />
-        <Route path="/profil" element={<Profil user={user}/>} />
+        <Route path="/settings" element={<Settings user={user} setUser={setUser}/>} />
+        <Route path="/profil" element={<Profil user={user} setUser={setUser}/>} />
 
         <Route
           path="/"

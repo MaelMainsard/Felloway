@@ -19,6 +19,7 @@ const ChatMenu = ({ user, setUser }) => {
 
   useEffect(() => {
 
+    console.log("je rentre dans le useeffect de chatmenu");
     setLoading(true)
 
     if (user === null) {

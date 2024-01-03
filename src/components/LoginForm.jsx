@@ -60,7 +60,10 @@ const LoginForm = ({ setAuth, setUser }) => {
 
         // Signed in
         const user = userCredential.user;
+        console.log("user log", user);
         setUser(userCredential.user)
+        
+        console.log("user log", user);
         setAuth(true);
         navigate(from, { replace: true });
       } catch (error) {

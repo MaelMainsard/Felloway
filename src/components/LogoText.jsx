@@ -2,14 +2,14 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { Box } from "@mui/material";
 
-const Logo = () => {
+const LogoText = () => {
   return (
     <Box>
       <Link to="/">
-        <Box component="img" src="/static/Felloway.svg" alt="logo" />
+        <Box component="img" src="/static/FellowayCombinaison.svg" alt="logo" />
       </Link>
     </Box>
   );
 };
 
-export default Logo;
+export default LogoText;

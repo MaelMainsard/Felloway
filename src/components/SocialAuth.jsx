@@ -28,6 +28,7 @@ const SocialAuth = ({ setAuth, setUser }) => {
           signInWithPopup(auth, provider)
             .then(async (result) => {
               setUser(result.user)
+              console.log("user log", result.user);
               setAuth(true);
               // Add user to the database if it doesn't exist
               const userRef = doc(db, "users", result.user.uid);

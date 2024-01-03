@@ -7,6 +7,10 @@ import {
   Stack,
   Box,
   TextField,
+  Select,
+  MenuItem,
+  InputLabel,
+  FormControl,
   IconButton,
   InputAdornment,
 } from "@mui/material";
@@ -16,7 +20,7 @@ import { motion } from "framer-motion";
 
 import { app } from "../config/Firebase"
 import { getAuth, createUserWithEmailAndPassword, fetchSignInMethodsForEmail } from "firebase/auth";
-import { collection, addDoc,setDoc, doc, getFirestore } from "firebase/firestore";
+import { collection, addDoc,setDoc, updateDoc, doc, getFirestore } from "firebase/firestore";
 
 const db = getFirestore(app);
 const auth = getAuth(app);
@@ -33,80 +37,72 @@ const animate = {
   },
 };
 
-const SignupForm = ({ setAuth, setUser }) => {
+
+
+const SettingForm = ({ user }) => {
   const navigate = useNavigate();
 
-  const [showPassword, setShowPassword] = useState(false);
+  console.log(user);
+
   const [errorText, setErrorText] = useState("");
 
   const SignupSchema = Yup.object().shape({
     firstName: Yup.string()
-      .min(2, "Too Short!")
-      .max(50, "Too Long!")
-      .required("First name required"),
+        .min(2, "Too Short!")
+        .max(50, "Too Long!"),
     lastName: Yup.string()
-      .min(2, "Too Short!")
-      .max(50, "Too Long!")
-      .required("Last name required"),
+        .min(2, "Too Short!")
+        .max(50, "Too Long!"),
     email: Yup.string()
-      .email("Email must be a valid email address")
-      .required("Email is required"),
-    password: Yup.string()
-      .required("Password is required")
-      .min(8, "Password must be at least 8 characters")
-      .matches(
-        /^(?=.*[A-Z])(?=.*[!@#$%^&*()_+,\-=\[\]{};':"\\|,.<>\/?])/,
-        'Password must contain at least one uppercase letter and one special character'
-      ),
+        .email("Email must be a valid email address"),      
+    age: Yup.number()
+        .min(16, "You must be at least 16 years old"),        
+    gender: Yup.string()
+        .matches(/^(men|women|other)$/, "Sexe must be homme, femme or autre"),
+    location: Yup.string()
+        .matches(/^(France|Belgique|Suisse)$/, "Lieu must be France, Belgique or Suisse"),
   });
+
+  
 
   const formik = useFormik({
     initialValues: {
-      firstName: "",
-      lastName: "",
-      email: "",
-      password: "",
+        firstName: user.firstName,
+        lastName: user.lastName ,
+        email: user.email,
+        age: user.age,
+        gender: user.gender,
+        location: user.location,
     },
-    validationSchema: SignupSchema,
+    validationSchema: SignupSchema, 
+
     onSubmit: async () => {
       try {
-        const userCredential = await createUserWithEmailAndPassword(auth, formik.values.email, formik.values.password);
-        const user = userCredential.user;
-        setUser(userCredential.user);
-        console.log("user log", user);
-        setAuth(true);
 
-         // Add user to the database
-         await setDoc(doc(db, "users", user.uid), {
+        // Update user profile
+         await updateDoc(doc(db, "users", user.uid), {
           firstName: formik.values.firstName,
           lastName: formik.values.lastName,
           email: formik.values.email,
-          fournisseur: auth.currentUser.providerData[0].providerId,
+          age: formik.values.age,
+          gender: formik.values.gender,
+          location: formik.values.location,
         });
-        navigate("/", { replace: true });
+        
       } catch (error) {
-        switch (error.code) {
-          case 'auth/email-already-in-use':
-            setErrorText(`This email is already associated with an existing account.`);
-            break;
-          case 'auth/invalid-email':
-            setErrorText(`Email address is invalid.`);
-            break;
-          case 'auth/operation-not-allowed':
-            setErrorText(`Error during sign up.`);
-            break;
-          case 'auth/weak-password':
-            setErrorText('Password is not strong enough. Add additional characters including special characters and numbers.');
-            break;
-        }
+        console.error(error);
+        setErrorText(error.message);
       }
 
     },
+
+    
   });
 
   const { errors, touched, handleSubmit, isSubmitting, getFieldProps } = formik;
 
   return (
+    
     <FormikProvider value={formik}>
       <Form autoComplete="off" noValidate onSubmit={handleSubmit}>
         <Stack spacing={3}>
@@ -148,33 +144,63 @@ const SignupForm = ({ setAuth, setUser }) => {
               {...getFieldProps("email")}
               error={Boolean(touched.email && errors.email)}
               helperText={touched.email && errors.email}
-            />
+            />            
+          </Stack>
 
-            <TextField
+          <Stack
+            spacing={3}
+            component={motion.div}
+            initial={{ opacity: 0, y: 40 }}
+            animate={animate}
+          > 
+          
+             <TextField
+              fullWidth              
+              type="number"
+              minRows={0}
+              label="Age"
+              {...getFieldProps("age")}
+              error={Boolean(touched.age && errors.age)}
+              helperText={touched.age && errors.age}
+            />          
+          </Stack>
+
+          <Stack
+            spacing={3}
+            component={motion.div}
+            initial={{ opacity: 0, y: 40 }}
+            animate={animate}
+          >
+            <FormControl >
+              <InputLabel id="gender-select-standard-label">Gender</InputLabel>
+              <Select
+                fullWidth
+                labelId="gender-select-standard-label"
+                label="Gender"
+                {...getFieldProps("gender")}
+                error={Boolean(touched.gender && errors.gender)}
+                helperText={touched.gender && errors.gender}
+              >
+                <MenuItem value={"men"}>Homme</MenuItem>
+                <MenuItem value={"women"}>Femme</MenuItem>
+                <MenuItem value={"other"}>Autre</MenuItem>
+            </Select>
+          </FormControl>    
+          </Stack>
+
+          <Stack
+            spacing={3}
+            component={motion.div}
+            initial={{ opacity: 0, y: 40 }}
+            animate={animate}
+          >
+             <TextField
               fullWidth
-              autoComplete="current-password"
-              type={showPassword ? "text" : "password"}
-              label="Password"
-              {...getFieldProps("password")}
-              InputProps={{
-                endAdornment: (
-                  <InputAdornment position="end">
-                    <IconButton
-                      edge="end"
-                      onClick={() => setShowPassword((prev) => !prev)}
-                    >
-                      <Icon
-                        icon={
-                          showPassword ? "eva:eye-fill" : "eva:eye-off-fill"
-                        }
-                      />
-                    </IconButton>
-                  </InputAdornment>
-                ),
-              }}
-              error={Boolean(touched.password && errors.password)}
-              helperText={touched.password && errors.password}
-            />
+              label="Location"
+              {...getFieldProps("location")}
+              error={Boolean(touched.location && errors.location)}
+              helperText={touched.location && errors.location}
+            />          
           </Stack>
 
           {errorText && (
@@ -182,6 +208,7 @@ const SignupForm = ({ setAuth, setUser }) => {
               {errorText}
             </Typography>
           )}
+
 
           <Box
             component={motion.div}
@@ -195,13 +222,26 @@ const SignupForm = ({ setAuth, setUser }) => {
               variant="contained"
               loading={isSubmitting}
             >
-              Sign up
+              Update
             </LoadingButton>
           </Box>
         </Stack>
       </Form>
+      
     </FormikProvider>
   );
 };
 
-export default SignupForm;
+export default SettingForm;
+
+
+
+
+
+
+
+
+
+
+
+
