@@ -5,12 +5,15 @@ import ChatMessage from "../components/ChatMessage"
 import React, { useState, useEffect } from 'react';
 import { firestore } from '../config/Firebase';
 import { collection, query, where, getDocs, onSnapshot } from "firebase/firestore";
-
+import { getLoggedUser } from '../config/util';
 import { LoaderConversation, EmptyConversation } from "../components/Loader";
 
 //////////////////////////////////////
 
-const ChatMenu = ({ user, setUser }) => {
+const ChatMenu = () => {
+
+  let user = getLoggedUser();
+
   const [showMessage, setShowMessage] = useState(true);
 
   let [groupMessages, setGroupMessages] = useState([]);
@@ -19,18 +22,9 @@ const ChatMenu = ({ user, setUser }) => {
 
   useEffect(() => {
 
+    console.log("je rentre dans le useeffect de chatmenu");
     setLoading(true)
 
-    if (user === null) {
-      const localUser = localStorage.getItem('felloway_uid');
-      if (localUser) {
-        setUser(JSON.parse(localUser)); // Parse la chaîne JSON pour obtenir un objet
-      }
-    } else {
-      setUser(user);
-      localStorage.setItem('felloway_uid', JSON.stringify(user)); // Convertit l'objet en chaîne JSON
-    }
-    
     const unsubscribe = onSnapshot(
       
       query(collection(firestore, "groups")),

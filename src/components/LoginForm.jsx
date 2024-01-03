@@ -63,7 +63,6 @@ const LoginForm = ({ setAuth, setUser }) => {
           setSubmitting(false);
           return;
         }
-
         const userData = querySnapshot.docs[0].data();
 
         if (userData.fournisseur === "password") {
@@ -71,6 +70,7 @@ const LoginForm = ({ setAuth, setUser }) => {
           // Signed in
           const user = userCredential.user;
           setUser(userCredential.user)
+          sessionStorage.setItem("loggedUser", JSON.stringify(userCredential.user));
           setAuth(true);
           navigate(from, { replace: true });
         } else if (userData.fournisseur === "google") {
