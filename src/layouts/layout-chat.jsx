@@ -1,51 +1,84 @@
 import {AvatarLayoutPage} from "../layouts/layout-avatar"
 import { firestore } from '../lib/Firebase';
 import { doc, getDoc   } from "firebase/firestore";
+import { useEffect, useState } from 'react';
 
-export const ChatLeft = async ({chat_content,group_data}) => {
+export const ChatLeft = ({ content, data }) => {
+  const [userPreview, setUserPreview] = useState({
+    avatar: null,
+    title: null,
+  });
 
-  
-  const usersRef = doc(firestore, "users", chat_content.sender_id);
-  const usersSnap = await getDoc(usersRef);
-  const user_data = usersSnap.data();
+  useEffect(() => {
+    const fetchData = async () => {
+      const usersRef = doc(firestore, 'users', content.sender_id);
+      const usersSnap = await getDoc(usersRef);
+      const user_data = usersSnap.data();
 
-  const group_preview = {
-    avatar: group_data.group_img ? group_data.group_img : user_data.avatar,
-    title: (user_data.firstName !== undefined || user_data.lastName !== undefined) ? (user_data.firstName + " " + user_data.lastName) : null,
-  }
+      const group_preview = {
+        avatar: data.group_img ? data.group_img : user_data.avatar,
+        title:
+          user_data.firstName !== undefined || user_data.lastName !== undefined
+            ? user_data.firstName + ' ' + user_data.lastName
+            : null,
+      };
 
+      setUserPreview(group_preview);
+    };
 
-  return(
+    fetchData();
+  }, [content.sender_id, data.group_img]);
+
+  return (
     <div className="chat chat-start mb-3">
-        <AvatarLayoutPage user_id={chat_content.sender_id} message_preview={group_preview}/>
-        <div className="chat-header flex flex-row items-center">
-          <span className='mr-2'>{group_preview.title}</span>
-          <time className="text-xs opacity-50">{formatTimestamp(chat_content.timestamp)}</time>
-        </div>
-        <div className="chat-bubble bg-white text-font_1">{chat_content.content}</div>
+      <AvatarLayoutPage user_id={content.sender_id} message_preview={userPreview} />
+      <div className="chat-header flex flex-row items-center">
+        <span className="mr-2">{userPreview.title}</span>
+        <time className="text-xs opacity-50">{formatTimestamp(content.timestamp)}</time>
+      </div>
+      <div className="chat-bubble bg-white text-font_1">{content.content}</div>
     </div>
   );
 };
 
-export const ChatRight = async ({chat_content,group_data}) => {
+export const ChatRight = async ({ content, data }) => {
 
-  const usersRef = doc(firestore, "users", chat_content.sender_id);
-  const usersSnap = await getDoc(usersRef);
-  const user_data = usersSnap.data();
+  const [groupPreview, setUserPreview] = useState(null);
 
-  const group_preview = {
-    avatar: group_data.group_img ? group_data.group_img : user_data.avatar,
-    title: (user_data.firstName !== undefined || user_data.lastName !== undefined) ? (user_data.firstName + " " + user_data.lastName) : null,
-  }
+  useEffect(() => {
+    setUserPreview({
+      avatar: null,
+      title: '?',
+    })
+    const fetchData = async () => {
 
-  return(
+      // const usersRef = doc(firestore, "users", content.sender_id);
+      // const usersSnap = await getDoc(usersRef);
+      // const user_data = usersSnap.data();
+
+      
+    
+      // const group_preview = {
+      //   avatar: data.group_img ? data.group_img : user_data.avatar,
+      //   title: (user_data.firstName !== undefined || user_data.lastName !== undefined) ? (user_data.firstName + " " + user_data.lastName) : null,
+      // }
+
+      // setUserPreview(group_preview);
+    };
+
+    fetchData();
+  }, [content,data]);
+
+  console.log(groupPreview)
+  
+  return (
     <div className="chat chat-end mb-3">
-        <AvatarLayoutPage user_id={chat_content.sender_id} message_preview={group_preview}/>
-        <div className="chat-header flex flex-row items-center">
-          <span className='mr-2'>{group_preview.title}</span>
-          <time className="text-xs opacity-50">{formatTimestamp(chat_content.timestamp)}</time>
-        </div>
-        <div className="chat-bubble bg-blue-2 text-white">{chat_content.content}</div>
+      <AvatarLayoutPage message_preview={groupPreview} />
+      <div className="chat-header flex flex-row items-center">
+        <span className="mr-2">{groupPreview.title}</span>
+        <time className="text-xs opacity-50">{formatTimestamp(content.timestamp)}</time>
+      </div>
+      <div className="chat-bubble bg-blue-2 text-white">{content.content}</div>
     </div>
   );
 };

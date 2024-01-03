@@ -44,11 +44,11 @@ const GetMessagePage = async ({ user_id, setMessages, chat_id}) => {
             const isUserMessage = item.sender_id === user_id;
             if (isUserMessage) {
               return !group_data.is_chat ?
-                <ChatRight chat_content={item} key={index} group_data={group_data} /> :
+                <ChatRight content={item} data={group_data} key={index}/> :
                 <ChatRightDM chat_content={item} key={index} />;
             } else {
               return !group_data.is_chat ?
-                <ChatLeft chat_content={item} key={index} group_data={group_data} /> :
+                <ChatLeft content={item} data={group_data} key={index} /> :
                 <ChatLeftDM chat_content={item} key={index} />;
             }
           });
