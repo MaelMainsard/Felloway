@@ -7,6 +7,7 @@ import Signup from "./pages/Signup";
 import Chat from "./pages/Chat";
 import Settings from "./pages/Settings";
 import Profil from "./pages/Profil";
+import ForgotPassword from "./pages/ForgotPassword";
 
 import "./App.css"
 function App() {
@@ -35,6 +36,7 @@ function App() {
             )
           }
         />
+        <Route path="/forgot-password" element={<ForgotPassword />} />
       </Routes>
     </>
   );

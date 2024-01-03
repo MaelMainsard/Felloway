@@ -18,6 +18,7 @@ import { motion } from "framer-motion";
 
 import { app } from "../config/Firebase";
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
+import { getFirestore, collection, where, query, getDocs } from "firebase/firestore";
 
 const auth = getAuth(app);
 
@@ -31,9 +32,6 @@ const animate = {
     delay: 0.16,
   },
 };
-
-const INVALID_CREDENTIALS_ERROR = "Email address or password invalid.";
-const WRONG_PASSWORD_ERROR = "Incorrect password. Please try again.";
 
 const LoginForm = ({ setAuth, setUser }) => {
   const navigate = useNavigate();
@@ -56,16 +54,32 @@ const LoginForm = ({ setAuth, setUser }) => {
     validationSchema: LoginSchema,
     onSubmit: async (values, { setStatus, setSubmitting }) => {
       try {
-        const userCredential = await signInWithEmailAndPassword(auth, values.email, values.password);
+        const usersCollection = collection(getFirestore(app), "users");
+        const q = query(usersCollection, where("email", "==", values.email));
+        const querySnapshot = await getDocs(q);
 
-        // Signed in
-        const user = userCredential.user;
-        setUser(userCredential.user)
-        setAuth(true);
-        navigate(from, { replace: true });
+        if (querySnapshot.docs.length === 0) {
+          setStatus({ error: "User not found. Please sign up." });
+          setSubmitting(false);
+          return;
+        }
+
+        const userData = querySnapshot.docs[0].data();
+
+        if (userData.fournisseur === "password") {
+          const userCredential = await signInWithEmailAndPassword(auth, values.email, values.password);
+          // Signed in
+          const user = userCredential.user;
+          setUser(userCredential.user)
+          setAuth(true);
+          navigate(from, { replace: true });
+        } else if (userData.fournisseur === "google") {
+          setStatus({ error: "This email is already associated with a Google Account. Please sign in with Google." });
+          setSubmitting(false);
+        }
       } catch (error) {
         if (error.code === "auth/invalid-login-credentials") {
-          setStatus({ error: INVALID_CREDENTIALS_ERROR });
+          setStatus({ error: "Email address or password invalid." });
         } else {
           setStatus({ error: "An unexpected error occurred. Please try again later." });
         }
@@ -145,7 +159,7 @@ const LoginForm = ({ setAuth, setUser }) => {
                 label="Remember me"
               />
 
-              <Link component={RouterLink} variant="subtitle2" to="#" underline="hover">
+              <Link component={RouterLink} variant="subtitle2" to="/forgot-password" underline="hover">
                 Forgot password?
               </Link>
             </Stack>
