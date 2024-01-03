@@ -6,9 +6,7 @@ const ChatPageBody = ({ chat_id, user_id, messages,setMessages  }) => {
   const scrollbarsRef = useRef(null);
 
   useEffect(() => {
-    // Fetch des messages et mise à jour de l'état
-    GetMessagePage({ user_id, setMessages, chat_id });
-
+      GetMessagePage({ user_id, setMessages, chat_id });
   }, [chat_id]);
 
   useEffect(() => {

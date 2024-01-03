@@ -9,7 +9,7 @@ import { NoConv } from '../lib/icon_and_loader';
 
 const ChatMenu = () => {
   const [showMessage, setShowMessage] = useState(true);
-  const [user_id, setUserId] = useState('');
+  const user_id = "72MMTbrxZCRRUHoZFJUnkVOxDNk1"
   const [openChat, setOpenChat] = useState(false);
   const [chat, setChat] = useState('');
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
@@ -27,9 +27,6 @@ const ChatMenu = () => {
     };
   }, []); 
 
-  useEffect(() => {
-    setUserId('72MMTbrxZCRRUHoZFJUnkVOxDNk1');
-  }, [user_id,messages]);
 
 
   const handlers = useSwipeable({

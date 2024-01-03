@@ -1,11 +1,25 @@
 import {AvatarLayoutPage} from "../layouts/layout-avatar"
+import { firestore } from '../lib/Firebase';
+import { doc, getDoc   } from "firebase/firestore";
 
-export const ChatLeft = ({chat_content,chat_params}) => {
+export const ChatLeft = async ({chat_content,group_data}) => {
+
+  
+  const usersRef = doc(firestore, "users", chat_content.sender_id);
+  const usersSnap = await getDoc(usersRef);
+  const user_data = usersSnap.data();
+
+  const group_preview = {
+    avatar: group_data.group_img ? group_data.group_img : user_data.avatar,
+    title: (user_data.firstName !== undefined || user_data.lastName !== undefined) ? (user_data.firstName + " " + user_data.lastName) : null,
+  }
+
+
   return(
     <div className="chat chat-start mb-3">
-        <AvatarLayoutPage user_id={chat_content.sender_id} message_preview={chat_params}/>
+        <AvatarLayoutPage user_id={chat_content.sender_id} message_preview={group_preview}/>
         <div className="chat-header flex flex-row items-center">
-          <span className='mr-2'>{chat_params.title}</span>
+          <span className='mr-2'>{group_preview.title}</span>
           <time className="text-xs opacity-50">{formatTimestamp(chat_content.timestamp)}</time>
         </div>
         <div className="chat-bubble bg-white text-font_1">{chat_content.content}</div>
@@ -13,13 +27,22 @@ export const ChatLeft = ({chat_content,chat_params}) => {
   );
 };
 
-export const ChatRight = ({chat_content,chat_params}) => {
+export const ChatRight = async ({chat_content,group_data}) => {
+
+  const usersRef = doc(firestore, "users", chat_content.sender_id);
+  const usersSnap = await getDoc(usersRef);
+  const user_data = usersSnap.data();
+
+  const group_preview = {
+    avatar: group_data.group_img ? group_data.group_img : user_data.avatar,
+    title: (user_data.firstName !== undefined || user_data.lastName !== undefined) ? (user_data.firstName + " " + user_data.lastName) : null,
+  }
 
   return(
     <div className="chat chat-end mb-3">
-        <AvatarLayoutPage user_id={chat_content.sender_id} message_preview={chat_params}/>
+        <AvatarLayoutPage user_id={chat_content.sender_id} message_preview={group_preview}/>
         <div className="chat-header flex flex-row items-center">
-          <span className='mr-2'>{chat_params.title}</span>
+          <span className='mr-2'>{group_preview.title}</span>
           <time className="text-xs opacity-50">{formatTimestamp(chat_content.timestamp)}</time>
         </div>
         <div className="chat-bubble bg-blue-2 text-white">{chat_content.content}</div>
