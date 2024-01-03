@@ -5,7 +5,7 @@ import IconButton from '@mui/material/IconButton';
 import SettingsIcon from '@mui/icons-material/Settings';
 import { Link } from "react-router-dom";
 import Avatar from '@mui/material/Avatar';
-import { getLoggedUser } from '../../config/util';
+import { getLoggedUser } from '../config/util';
 
 //////////////////////////////////////
 
@@ -15,21 +15,7 @@ const Profil = () => {
 
   const [image, setImage] = useState(user.photoURL);
 
-  useEffect(() => {
-
-    console.log("je rentre dans le useeffect de profil");
-
-    if (user === null) {
-      const localUser = localStorage.getItem('felloway_uid');
-      if (localUser) {
-        setUser(JSON.parse(localUser)); // Parse la chaîne JSON pour obtenir un objet
-      }
-    } else {
-      setUser(user);
-      localStorage.setItem('felloway_uid', JSON.stringify(user)); // Convertit l'objet en chaîne JSON
-    }
-    
-  });
+  
   
   //const [image, setImage] = useState(user.photoURL);
 

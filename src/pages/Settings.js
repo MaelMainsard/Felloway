@@ -2,16 +2,17 @@ import { Container } from "@mui/material";
 import NavBar from "../components/BottomNavBar";
 import { useState, useEffect } from "react";
 import SettingForm from "../components/SettingForm";
-
+import { getLoggedUser } from "../config/util";
 
 import { app } from "../config/Firebase"
 import { collection, addDoc,setDoc, doc, getFirestore } from "firebase/firestore";
 
 const db = getFirestore(app);
 
-const Settings = ({user, setUser}) => {
+const Settings = () => {
 
-  console.log("user", user);
+  let user = getLoggedUser();
+
   
   const [loading, setLoading] = useState(true);
 
@@ -19,16 +20,6 @@ const Settings = ({user, setUser}) => {
   useEffect(() => {
 
     setLoading(true)
-
-    if (user === null) {
-      const localUser = localStorage.getItem('felloway_uid');
-      if (localUser) {
-        setUser(JSON.parse(localUser)); // Parse la chaîne JSON pour obtenir un objet
-      }
-    } else {
-      setUser(user);
-      localStorage.setItem('felloway_uid', JSON.stringify(user)); // Convertit l'objet en chaîne JSON
-    }
 
   });
 

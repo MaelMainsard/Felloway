@@ -62,6 +62,7 @@ const LoginForm = ({ setAuth, setUser }) => {
         const user = userCredential.user;
         console.log("user log", user);
         setUser(userCredential.user)
+        sessionStorage.setItem("loggedUser", JSON.stringify(userCredential.user));
         
         console.log("user log", user);
         setAuth(true);

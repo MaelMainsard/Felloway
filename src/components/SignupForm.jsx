@@ -83,6 +83,8 @@ const SignupForm = ({ setAuth, setUser }) => {
           email: formik.values.email,
           fournisseur: auth.currentUser.providerData[0].providerId,
         });
+        sessionStorage.setItem("loggedUser", JSON.stringify(userCredential.user));
+        
         navigate("/", { replace: true });
       } catch (error) {
         switch (error.code) {

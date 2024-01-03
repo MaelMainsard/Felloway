@@ -57,7 +57,8 @@ const SocialAuth = ({ setAuth, setUser }) => {
                   fournisseur: auth.currentUser.providerData[0].providerId,
                 });
               }              
-              
+              sessionStorage.setItem("loggedUser", JSON.stringify(result.user));
+
               navigate("/", { replace: true });
             })
             .catch((error) => {
