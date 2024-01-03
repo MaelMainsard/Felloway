@@ -10,21 +10,21 @@ const ImageUploader = () => {
   const storage = getStorage(app);
   let user = getLoggedUser();
 
-  const [images, setImages] = useState([]);
-  const [imageUrl, setImageUrl] = useState('');
-  const [uploading, setUploading] = useState(false);
+    const [images, setImages] = useState([]);
+    const [imageUrl, setImageUrl] = useState('');
+    const [uploading, setUploading] = useState(false);
 
-  useEffect(() => {
-    // Récupération des images depuis Firestore lors du chargement initial
-    const fetchImages = async () => {
-      const userImagesRef = collection(db, 'users', user.uid, 'images');
-      const snapshot = await getDocs(userImagesRef);
-      const imageUrls = snapshot.docs.map((doc) => doc.data().url);
-      setImages(imageUrls);
-    };
+    useEffect(() => {
+      // Récupération des images depuis Firestore lors du chargement initial
+      const fetchImages = async () => {
+        const userImagesRef = collection(db, 'users', user.uid, 'images');
+        const snapshot = await getDocs(userImagesRef);
+        const imageUrls = snapshot.docs.map((doc) => doc.data().url);
+        setImages(imageUrls);
+      };
 
-    fetchImages();
-  }, [db]);
+      fetchImages();
+    }, [db]);
 
   const handleImageUpload = async (e) => {
     const file = e.target.files[0];
