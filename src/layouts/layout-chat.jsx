@@ -4,36 +4,36 @@ import { doc, getDoc   } from "firebase/firestore";
 import { useEffect, useState } from 'react';
 
 export const ChatLeft = ({ content, data }) => {
-  const [userPreview, setUserPreview] = useState({
+
+  const [groupPreview,setGroupPreview] = useState({
     avatar: null,
     title: null,
   });
 
   useEffect(() => {
     const fetchData = async () => {
-      const usersRef = doc(firestore, 'users', content.sender_id);
+      const usersRef = doc(firestore, "users", content.sender_id);
       const usersSnap = await getDoc(usersRef);
       const user_data = usersSnap.data();
 
       const group_preview = {
         avatar: data.group_img ? data.group_img : user_data.avatar,
-        title:
-          user_data.firstName !== undefined || user_data.lastName !== undefined
-            ? user_data.firstName + ' ' + user_data.lastName
-            : null,
-      };
-
-      setUserPreview(group_preview);
+        title: (user_data.firstName !== undefined || user_data.lastName !== undefined) ? (user_data.firstName + " " + user_data.lastName) : null,
+      }
+  
+      setGroupPreview(group_preview)
     };
 
-    fetchData();
-  }, [content.sender_id, data.group_img]);
+
+    return () => fetchData()
+  }, []); 
+
 
   return (
     <div className="chat chat-start mb-3">
-      <AvatarLayoutPage user_id={content.sender_id} message_preview={userPreview} />
+      <AvatarLayoutPage message_preview={groupPreview} />
       <div className="chat-header flex flex-row items-center">
-        <span className="mr-2">{userPreview.title}</span>
+        <span className="mr-2">{groupPreview.title}</span>
         <time className="text-xs opacity-50">{formatTimestamp(content.timestamp)}</time>
       </div>
       <div className="chat-bubble bg-white text-font_1">{content.content}</div>
@@ -41,35 +41,30 @@ export const ChatLeft = ({ content, data }) => {
   );
 };
 
-export const ChatRight = async ({ content, data }) => {
+export const ChatRight = ({ content, data }) => {
 
-  const [groupPreview, setUserPreview] = useState(null);
+  const [groupPreview,setGroupPreview] = useState({
+    avatar: null,
+    title: null,
+  });
 
   useEffect(() => {
-    setUserPreview({
-      avatar: null,
-      title: '?',
-    })
     const fetchData = async () => {
+      const usersRef = doc(firestore, "users", content.sender_id);
+      const usersSnap = await getDoc(usersRef);
+      const user_data = usersSnap.data();
 
-      // const usersRef = doc(firestore, "users", content.sender_id);
-      // const usersSnap = await getDoc(usersRef);
-      // const user_data = usersSnap.data();
-
-      
-    
-      // const group_preview = {
-      //   avatar: data.group_img ? data.group_img : user_data.avatar,
-      //   title: (user_data.firstName !== undefined || user_data.lastName !== undefined) ? (user_data.firstName + " " + user_data.lastName) : null,
-      // }
-
-      // setUserPreview(group_preview);
+      const group_preview = {
+        avatar: data.group_img ? data.group_img : user_data.avatar,
+        title: (user_data.firstName !== undefined || user_data.lastName !== undefined) ? (user_data.firstName + " " + user_data.lastName) : null,
+      }
+  
+      setGroupPreview(group_preview)
     };
 
-    fetchData();
-  }, [content,data]);
 
-  console.log(groupPreview)
+    return () => fetchData()
+  }, []); 
   
   return (
     <div className="chat chat-end mb-3">

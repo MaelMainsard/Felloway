@@ -40,6 +40,10 @@ export const AvatarLayoutPreview = ({ group_preview }) => {
 
 export const AvatarLayoutPage = ({ message_preview }) => {
 
+    if(!message_preview.title){
+      return <div></div>
+    }
+
     return (
         <div className='chat-image avatar'>
           <div className="w-10 rounded-full">
