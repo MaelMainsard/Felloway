@@ -20,9 +20,8 @@ export const AvatarLayoutModal = ({ user_array }) => {
 
 export const AvatarLayoutPreview = ({ group_preview }) => {
 
-
   return (
-    <div className='avatar mr-3'>
+    <div className={`avatar mr-3 ${group_preview.is_chat ? (group_preview.online ? 'online' : 'offline') : ''}`}>
       <div className="w-14 rounded-full">
         {group_preview.avatar ? (
           <img src={group_preview.avatar} alt="Avatar" className='object-cover rounded-full w-14' />

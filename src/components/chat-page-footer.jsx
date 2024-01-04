@@ -30,9 +30,6 @@ const ChatPageFooter = ({ chat_id, user_id }) => {
           <div className="join-item bg-grey_1 justify-center align-middle items-center flex flex-col pr-2 pl-2">
             <InsertPhotoIcon className="cursor-pointer" />
           </div>
-          <div className="join-item bg-grey_1 justify-center align-middle items-center flex flex-col pr-2 rounded-r-full">
-            <KeyboardVoiceIcon className="cursor-pointer" />
-          </div>
         </div>
       </div>
     );

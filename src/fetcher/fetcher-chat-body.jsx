@@ -24,9 +24,11 @@ const GetMessagePage = async ({ user_id, setMessages, chat_id}) => {
     const q = query(collection(firestore, 'groups', chat_id, 'messages'), orderBy('timestamp'));
     const unsubscribe_group = onSnapshot(q, (groupSnapshot) => {
       const messages_preview_list = [];
+      let test = false
 
       groupSnapshot.forEach(async (docs) => {
         const messages_preview = docs.data();
+        test = true
 
         messages_preview_list.push(messages_preview);
 
@@ -62,7 +64,9 @@ const GetMessagePage = async ({ user_id, setMessages, chat_id}) => {
 
       });
 
-
+      if(!test){
+        setMessages('')
+      }
     });
     return () => unsubscribe_group();
 

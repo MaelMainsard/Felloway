@@ -1,7 +1,7 @@
 import { AvatarLayoutModal } from '../layouts/layout-avatar';
 import React, { useState, useEffect } from 'react';
 import { firestore } from '../lib/Firebase';
-import { collection, onSnapshot, query, addDoc, serverTimestamp } from 'firebase/firestore';
+import { collection, onSnapshot, query, addDoc } from 'firebase/firestore';
 
 const ModalNewConv = ({ showModal, closeModal, user_id, show_conv, set_open_chat, set_chat}) => {
   const [checkedUsers, setCheckedUsers] = useState([]); // Utiliser un objet pour stocker les états des cases à cocher
@@ -47,7 +47,6 @@ const ModalNewConv = ({ showModal, closeModal, user_id, show_conv, set_open_chat
     else{
       show_conv(true)
     }
-    closeModal()
 
     const response = await addDoc(collection(firestore, 'groups'), {
       group_img: '',
@@ -55,9 +54,11 @@ const ModalNewConv = ({ showModal, closeModal, user_id, show_conv, set_open_chat
       is_chat: array_users.length > 2 ? false : true,
       users: usersMap,
     });
-
+    set_chat('')
     set_chat(response.id)
     set_open_chat(true)
+
+    closeModal()
   };
 
   const handleBadgeClick = (user) => {

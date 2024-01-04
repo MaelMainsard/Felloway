@@ -2,12 +2,13 @@ import React, { useState, useEffect, useRef } from 'react';
 import GetMessagePage from '../fetcher/fetcher-chat-body';
 import { Scrollbars } from 'react-custom-scrollbars';
 
-const ChatPageBody = ({ chat_id, user_id, messages,setMessages  }) => {
+const ChatPageBody = ({ chat_id, user_id }) => {
   const scrollbarsRef = useRef(null);
+  const [messages, setMessages] = useState(null);
 
   useEffect(() => {
       GetMessagePage({ user_id, setMessages, chat_id });
-  }, [chat_id]);
+  }, [chat_id,user_id]);
 
   useEffect(() => {
     if (scrollbarsRef.current) {

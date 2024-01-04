@@ -58,7 +58,9 @@ const GetMessagePreview = async ({ user_id, setMessages, state_show_message, set
           title:  !group_data.is_chat ? group_data.group_name : (user_data.firstName !== undefined || user_data.lastName !== undefined) ? (user_data.firstName + " " + user_data.lastName) : null,
           message: lastMessageData && lastMessageData.content || null,
           timestamp: formatTimestamp(lastMessageData && lastMessageData.timestamp || null),
-          notification: messages_not_view
+          notification: messages_not_view,
+          online : user_data.online,
+          is_chat: group_data.is_chat
         }
         
         groups_preview_list.push(group_preview);

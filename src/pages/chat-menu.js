@@ -13,7 +13,6 @@ const ChatMenu = () => {
   const [openChat, setOpenChat] = useState(false);
   const [chat, setChat] = useState('');
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
-  const [messages, setMessages] = useState(null);
 
   useEffect(() => {
     const handleResize = () => {
@@ -42,7 +41,7 @@ const ChatMenu = () => {
   return (
     <div className="flex flex-row w-screen">
        {(((!openChat) && (windowWidth < 640) || (windowWidth > 640))) && ( 
-        <div className={`h-screen bg-white sm:w-5/12 w-full`} {...handlers}>
+        <div className={`h-screen bg-white sm:max-w-sm w-full flex flex-col justify-between`} {...handlers}>
           <ChatMenuHeader
             user_id={user_id}
             state_show_message={showMessage}
@@ -66,7 +65,7 @@ const ChatMenu = () => {
               chat_id={chat}
               user_id={user_id}
             />
-            <ChatPageBody chat_id={chat} user_id={user_id} setMessages={setMessages} messages={messages}/>
+            <ChatPageBody chat_id={chat} user_id={user_id} />
             <ChatPageFooter chat_id={chat} user_id={user_id} />
         </div>
       )}
