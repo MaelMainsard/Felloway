@@ -2,14 +2,15 @@ import { AvatarLayoutPreview } from "../layouts/layout-avatar";
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { firestore } from '../lib/Firebase';
-import { doc, deleteDoc } from "firebase/firestore";
+import { doc, deleteDoc, collection, query, getDoc, getDocs, updateDoc  } from "firebase/firestore";
 
-export const ChatMenuMessage = ({group_preview, open_chat, chat}) => {
+
+export const ChatMenuMessage = ({group_preview, open_chat, chat, user_id}) => {
 
     return (
       <div className='flex flex-row align-middle items-center justify-start bg-grey_1 rounded-xl p-3 mb-2 w-full cursor-pointer'>
         <AvatarLayoutPreview group_preview={group_preview} />
-        <div className="w-full justify-center align-middle flex flex-col mb-1 mr-1"  onClick={() => { open_chat(true); chat(''); chat(group_preview.id); }}>
+        <div className="w-full justify-center align-middle flex flex-col mb-1 mr-1"  onClick={() => { open_chat(true); chat(''); chat(group_preview.id); updateViewMessage(group_preview.id,user_id)}}>
           <div className=" justify-between flex flex-row items-start">
             <span className='text-font_1 line-clamp-1 font-bold text-base w-8/12'>{group_preview.title}</span>
             <span className='text-font_2 line-clamp-1 text-xs'>{group_preview.timestamp}</span>
@@ -40,4 +41,30 @@ export const ChatMenuMessage = ({group_preview, open_chat, chat}) => {
         </div>
       </div>
     );
-  };
+};
+
+async function updateViewMessage(chat_id, user_id) {
+  const q = query(collection(firestore, "groups", chat_id, "messages"));
+
+  const querySnapshot = await getDocs(q);
+
+  // Utilisez Promise.all pour attendre la résolution de toutes les mises à jour
+  await Promise.all(
+    querySnapshot.docs.map(async (doc) => {
+      const docRef = doc.ref; // Obtenez la référence du document
+
+      // Utilisez getDoc pour obtenir une version mise à jour du document
+      const docSnapshot = await getDoc(docRef);
+      const doc_data = docSnapshot.data();
+
+      if (!doc_data.view_by.includes(user_id)) {
+        doc_data.view_by.push(user_id);
+
+        // Mettez à jour le document en utilisant la référence du document
+        await updateDoc(docRef, {
+          view_by: doc_data.view_by,
+        });
+      }
+    })
+  );
+}

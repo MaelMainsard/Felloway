@@ -16,23 +16,23 @@ const GetMessagePreview = async ({ user_id, setMessages, state_show_message, set
     }
 
     const queryGroups = query(collection(firestore, "groups"), where('users', 'array-contains', user_id),where('is_chat','==',state_show_message));
-    const unsubscribe_groups = onSnapshot(queryGroups, (groupsSnapshot) => {
-
+    const unsubscribe_groups = onSnapshot(queryGroups, async (groupsSnapshot) => {
       if(groupsSnapshot.empty) {
         setMessages(
           <div className="flex align-middle justify-center items-center mx-auto mt-60">
             <NoConv />
           </div>
         );
+        return;
       }
+
       const groups_preview_list = [];
 
-      groupsSnapshot.forEach(async (group) => {
-
+      await Promise.all(groupsSnapshot.docs.map(async (group) => {
         const group_data = group.data();
         const id_other_user = user_id === group_data.users[0] ? group_data.users[1] : group_data.users[0];
         const usersRef = doc(firestore, "users", id_other_user);
-        const usersSnap = await getDoc(usersRef);
+        const usersSnap =  await getDoc(usersRef);
         const user_data = usersSnap.data();
         const messagesQuery = collection(firestore, 'groups', group.id, 'messages');
         const messagesSnapshot = await getDocs(messagesQuery);
@@ -64,29 +64,26 @@ const GetMessagePreview = async ({ user_id, setMessages, state_show_message, set
         }
         
         groups_preview_list.push(group_preview);
-        
-        const chatMenuMessages = groups_preview_list.map((item, index) => (
-          <ChatMenuMessage group_preview={item} key={index} open_chat={set_open_chat} chat={set_chat} />
-        ));
-        
-        setMessages(
-          <div className="flex align-top justify-start items-start mx-auto flex-col">
-            {chatMenuMessages}
-          </div>
-        );
+      }));
 
-      });
-  
-    })
+      const chatMenuMessages = groups_preview_list.map((item, index) => (
+        <ChatMenuMessage group_preview={item} key={index} open_chat={set_open_chat} chat={set_chat} user_id={user_id} />
+      ));
+
+      setMessages(
+        <div className="flex align-top justify-start items-start mx-auto flex-col">
+          {chatMenuMessages}
+        </div>
+      );
+    });
 
     return () => unsubscribe_groups();
-  
-    
-
   } catch (error) {
     console.error('Error fetching messages: ', error);
   }
 };
+
+
 
 export default GetMessagePreview;
 
