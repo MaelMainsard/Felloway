@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import GetUserInfo from '../fetcher/fetcher-header-chat-page';
+import { getLoggedUser } from "../config/util";
 
-const ChatPageHeader = ({ open_chat, user_id, chat_id }) => {
+const ChatPageHeader = ({ open_chat, chat_id }) => {
   const [info, setInfo] = useState(null);
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+  let user_id = getLoggedUser().uid;
 
   useEffect(() => {
     const handleResize = () => {

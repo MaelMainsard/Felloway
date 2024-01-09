@@ -4,19 +4,13 @@ import { collection, onSnapshot, query, doc, getDoc, orderBy   } from "firebase/
 
 import { ChatLeft, ChatRight, ChatLeftDM, ChatRightDM } from '../layouts/layout-chat';
 import { NoConv } from '../lib/icon_and_loader';
+import { getLoggedUser } from "../config/util";
 
-const GetMessagePage = async ({ user_id, setMessages, chat_id}) => {
+const GetMessagePage = async ({ setMessages, chat_id}) => {
 
   try {
-    if (!chat_id) {
-      setMessages(
-        <div className="flex align-middle justify-center items-center mx-auto h-5/6">
-          <span className="loading loading-ball loading-lg bg-red_1"></span>
-        </div>
-      );
-      return;
-    }
-
+    let user_id = getLoggedUser().uid;
+    
     const docGroups = doc(firestore, "groups", chat_id);
     const snapGroups = await getDoc(docGroups);
     const group_data = snapGroups.data();
@@ -24,9 +18,11 @@ const GetMessagePage = async ({ user_id, setMessages, chat_id}) => {
     const q = query(collection(firestore, 'groups', chat_id, 'messages'), orderBy('timestamp'));
     const unsubscribe_group = onSnapshot(q, (groupSnapshot) => {
       const messages_preview_list = [];
+      let test = false
 
-      groupSnapshot.forEach(async (docs) => {
+      groupSnapshot.forEach(async(docs) => {
         const messages_preview = docs.data();
+        test = true
 
         messages_preview_list.push(messages_preview);
 
@@ -44,11 +40,11 @@ const GetMessagePage = async ({ user_id, setMessages, chat_id}) => {
             const isUserMessage = item.sender_id === user_id;
             if (isUserMessage) {
               return !group_data.is_chat ?
-                <ChatRight content={item} data={group_data} key={index}/> :
+                <ChatRight chat_content={item} key={index}/> :
                 <ChatRightDM chat_content={item} key={index} />;
             } else {
               return !group_data.is_chat ?
-                <ChatLeft content={item} data={group_data} key={index} /> :
+                <ChatLeft chat_content={item} key={index} /> :
                 <ChatLeftDM chat_content={item} key={index} />;
             }
           });
@@ -62,7 +58,9 @@ const GetMessagePage = async ({ user_id, setMessages, chat_id}) => {
 
       });
 
-
+      if(!test){
+        setMessages('')
+      }
     });
     return () => unsubscribe_group();
 
