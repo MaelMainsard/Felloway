@@ -1,21 +1,36 @@
-import React, { useState } from 'react';
-import InsertPhotoIcon from '@mui/icons-material/InsertPhoto';
+import React, { useState,useRef } from 'react';
 import KeyboardVoiceIcon from '@mui/icons-material/KeyboardVoice';
-import { firestore } from '../config/Firebase';
-import { collection, addDoc, serverTimestamp, updateDoc, doc, getDoc } from "firebase/firestore"; 
 import { getLoggedUser } from "../config/util";
+import { newMessage,uploadPicture } from "../lib/script"
+import InsertPhotoIcon from '@mui/icons-material/InsertPhoto';
+import DeleteIcon from '@mui/icons-material/Delete';
+import SendIcon from '@mui/icons-material/Send';
 
-const ChatPageFooter = ({ chat_id }) => {
+const ChatPageFooter = ({ chat_id, set_add_pic, add_pic }) => {
     const [message, setMessage] = useState('');
     let user_id = getLoggedUser().uid;
-  
+    const fileInputRef = useRef(null);
+
     const handleKeyPress = (event) => {
       if (event.key === 'Enter') {
         // Appel de la fonction newMessage avec le contenu du message
-        newMessage(chat_id, user_id, message);
+        newMessage(chat_id, message);
         // Réinitialiser le contenu de l'input après l'envoi
         setMessage('');
         // Vous pouvez également ajouter ici d'autres traitements si nécessaire
+      }
+    };
+
+    const handleImageChange = (e) => {
+      if (e.target.files[0]) {
+        set_add_pic(e.target.files[0]);
+      }
+    };
+
+    const handleClickInsertPhoto = () => {
+      // Déclencher le clic de l'input file
+      if (fileInputRef.current) {
+        fileInputRef.current.click();
       }
     };
   
@@ -29,8 +44,33 @@ const ChatPageFooter = ({ chat_id }) => {
             onChange={(e) => setMessage(e.target.value)}
             onKeyPress={handleKeyPress} // Ajout du gestionnaire d'événements
           />
-          <div className="join-item bg-grey-1 justify-center align-middle items-center flex flex-col pr-2 pl-2">
-            <InsertPhotoIcon className="cursor-pointer" />
+          <div className="join-item bg-grey-1 justify-center align-middle items-center flex flex-col pr-4 pl-2 rounded-full">
+          {add_pic ? (
+            <div className='flex space-x-3'>
+              <DeleteIcon 
+                className="cursor-pointer text-red-1" 
+                onClick={()=>set_add_pic('')}
+              />
+              <SendIcon
+                className="cursor-pointer text-font-1"
+                onClick={()=>uploadPicture(chat_id,set_add_pic,add_pic,message)}
+              />
+            </div>
+            ) : (
+              <div>
+                <input
+                  type="file"
+                  onChange={handleImageChange}
+                  accept="image/*"
+                  ref={fileInputRef}
+                  style={{ display: 'none' }} // Cacher l'input file
+                />
+                <InsertPhotoIcon
+                  className="cursor-pointer text-font-1"
+                  onClick={handleClickInsertPhoto}
+                />
+              </div>
+            )}
           </div>
         </div>
       </div>
@@ -38,24 +78,3 @@ const ChatPageFooter = ({ chat_id }) => {
   };
   
   export default ChatPageFooter;
-  
-  async function newMessage(chat_id, user_id, content) {
-
-    const usersRef = doc(firestore, "users", user_id);
-    const usersSnap = await getDoc(usersRef);
-    const user_data = usersSnap.data();
-
-    await addDoc(collection(firestore, "groups",chat_id,"messages"), {
-        content: content,
-        sender_id: user_id,
-        sender_name: user_data.firstName + " " + user_data.lastName,
-        sender_img: user_data.avatar,
-        timestamp: serverTimestamp(),
-        view_by: [user_id]
-    });
-
-    await updateDoc(doc(firestore, "groups", chat_id), {
-        last_message: content,
-        last_message_timestamp: serverTimestamp(),
-    });
-  }

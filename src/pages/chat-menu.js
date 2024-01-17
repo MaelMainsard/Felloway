@@ -13,6 +13,7 @@ const ChatMenu = () => {
   const [openChat, setOpenChat] = useState(false);
   const [chat, setChat] = useState('');
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+  const [addPicture, setAddPicture] = useState('');
 
   useEffect(() => {
     const handleResize = () => {
@@ -63,8 +64,8 @@ const ChatMenu = () => {
         {((openChat && windowWidth < 640) || (chat && windowWidth > 640)) && (
           <div className={` bg-grey-1 w-full flex flex-col justify-between`}>
             <ChatPageHeader open_chat={setOpenChat} chat_id={chat} />
-            <ChatPageBody chat_id={chat} />
-            <ChatPageFooter chat_id={chat} />
+            <ChatPageBody chat_id={chat} add_pic={addPicture} />
+            <ChatPageFooter chat_id={chat} set_add_pic={setAddPicture} add_pic={addPicture} />
           </div>
         )}
         {windowWidth > 640 && !chat && (

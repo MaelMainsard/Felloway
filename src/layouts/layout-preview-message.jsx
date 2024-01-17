@@ -29,15 +29,15 @@ export const ChatMenuMessage = ({group_preview, open_chat, chat}) => {
         </div>
         <div className="dropdown dropdown-end">
           <div tabIndex={0} role="button">
-            <MoreVertIcon/>
+            <MoreVertIcon className="text-font-1"/>
           </div>
-          <ul tabIndex={0} className="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-fit">
+          <ul tabIndex={0} className="dropdown-content z-[1] menu p-2 shadow rounded-box w-fit bg-grey-1">
             <li>
               <div className="join" onClick={async () => {await deleteDoc(doc(firestore, "groups", group_preview.id)); chat(null);}}>
                   <span className="join-item">
                      Supprimer
                   </span>
-                  <DeleteIcon className="join-item"/>
+                  <DeleteIcon className="join-item text-red-1"/>
               </div>
             </li>
           </ul>
