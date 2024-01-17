@@ -1,14 +1,12 @@
 import { firestore } from '../config/Firebase';
 import { collection, doc, onSnapshot } from 'firebase/firestore';
 import { AvatarLayoutModal } from '../layouts/layout-avatar';
+import { getLoggedUser } from "../config/util";
 
-const GetUserAvatar = async ({ user_id, setAvatar }) => {
+const GetUserAvatar = async ({ setAvatar }) => {
 
-  if (!user_id) {
-    setAvatar(<span className="loading loading-ring loading-md"></span>);
-    return;
-  }
 
+  let user_id = getLoggedUser().uid;
   const userRef = doc(collection(firestore, 'users'), user_id);
 
   const unsubscribe = onSnapshot(userRef, (docSnapshot) => {
@@ -17,7 +15,7 @@ const GetUserAvatar = async ({ user_id, setAvatar }) => {
       setAvatar(<AvatarLayoutModal user_array={user} />);
     } else {
       setAvatar(
-        <span className='text-grey_2 text-center justify-center w-8 h-8 pt-1 rounded-full font-semibold'>_</span>
+        <span className='text-grey-2 text-center justify-center w-8 h-8 pt-1 rounded-full font-semibold'>_</span>
       );
     }
   });

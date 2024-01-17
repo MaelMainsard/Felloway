@@ -2,12 +2,17 @@ import { AvatarLayoutModal } from '../layouts/layout-avatar';
 import React, { useState, useEffect } from 'react';
 import { firestore } from '../config/Firebase';
 import { collection, onSnapshot, query, addDoc } from 'firebase/firestore';
+import { getLoggedUser } from "../config/util";
+import { Scrollbars } from 'react-custom-scrollbars';
 
-const ModalNewConv = ({ showModal, closeModal, user_id, show_conv, set_open_chat, set_chat}) => {
+
+
+const ModalNewConv = ({ showModal, closeModal, show_conv, set_open_chat, set_chat}) => {
   const [checkedUsers, setCheckedUsers] = useState([]); // Utiliser un objet pour stocker les états des cases à cocher
   const [usersList, setUsersList] = useState([]);
   const [groupName, setGroupName] = useState('');
   const [searchUser, setSearchUser] = useState('');
+  let user_id = getLoggedUser().uid;
 
   useEffect(() => {
     const unsubscribe = onSnapshot(query(collection(firestore, 'users')), (usersSnapshot) => {
@@ -47,7 +52,6 @@ const ModalNewConv = ({ showModal, closeModal, user_id, show_conv, set_open_chat
     else{
       show_conv(true)
     }
-    closeModal()
 
     const response = await addDoc(collection(firestore, 'groups'), {
       group_img: '',
@@ -55,9 +59,11 @@ const ModalNewConv = ({ showModal, closeModal, user_id, show_conv, set_open_chat
       is_chat: array_users.length > 2 ? false : true,
       users: usersMap,
     });
-
+    set_chat('')
     set_chat(response.id)
     set_open_chat(true)
+
+    closeModal()
   };
 
   const handleBadgeClick = (user) => {
@@ -121,17 +127,19 @@ const ModalNewConv = ({ showModal, closeModal, user_id, show_conv, set_open_chat
 
     return (
         <dialog id="my_modal_1" className="modal" open={showModal}>
-            <div className="modal-box max-w-sm" onClick={(e) => e.stopPropagation()}>
+            <div className="modal-box max-w-sm s" onClick={(e) => e.stopPropagation()}>
                 <input
                   onChange={(e) => setSearchUser(e.target.value)}
                   type="text"
                   placeholder="Recherchez un utilisateur"
-                  className="input input-bordered w-full max-w-xs"
+                  className="input input-bordered w-full"
                 />
-                <div className="overflow-x-auto">
+                <div className="h-96">
+                  <Scrollbars autoHide>
                     <table className="table">
-                        <tbody>{chatMenuMessages}</tbody>
+                      <tbody>{chatMenuMessages}</tbody>
                     </table>
+                  </Scrollbars>
                 </div>
                 {selectedUsersBadge}
                 {checkedUsers.length > 1 &&  checkedUsers.length < 3 ? (
