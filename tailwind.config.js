@@ -8,18 +8,27 @@ module.exports = {
       grey: {
         1:'#f7f7f7',
         2:'#d9d9d9',
+        3:'#b8a7a7',
+        4:'#3d4451'
       },
       blue: {
         1:'#004ffe',
         2:'#074efd'
       },
       white: '#ffffff',
+      black: '#000000',
       font: {
         1:'#6d7276',
         2:'#c5c5c5',
       },
       red: {
         1:'#cf3535',
+      },
+      green: {
+        1: "#1998A5"
+      },
+      yellow: {
+        1: "#F8AF42"
       }
     },
     extend: {},
@@ -27,5 +36,19 @@ module.exports = {
   plugins: [
     require("daisyui")
   ],
+  daisyui: {
+    themes:[
+      {
+        light: {
+          "primary": "#a991f7",
+          "secondary": "#f6d860",
+          "accent": "#37cdbe",
+          "base-100": "#ffffff",
+        },
+      }
+    ],
+    darkTheme: "light", // name of one of the included themes for dark mode
+
+  },
 }
 

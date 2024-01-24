@@ -4,7 +4,7 @@ import GetModalNewConv from '../modals/modal-new-conv';
 import MapsUgcIcon from '@mui/icons-material/MapsUgc';
 import { getLoggedUser } from "../config/util";
 
-const ChatMenuHeader = ({state_show_message,state_set_show_message,set_open_chat,set_chat}) => {
+const ChatMenuHeader = ({show_conv, set_open_chat,set_chat, state_show_message, setShowMessage}) => {
 
   const [avatar, setAvatar] = useState(null);
   const [showModalNewConv, setShowModalNewConv] = useState(false);
@@ -13,7 +13,7 @@ const ChatMenuHeader = ({state_show_message,state_set_show_message,set_open_chat
   useEffect(() => {
     GetUserAvatar({user_id,setAvatar});
     
-  }, [user_id,state_show_message]);
+  }, [user_id]);
 
 
   return (
@@ -29,21 +29,23 @@ const ChatMenuHeader = ({state_show_message,state_set_show_message,set_open_chat
             </ul>
           </div>
         </div>
+        <div className='navbar-center'>
         <div className="rounded-full p-1 bg-grey-1">
         <button
           type="button"  // Assurez-vous d'ajuster le type en fonction de vos besoins
-          className={`w-20 h-8 rounded-full ${!state_show_message ? ' bg-grey-1 text-font-2' : ' bg-blue-1 text-white'}`}
-          onClick={() => state_set_show_message(true)}
+          className={`w-20 h-8 rounded-full ${!state_show_message ? ' bg-grey-1 text-font-2' : ' bg-yellow-1 text-white'}`}
+          onClick={() => setShowMessage(true)}
         >
           DM
         </button>
         <button
           type="button"
-          className={` w-20 h-8 rounded-full ${state_show_message ? ' bg-grey-1 text-font-2' : ' bg-blue-1 text-white'}`}
-          onClick={() => state_set_show_message(false)}
+          className={` w-20 h-8 rounded-full ${state_show_message ? ' bg-grey-1 text-font-2' : ' bg-yellow-1 text-white'}`}
+          onClick={() => setShowMessage(false)}
         >
           Groupes
         </button>
+      </div>
         </div>
         <div className="navbar-end">
           <button className="btn btn-ghost btn-circle" onClick={()=> setShowModalNewConv(true)}>
@@ -51,7 +53,7 @@ const ChatMenuHeader = ({state_show_message,state_set_show_message,set_open_chat
           </button>
         </div>
       </div>
-      <GetModalNewConv showModal={showModalNewConv} closeModal={()=>setShowModalNewConv(false)} user_id={user_id} show_conv={state_set_show_message} set_open_chat={set_open_chat} set_chat={set_chat}/>
+      <GetModalNewConv showModal={showModalNewConv} closeModal={()=>setShowModalNewConv(false)} show_conv={show_conv} set_open_chat={set_open_chat} set_chat={set_chat}/>
     </>
   );
 };

@@ -9,11 +9,11 @@ import { NoConv } from '../lib/icon_and_loader';
 import NavBar from "../components/BottomNavBar";
 
 const ChatMenu = () => {
-  const [showMessage, setShowMessage] = useState(true);
   const [openChat, setOpenChat] = useState(false);
   const [chat, setChat] = useState('');
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
   const [addPicture, setAddPicture] = useState('');
+  const [showMessage, setShowMessage] = useState(true);
 
   useEffect(() => {
     const handleResize = () => {
@@ -25,19 +25,7 @@ const ChatMenu = () => {
     return () => {
       window.removeEventListener('resize', handleResize);
     };
-  }, []); 
-
-
-
-  const handlers = useSwipeable({
-    onSwipedLeft: () => {
-      setShowMessage(true);
-    },
-    onSwipedRight: () => {
-      setShowMessage(false);
-    },
-  });
-
+  }, []);
 
   return (
     <div className='h-screen flex flex-col justify-between'>
@@ -45,19 +33,18 @@ const ChatMenu = () => {
         {((!openChat && windowWidth < 640) || windowWidth > 640) && (
           <div
             className={` bg-white sm:max-w-sm w-full flex flex-col justify-between`}
-            {...handlers}
           >
             <ChatMenuHeader
-              state_show_message={showMessage}
-              state_set_show_message={setShowMessage}
               set_open_chat={setOpenChat}
               set_chat={setChat}
+              setShowMessage={setShowMessage}
+              state_show_message={showMessage}
+              show_conv={setOpenChat}
             />
             <ChatMenuBody
-              state_show_message={showMessage}
-              state_set_show_message={setShowMessage}
               set_open_chat={setOpenChat}
               set_chat={setChat}
+              state_show_message={showMessage}
             />
           </div>
         )}
@@ -69,7 +56,7 @@ const ChatMenu = () => {
           </div>
         )}
         {windowWidth > 640 && !chat && (
-          <div className={` bg-grey-1 w-full flex-col justify-between`}>
+          <div className="flex flex-col mx-auto mt-64">
             <NoConv />
           </div>
         )}

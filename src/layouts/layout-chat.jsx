@@ -19,7 +19,7 @@ export const ChatLayout = ({ chat_content, right }) => {
         )}
       </div>
 
-      <div className="chat-bubble bg-blue-2 text-white cursor-pointer">
+      <div className={`chat-bubble ${right ? 'bg-yellow-1' : 'bg-green-1'} text-white cursor-pointer`}>
         {chat_content.content ? (
           <span>{chat_content.content}</span>
         ) : (

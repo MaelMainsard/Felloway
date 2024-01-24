@@ -5,8 +5,9 @@ import {ChatMenuMessage} from '../layouts/layout-preview-message';
 import { NoConv } from '../lib/icon_and_loader';
 import { getLoggedUser } from "../config/util";
 import { formatTimestamp } from '../lib/script';
+import { AvatarListPreview } from "../layouts/layout-avatar";
 
-const GetMessagePreview = async ({ setMessages, state_show_message, set_open_chat, set_chat }) => {
+const GetMessagePreview = async ({ setMessages, state_show_message, set_open_chat, set_chat, setAvatarList,convFilter }) => {
   try {
 
     let user_id = getLoggedUser().uid;
@@ -58,19 +59,41 @@ const GetMessagePreview = async ({ setMessages, state_show_message, set_open_cha
           online : user_data.online,
           is_chat: group_data.is_chat
         }
-        
-        groups_preview_list.push(group_preview);
+        console.log(convFilter)
+        if(group_preview.title.toUpperCase().includes(convFilter.toUpperCase())){
+          groups_preview_list.push(group_preview);
+        }
       }));
 
       const chatMenuMessages = groups_preview_list.map((item, index) => (
         <ChatMenuMessage group_preview={item} key={index} open_chat={set_open_chat} chat={set_chat} user_id={user_id} />
       ));
 
-      setMessages(
-        <div className="flex align-top justify-start items-start mx-auto flex-col">
-          {chatMenuMessages}
+      const avatarList = groups_preview_list.map((item, index) => (
+        <div className="carousel-item">
+          <AvatarListPreview group_preview={item} key={index}/>
         </div>
-      );
+      ));
+
+      if(groups_preview_list.length === 0) {
+        setMessages(
+          <div className="flex flex-col mx-auto h-7">
+            <NoConv />
+          </div>
+        );
+      }
+      else {
+        setAvatarList(
+          <div className='carousel w-full flex felx-row'>
+            {avatarList}
+          </div>
+        )
+        setMessages(
+          <div className="flex align-top justify-start items-start mx-auto flex-col">
+            {chatMenuMessages}
+          </div>
+        );
+      }
     });
 
     return () => unsubscribe_groups();

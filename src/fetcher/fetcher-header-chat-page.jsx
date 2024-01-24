@@ -1,6 +1,6 @@
 import { firestore } from '../config/Firebase';
 import { doc, getDoc, collection, onSnapshot, getDocs } from 'firebase/firestore';
-import { AvatarLayoutPreview } from '../layouts/layout-avatar';
+import { AvatarListPreview } from '../layouts/layout-avatar';
 import { getLoggedUser } from "../config/util";
 
 const GetUserInfo = async ({ setInfo, chat_id }) => {
@@ -27,7 +27,7 @@ const GetUserInfo = async ({ setInfo, chat_id }) => {
   
     setInfo(
       <div className='flex flex-row items-center'>
-        <AvatarLayoutPreview group_preview={group_preview}/>
+        <AvatarListPreview group_preview={group_preview}/>
         <div className='flex flex-col'>
           <span className='text-font-1 line-clamp-1 font-bold text-base'>{group_preview.title || '?'}</span>
           {group_preview.is_chat && (
