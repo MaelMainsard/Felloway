@@ -1,25 +1,42 @@
 import React from 'react';
 import { firestore } from '../config/Firebase';
 import { collection, onSnapshot, query, where, getDocs, getDoc, doc  } from "firebase/firestore";
-import {ChatMenuMessage} from '../layouts/layout-preview-message';
-import { NoConv } from '../lib/icon_and_loader';
-import { getLoggedUser } from "../config/util";
+import {ChatMenuMessage, ChatMenuMessageLoader} from '../layouts/layout-preview-message';
+import { NoConv, NoAvatarList } from '../lib/icon_and_loader';
 import { formatTimestamp } from '../lib/script';
-import { AvatarListPreview } from "../layouts/layout-avatar";
+import { Each } from '../config/Each';
+import Avatar from '@mui/material/Avatar';
+import IconButton from '@mui/material/IconButton';
+import AddCircleIcon from '@mui/icons-material/AddCircle';
 
-const GetMessagePreview = async ({ setMessages, state_show_message, set_open_chat, set_chat, setAvatarList,convFilter }) => {
+const GetMessagePreview = async ({ task, updateTask}) => {
   try {
-
-    let user_id = getLoggedUser().uid;
-
-    const queryGroups = query(collection(firestore, "groups"), where('users', 'array-contains', user_id),where('is_chat','==',state_show_message));
+    updateTask({
+      messages_preview: (
+        <div className="flex align-top justify-start items-start mx-auto flex-col">
+          {[...Array(5)].map((_, index) => (
+            <ChatMenuMessageLoader key={index} />
+          ))}
+        </div>
+      ),
+      avatar_carousel_preview:(
+        <div className='carousel w-full flex felx-row'>
+          {[...Array(5)].map((_, index) => (
+            <div key={index} className="skeleton w-16 h-16 rounded-full shrink-0 mr-3 bg-yellow-1"></div>
+          ))}
+        </div>
+      )
+    })
+    const queryGroups = query(collection(firestore, "groups"), where('users', 'array-contains', task.user_id),where('is_chat','==',task.show_preview_dm));
     const unsubscribe_groups = onSnapshot(queryGroups, async (groupsSnapshot) => {
       if(groupsSnapshot.empty) {
-        setMessages(
-          <div className="flex align-middle justify-center items-center mx-auto mt-60">
-            <NoConv />
-          </div>
-        );
+        updateTask({
+          messages_preview: (
+            <div className="flex align-middle justify-center items-center mx-auto mt-60">
+              <NoConv />
+            </div>
+          )
+        })
         return;
       }
 
@@ -27,7 +44,7 @@ const GetMessagePreview = async ({ setMessages, state_show_message, set_open_cha
 
       await Promise.all(groupsSnapshot.docs.map(async (group) => {
         const group_data = group.data();
-        const id_other_user = user_id === group_data.users[0] ? group_data.users[1] : group_data.users[0];
+        const id_other_user = task.user_id === group_data.users[0] ? group_data.users[1] : group_data.users[0];
         const usersRef = doc(firestore, "users", id_other_user);
         const usersSnap =  await getDoc(usersRef);
         const user_data = usersSnap.data();
@@ -40,7 +57,7 @@ const GetMessagePreview = async ({ setMessages, state_show_message, set_open_cha
         messagesSnapshot.forEach((message) => {
           const message_data = message.data();
         
-          if (!message_data.view_by.includes(user_id)) {
+          if (!message_data.view_by.includes(task.user_id)) {
             messages_not_view++;
           }
         
@@ -59,40 +76,63 @@ const GetMessagePreview = async ({ setMessages, state_show_message, set_open_cha
           online : user_data.online,
           is_chat: group_data.is_chat
         }
-        console.log(convFilter)
-        if(group_preview.title.toUpperCase().includes(convFilter.toUpperCase())){
+
+        if(group_preview.title.toUpperCase().includes(task.conv_preview_filter.toUpperCase())){
           groups_preview_list.push(group_preview);
         }
       }));
 
-      const chatMenuMessages = groups_preview_list.map((item, index) => (
-        <ChatMenuMessage group_preview={item} key={index} open_chat={set_open_chat} chat={set_chat} user_id={user_id} />
-      ));
+      const chatMenuMessages = (
+        <Each of={groups_preview_list} render={(item, index) => (
+          <ChatMenuMessage group_preview={item} key={index} task={task} updateTask={updateTask} />
+        )} />
+      );
 
-      const avatarList = groups_preview_list.map((item, index) => (
-        <div className="carousel-item">
-          <AvatarListPreview group_preview={item} key={index}/>
-        </div>
-      ));
+      const avatarList = (
+        <Each of={groups_preview_list} render={(item, index) => (
+          <div className="carousel-item" key={index}>
+              <Avatar alt="Remy Sharp" src={item.avatar} sx={{width:'64px',height:'64px'}} className='mr-3'>
+                {item.title.charAt(0)}
+              </Avatar>
+          </div>
+        )} />
+      );
 
       if(groups_preview_list.length === 0) {
-        setMessages(
-          <div className="flex flex-col mx-auto h-7">
-            <NoConv />
-          </div>
-        );
+        updateTask({
+          avatar_carousel_preview: (
+            <div className="flex flex-row justify-center">
+             
+            </div>
+          )
+        })
+      }
+      else{
+        updateTask({
+          avatar_carousel_preview: (
+            <div className='carousel w-full flex felx-row'>
+              {avatarList}
+            </div>
+          ),
+        })
+      }
+      if(groups_preview_list.length === 0) {
+        updateTask({
+          messages_preview: (
+            <div className="flex align-middle justify-center items-center mx-auto">
+              <NoConv />
+            </div>
+          )
+        })
       }
       else {
-        setAvatarList(
-          <div className='carousel w-full flex felx-row'>
-            {avatarList}
-          </div>
-        )
-        setMessages(
-          <div className="flex align-top justify-start items-start mx-auto flex-col">
-            {chatMenuMessages}
-          </div>
-        );
+        updateTask({
+          messages_preview: (
+            <div className="flex align-top justify-start items-start mx-auto flex-col">
+              {chatMenuMessages}
+            </div>
+          )
+        })
       }
     });
 

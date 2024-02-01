@@ -7,7 +7,7 @@ import InsertPhotoIcon from '@mui/icons-material/InsertPhoto';
 
 export function formatTimestamp(timestamp) {
     if (!timestamp) {
-      return '...';
+      return '';
     }
   
     const { seconds, nanoseconds } = timestamp;

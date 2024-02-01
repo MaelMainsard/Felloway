@@ -1,53 +1,103 @@
-import { AvatarLayoutPreview } from "./layout-avatar";
-import MoreVertIcon from '@mui/icons-material/MoreVert';
+import Avatar from '@mui/material/Avatar';
+import Badge from '@mui/material/Badge';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { firestore } from '../config/Firebase';
 import { doc, deleteDoc, collection, query, getDoc, getDocs, updateDoc  } from "firebase/firestore";
-import { getLoggedUser } from "../config/util";
+import React from 'react';
+import {Menu} from '@mui/material';
 
+import MenuItem from '@mui/material/MenuItem';
+import ListItemText from '@mui/material/ListItemText';
+import ListItemIcon from '@mui/material/ListItemIcon';
 
-export const ChatMenuMessage = ({group_preview, open_chat, chat}) => {
+export const ChatMenuMessage = ({group_preview, task, updateTask}) => {
+    const [anchorEl, setAnchorEl] = React.useState(null);
 
-   let user_id = getLoggedUser().uid;
+    const handleClick = (event) => {
+      setAnchorEl(event.currentTarget);
+    };
+
+    const handleClickDroit = (e) => {
+      e.preventDefault();
+      handleClick(e)
+    };
+
+    const handleClose = () => {
+      setAnchorEl(null);
+    };
+
+    const open = Boolean(anchorEl);
+    const id = open ? 'simple-popover' : undefined;
+    
 
     return (
-      <div className='flex flex-row align-middle items-center justify-start rounded-xl p-3 mb-2 w-full cursor-pointer bg-grey-1'>
-        <AvatarLayoutPreview group_preview={group_preview} />
-        <div className="w-full justify-center align-middle flex flex-col mr-1"  onClick={() => { open_chat(true); chat(''); chat(group_preview.id); updateViewMessage(group_preview.id,user_id)}}>
-          <div className=" justify-between flex flex-row items-center">
-            <span className={`line-clamp-1 font-bold text-base w-8/12 ${group_preview.notification !== 0 ? 'font-bold text-green-1' : 'text-black'}`}>{group_preview.title}</span>
-            <span className='text-black line-clamp-1 text-xs italic'>{group_preview.timestamp}</span>
-          </div>
-          <div className="justify-between flex flex-row items-end">
-            <span className={`text-font-2 line-clamp-1 w-9/12 ${group_preview.notification !== 0 ? 'text-font-1' : ''}`}>{group_preview.message}</span>
-            {group_preview.notification !== 0 && (
+      <div aria-describedby={id} variant="contained" onTouchStart={handleClick} onContextMenu={handleClickDroit}   className='flex flex-row align-middle items-center justify-start rounded-xl p-3 mb-2 w-full cursor-pointer bg-grey-1'>
+        <div className="flex flex-row justify-center items-center">
+          <Badge color={group_preview.online ? 'success' : 'string'} overlap="circular" badgeContent=" " className='mr-3' sx={{ "& .MuiBadge-badge": { fontSize: 9, height: 15, minWidth: 15,  border: group_preview.online ? 2 : 'none', borderColor: group_preview.online ? '#f7f7f7' : 'transparent', } }}>
+            <Avatar alt="Remy Sharp" src={group_preview.avatar} sx={{width:'56px',height:'56px'}}>
+                {group_preview.title.charAt(0)}
+            </Avatar>
+          </Badge>
+        </div>
+        <div className={`grid ${group_preview.message ? 'grid-cols-2': 'grid-cols-1'} gap-1 w-full cursor-pointer`} onClick={() => {updateViewMessage(group_preview.id,task.user_id,updateTask)}}>
+          <span className={`line-clamp-1 font-bold text-base ${group_preview.notification !== 0 ? 'font-bold text-green-1' : 'text-black'}`}>{group_preview.title}</span>
+          <span className='text-black line-clamp-1 text-xs italic flex flex-row justify-end items-center'>{group_preview.timestamp}</span>
+          <span className={`text-font-2 line-clamp-1  ${group_preview.notification !== 0 ? 'text-font-1' : ''}`}>
+            {group_preview.message ? group_preview.message : 'Début de la discussion'}
+          </span>
+          {group_preview.notification !== 0 && (
+            <div className="flex flex-row justify-end">
               <span className='bg-green-1 w-5 h-5 rounded-full align-middle justify-center items-center flex text-white text-xs font-bold pt-0.5'>
                 {group_preview.notification}
               </span>
+            </div>
             )}
-          </div>
         </div>
-        <div className="dropdown dropdown-end">
-          <div tabIndex={0} role="button">
-            <MoreVertIcon className="text-font-1"/>
-          </div>
-          <ul tabIndex={0} className="dropdown-content z-[1] menu p-2 shadow rounded-box w-fit bg-grey-1">
-            <li>
-              <div className="join" onClick={async () => {await deleteDoc(doc(firestore, "groups", group_preview.id)); chat(null);}}>
-                  <span className="join-item">
-                     Supprimer
-                  </span>
-                  <DeleteIcon className="join-item text-red-1"/>
-              </div>
-            </li>
-          </ul>
-        </div>
+        <Menu
+          id="basic-menu"
+          anchorEl={anchorEl}
+          open={open}
+          onClose={handleClose}
+          PaperProps={{
+            style: {
+              width: 'fit'
+            },
+          }}
+        >
+          <MenuItem onClick={()=>{deleteGroup(group_preview.id,updateTask);handleClose()}}>
+            <ListItemIcon>
+              <DeleteIcon fontSize="small" />
+            </ListItemIcon>
+            <ListItemText>Supprimer la discution</ListItemText>
+          </MenuItem>
+        </Menu>
+        
       </div>
     );
 };
 
-async function updateViewMessage(chat_id, user_id) {
-  const q = query(collection(firestore, "groups", chat_id, "messages"));
+export const ChatMenuMessageLoader = () => {
+
+  return (
+    <div className='flex flex-row align-middle gap-4 items-center justify-start rounded-xl p-3 mb-2 w-full cursor-pointer'>
+      <div className="skeleton w-14 h-14 rounded-full shrink-0 "></div>
+      <div className="grid grid-cols-2 gap-4 w-full">
+        <div className="skeleton h-4 w-full "></div>
+        <div className="skeleton h-4 w-full "></div>
+        <div className="skeleton h-4 w-full "></div>
+        <div className="skeleton h-4 w-full "></div>
+      </div>
+    </div>
+  );
+};
+async function deleteGroup(group_id,updateTask){
+  await deleteDoc(doc(firestore, "groups", group_id)); 
+  updateTask({chat_id:null});
+}
+
+async function updateViewMessage(group_id, user_id, updateTask) {
+  updateTask({open_chat_page:true,chat_id:group_id});
+  const q = query(collection(firestore, "groups", group_id, "messages"));
 
   const querySnapshot = await getDocs(q);
 
