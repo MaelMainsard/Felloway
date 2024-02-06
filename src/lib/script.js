@@ -30,10 +30,10 @@ export function formatTimestamp(timestamp) {
       return `${hours}:${minutes}`;
     } else {
       // Sinon, retournez la date au format jour/mois/année
-      const day = messageDate.getDate() < 10 ? '0'+messageDate.getDate() : messageDate.getDate()
+      const day = messageDate.getDate()
       let month = messageDate.getMonth() + 1
-      month = month < 10 ? '0'+month : month
-      const year = messageDate.getFullYear();
+      let year = messageDate.getFullYear();
+      year = year.toString().slice(2,4)
       return `${day}/${month}/${year}`;
     }
 }
@@ -59,42 +59,42 @@ export async function newMessage(chat_id, content) {
   });
 }
 
-async function newPicture(chat_id, url, text) {
+async function newPicture(url,task, updateTask) {
 
-  let user_id = getLoggedUser().uid;
-  const usersRef = doc(firestore, "users", user_id);
+  const usersRef = doc(firestore, "users", task.user_id);
   const usersSnap = await getDoc(usersRef);
   const user_data = usersSnap.data();
 
-  await addDoc(collection(firestore, "groups", chat_id, "messages"), {
-    content: text,
+  await addDoc(collection(firestore, "groups", task.chat_id, "messages"), {
+    content: task.messages_input_footer,
     content_img: url,
-    sender_id: user_id,
+    sender_id: task.user_id,
     sender_name: user_data.firstName + " " + user_data.lastName,
     sender_img: user_data.avatar,
     timestamp: serverTimestamp(),
-    view_by: [user_id],
+    view_by: [task.user_id],
   });
 
-  await updateDoc(doc(firestore, "groups", chat_id), {
-    last_message: text,
+  await updateDoc(doc(firestore, "groups", task.chat_id), {
+    last_message: task.messages_input_footer,
     last_message_timestamp: serverTimestamp(),
   });
+
+  updateTask({upload:0})
 }
 
 
-export async function uploadPicture(chat_id,set_add_pic, url,text){
+export async function uploadPicture(task, updateTask){
 
   var timestamp = Date.now();
   const storageRef = ref(storage, `images/${timestamp}`);
-  const uploadTask = uploadBytesResumable(storageRef, url);
+  const uploadTask = uploadBytesResumable(storageRef, task.add_pic);
   
   // Set up the event listener only once
   uploadTask.on(
     'state_changed',
     (snapshot) => {
-      // Handle upload progress here if needed
-      const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+      let progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
     },
     (error) => {
       // Handle errors during upload here
@@ -104,8 +104,8 @@ export async function uploadPicture(chat_id,set_add_pic, url,text){
       // This is called on successful completion of the upload
       const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
       console.log(`L'image a été téléversée avec succès. URL : ${downloadURL}`);
-      await newPicture(chat_id, downloadURL, text);
-      set_add_pic('');
+      await newPicture(downloadURL,task, updateTask);
+      updateTask({add_pic:''})
     }
   );
 }

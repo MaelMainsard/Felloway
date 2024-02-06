@@ -9,8 +9,10 @@ import {Menu} from '@mui/material';
 import MenuItem from '@mui/material/MenuItem';
 import ListItemText from '@mui/material/ListItemText';
 import ListItemIcon from '@mui/material/ListItemIcon';
+import MoreVertIcon from '@mui/icons-material/MoreVert';
 
 export const ChatMenuMessage = ({group_preview, task, updateTask}) => {
+
     const [anchorEl, setAnchorEl] = React.useState(null);
 
     const handleClick = (event) => {
@@ -28,51 +30,55 @@ export const ChatMenuMessage = ({group_preview, task, updateTask}) => {
 
     const open = Boolean(anchorEl);
     const id = open ? 'simple-popover' : undefined;
-    
+  
 
     return (
-      <div aria-describedby={id} variant="contained" onTouchStart={handleClick} onContextMenu={handleClickDroit}   className='flex flex-row align-middle items-center justify-start rounded-xl p-3 mb-2 w-full cursor-pointer bg-grey-1'>
-        <div className="flex flex-row justify-center items-center">
-          <Badge color={group_preview.online ? 'success' : 'string'} overlap="circular" badgeContent=" " className='mr-3' sx={{ "& .MuiBadge-badge": { fontSize: 9, height: 15, minWidth: 15,  border: group_preview.online ? 2 : 'none', borderColor: group_preview.online ? '#f7f7f7' : 'transparent', } }}>
-            <Avatar alt="Remy Sharp" src={group_preview.avatar} sx={{width:'56px',height:'56px'}}>
+        <div aria-describedby={id} variant="contained" className='flex flex-row align-middle items-center justify-start rounded-xl p-3 mb-2 w-full cursor-pointer bg-grey-1'>
+          <div className="flex flex-row justify-center items-center">
+            <Badge color={group_preview.online ? 'success' : 'string'} overlap="circular" badgeContent=" " className='mr-3' sx={{ "& .MuiBadge-badge": { fontSize: 9, height: 15, minWidth: 15, border: group_preview.online ? 2 : 'none', borderColor: group_preview.online ? '#f7f7f7' : 'transparent', } }}>
+              <Avatar alt="Remy Sharp" src={group_preview.avatar} sx={{ width: '56px', height: '56px' }}>
                 {group_preview.title.charAt(0)}
-            </Avatar>
-          </Badge>
-        </div>
-        <div className={`grid ${group_preview.message ? 'grid-cols-2': 'grid-cols-1'} gap-1 w-full cursor-pointer`} onClick={() => {updateViewMessage(group_preview.id,task.user_id,updateTask)}}>
-          <span className={`line-clamp-1 font-bold text-base ${group_preview.notification !== 0 ? 'font-bold text-green-1' : 'text-black'}`}>{group_preview.title}</span>
-          <span className='text-black line-clamp-1 text-xs italic flex flex-row justify-end items-center'>{group_preview.timestamp}</span>
-          <span className={`text-font-2 line-clamp-1  ${group_preview.notification !== 0 ? 'text-font-1' : ''}`}>
-            {group_preview.message ? group_preview.message : 'Début de la discussion'}
-          </span>
-          {group_preview.notification !== 0 && (
-            <div className="flex flex-row justify-end">
-              <span className='bg-green-1 w-5 h-5 rounded-full align-middle justify-center items-center flex text-white text-xs font-bold pt-0.5'>
-                {group_preview.notification}
-              </span>
-            </div>
+              </Avatar>
+            </Badge>
+          </div>
+          <div className={`grid ${group_preview.message ? 'grid-cols-2' : 'grid-cols-1'} gap-1 w-full cursor-pointer`} onClick={() => { updateViewMessage(group_preview.id, task.user_id, updateTask) }} >
+            <span className={`line-clamp-1 font-bold text-base ${group_preview.notification !== 0 ? 'font-bold text-green-1' : 'text-black'}`}>{group_preview.title}</span>
+            <span  className='text-black line-clamp-1 text-xs italic flex flex-row justify-end items-center'>{group_preview.timestamp}</span>
+            <span className={`text-font-2 line-clamp-1  ${group_preview.notification !== 0 ? 'text-font-1' : ''}`}>
+              {group_preview.message ? group_preview.message : 'Début de la discussion'}
+            </span>
+            {group_preview.notification !== 0 && (
+              <div className="flex flex-row justify-end">
+                <span className='bg-green-1 w-5 h-5 rounded-full align-middle justify-center items-center flex text-white text-xs font-bold pt-0.5'>
+                  {group_preview.notification}
+                </span>
+              </div>
             )}
+          </div>
+          <Menu
+            id="basic-menu"
+            anchorEl={anchorEl}
+            open={open}
+            onClose={handleClose}
+            PaperProps={{
+              style: {
+                width: 'fit'
+              },
+            }}
+            transformOrigin={{ horizontal: 'right', vertical: 'top' }}
+            anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
+          >
+            <MenuItem onClick={() => { deleteGroup(group_preview.id, updateTask); handleClose() }}>
+              <ListItemIcon>
+                <DeleteIcon fontSize="small" />
+              </ListItemIcon>
+              <ListItemText>Supprimer la discution</ListItemText>
+            </MenuItem>
+          </Menu>
+          <div onClick={handleClick} onMouseEnter={handleClick}>
+            <MoreVertIcon className=' text-grey-3'/>
+          </div>
         </div>
-        <Menu
-          id="basic-menu"
-          anchorEl={anchorEl}
-          open={open}
-          onClose={handleClose}
-          PaperProps={{
-            style: {
-              width: 'fit'
-            },
-          }}
-        >
-          <MenuItem onClick={()=>{deleteGroup(group_preview.id,updateTask);handleClose()}}>
-            <ListItemIcon>
-              <DeleteIcon fontSize="small" />
-            </ListItemIcon>
-            <ListItemText>Supprimer la discution</ListItemText>
-          </MenuItem>
-        </Menu>
-        
-      </div>
     );
 };
 

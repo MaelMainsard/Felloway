@@ -1,7 +1,8 @@
 import { firestore } from '../config/Firebase';
 import { doc, getDoc, collection, onSnapshot, getDocs } from 'firebase/firestore';
-import { AvatarListPreview } from '../layouts/layout-avatar';
 
+import Avatar from '@mui/material/Avatar';
+import Badge from '@mui/material/Badge';
 const GetUserInfo = async ({ task, updateTask }) => {
 
 
@@ -9,7 +10,6 @@ const GetUserInfo = async ({ task, updateTask }) => {
   const groupSnap = await getDoc(groupRef);
 
   const group_data = groupSnap.data();
-  console.log(group_data)
   const id_other_user = task.user_id === group_data.users[0] ? group_data.users[1] : group_data.users[0];
 
   //--------------------------------------------------------------
@@ -27,11 +27,15 @@ const GetUserInfo = async ({ task, updateTask }) => {
     updateTask({
       avatar_chat_info: (
         <div className='flex flex-row items-center'>
-          <AvatarListPreview group_preview={group_preview} />
+          <Badge color={group_preview.online ? 'success' : 'string'} overlap="circular" badgeContent=" " className='mr-3' sx={{ "& .MuiBadge-badge": { fontSize: 9, height: 15, minWidth: 15, border: group_preview.online ? 2 : 'none', borderColor: group_preview.online ? '#1998A5' : 'transparent', } }}>
+              <Avatar alt="Remy Sharp" src={group_preview.avatar} sx={{ width: '64px', height: '64px' }}>
+                {group_preview.title.charAt(0)}
+              </Avatar>
+          </Badge>
           <div className='flex flex-col'>
-            <span className='text-font-1 line-clamp-1 font-bold text-base'>{group_preview.title || '?'}</span>
+            <span className='text-white line-clamp-1 font-bold text-base'>{group_preview.title || '?'}</span>
             {group_preview.is_chat && (
-              <span className='text-font-2 line-clamp-1 text-base'>
+              <span className='text-grey-1 line-clamp-1 text-base'>
                 {group_preview.online ? 'En ligne' : 'Hors ligne'}
               </span>
             )}

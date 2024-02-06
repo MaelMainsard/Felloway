@@ -6,8 +6,7 @@ import { NoConv, NoAvatarList } from '../lib/icon_and_loader';
 import { formatTimestamp } from '../lib/script';
 import { Each } from '../config/Each';
 import Avatar from '@mui/material/Avatar';
-import IconButton from '@mui/material/IconButton';
-import AddCircleIcon from '@mui/icons-material/AddCircle';
+
 
 const GetMessagePreview = async ({ task, updateTask}) => {
   try {
@@ -27,7 +26,7 @@ const GetMessagePreview = async ({ task, updateTask}) => {
         </div>
       )
     })
-    const queryGroups = query(collection(firestore, "groups"), where('users', 'array-contains', task.user_id),where('is_chat','==',task.show_preview_dm));
+    const queryGroups = query(collection(firestore, "groups"), where('users', 'array-contains', task.user_id));
     const unsubscribe_groups = onSnapshot(queryGroups, async (groupsSnapshot) => {
       if(groupsSnapshot.empty) {
         updateTask({

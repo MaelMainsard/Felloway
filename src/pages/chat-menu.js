@@ -17,7 +17,6 @@ const ChatMenu = () => {
      user_id: getLoggedUser().uid,
      messages_preview: null,
      conv_preview_filter: '',
-     show_preview_dm: true,
      window_width: window.innerWidth,
      open_chat_page: false,
      chat_id: '',
@@ -25,9 +24,10 @@ const ChatMenu = () => {
      show_modal_new_conv: false,
      messages_body: null,
      avatar_carousel_preview: null,
-     addPicture: '',
+     add_pic: '',
      avatar_chat_info: null,
-     messages_input_footer:''
+     messages_input_footer: null,
+     upload : false,
    }
   );
 
@@ -43,7 +43,7 @@ const ChatMenu = () => {
     return () => {
       window.removeEventListener('resize', handleResize);
     };
-  }, []);
+  }, [task.window_width]);
 
   return (
     <div className='h-screen flex flex-col justify-between'>

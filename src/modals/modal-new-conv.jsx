@@ -83,13 +83,6 @@ const ModalNewConv = ({ task, updateTask}) => {
       setLoading(false)
       setSelected([])
 
-      if(selected.length > 2){
-        updateTask({show_preview_dm:false})
-      }
-      else{
-        updateTask({show_preview_dm:true})
-      }
-
       updateTask({chat_id:response.id,open_chat_page:true,show_modal_new_conv:false})
 
    }

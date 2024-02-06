@@ -1,5 +1,5 @@
-const ModalAddPicture = ({add_pic}) => {
-    const imageURL = URL.createObjectURL(add_pic);
+const ModalAddPicture = ({task,updateTask}) => {
+    const imageURL = URL.createObjectURL(task.add_pic);
 
     return(
         <div className="m-5 flex flex-col items-center object-contain">
