@@ -1,179 +1,164 @@
-import { AvatarLayoutModal } from '../layouts/layout-avatar';
+import CircularProgress from '@mui/material/CircularProgress';
 import React, { useState, useEffect } from 'react';
 import { firestore } from '../config/Firebase';
 import { collection, onSnapshot, query, addDoc } from 'firebase/firestore';
-import { getLoggedUser } from "../config/util";
-import { Scrollbars } from 'react-custom-scrollbars';
+import Button from '@mui/material/Button';
+import Box from '@mui/material/Box';
+import LoadingButton from '@mui/lab/LoadingButton';
+import Modal from '@mui/material/Modal';
+import Autocomplete from '@mui/material/Autocomplete';
+import TextField from '@mui/material/TextField';
+import Avatar from '@mui/material/Avatar';
+import Badge from '@mui/material/Badge';
 
 
-
-const ModalNewConv = ({ showModal, closeModal, show_conv, set_open_chat, set_chat}) => {
-  const [checkedUsers, setCheckedUsers] = useState([]); // Utiliser un objet pour stocker les états des cases à cocher
+const ModalNewConv = ({ task, updateTask}) => {
   const [usersList, setUsersList] = useState([]);
-  const [groupName, setGroupName] = useState('');
-  const [searchUser, setSearchUser] = useState('');
-  let user_id = getLoggedUser().uid;
+  const [loading, setLoading] = useState(false);
+  const [selected, setSelected] = useState([]);
+  const [error, setError] = useState(false);
+  const [groupName, setGroupName] = useState(null)
+  const [disableInput, setDisableInput] = useState(false);
+  const [jsonCurentUsers, setJsonCurentUsers] = useState(null)
+
+  const loadingAsyncron = task.show_modal_new_conv && usersList.length === 0;
+
+  const handleClose = () => {
+    updateTask({show_modal_new_conv:false});
+    setSelected([])
+  };
+
+  const handleChange = e => {
+    setGroupName(e.target.value)
+  }
 
   useEffect(() => {
     const unsubscribe = onSnapshot(query(collection(firestore, 'users')), (usersSnapshot) => {
-
       const usersData = usersSnapshot.docs.map((doc) => ({
-        id: doc.id,
-        ...doc.data(),
+        name: doc.data().firstName + ' ' + doc.data().lastName,
+        avatar: doc.data().avatar,
+        online: doc.data().online,
+        id: doc.id
       }));
 
       setUsersList(usersData);
 
-      const userToCheck = usersData.find((user) => user.id === user_id);
+      const userToCheck = usersData.find((user) => user.id === task.user_id);
 
       if (userToCheck) {
-        setCheckedUsers([userToCheck]); // Initialize with the user's data
+        setJsonCurentUsers([userToCheck]);
       }
-
     });
 
+    return () => {
+      unsubscribe();
+    };
+  }, [task.user_id, loading]);
+  
 
-    return () => unsubscribe();
-  }, [user_id]);
+  const createNewChat = async () => {
 
-  const createNewChat = async (array_users, closeModal) => {
-
-    if(array_users.length > 2 && groupName === '') {
-      return;
-    }
-
-    const usersMap = [];
-    array_users.forEach((user) => {
-      usersMap.push(user.id)
-    });
-    if(array_users.length > 2){
-      show_conv(false)
+    if(selected.length > 2 && groupName === null) {
+      setError(true)
     }
     else{
-      show_conv(true)
-    }
+      setError(false)
+      setDisableInput(true)
+      setLoading(true)
 
-    const response = await addDoc(collection(firestore, 'groups'), {
-      group_img: '',
-      group_name: array_users.length > 2 ? groupName : '',
-      is_chat: array_users.length > 2 ? false : true,
-      users: usersMap,
-    });
-    set_chat('')
-    set_chat(response.id)
-    set_open_chat(true)
+      const usersIds = [];
+      selected.forEach((user) => {
+        usersIds.push(user.id)
+      });
 
-    closeModal()
+      const response = await addDoc(collection(firestore, 'groups'), {
+        group_img: '',
+        group_name: selected.length > 2 ? groupName : '',
+        is_chat: selected.length > 2 ? false : true,
+        users: usersIds
+      });
+
+
+      setDisableInput(false)
+      setLoading(false)
+      setSelected([])
+
+      updateTask({chat_id:response.id,open_chat_page:true,show_modal_new_conv:false})
+
+   }
+    
   };
 
-  const handleBadgeClick = (user) => {
-    handleCheckboxChange(user);
-  };
-
-  const selectedUsersBadge = (
-    <div className='overflow-x-auto flex space-x-1 mb-2 overflow-y-hidden'>
-      {checkedUsers.length > 1 &&
-        checkedUsers.slice(1).map((user) => (
-          <div className="badge badge-neutral mr-1 cursor-pointer" key={user.id} style={{ whiteSpace: 'nowrap' }}>
-            <span onClick={() => handleBadgeClick(user)}>
-              {user.firstName}
-            </span>
-          </div>
-        ))}
-    </div>
-  );
-
-  const handleCheckboxChange = (user) => {
-
-    setCheckedUsers((prevCheckedUsers) => {
-      const userIndex = prevCheckedUsers.findIndex((u) => u.id === user.id);
-
-      if (userIndex !== -1) {
-        const updatedCheckedUsers = [...prevCheckedUsers.slice(0, userIndex), ...prevCheckedUsers.slice(userIndex + 1)];
-        return updatedCheckedUsers;
-      } else {
-        const updatedCheckedUsers = [...prevCheckedUsers, user];
-        return updatedCheckedUsers;
-      }
-    });
-
-  };
-
-  const chatMenuMessages = usersList.map((user, index) => (
-    user.id !== user_id && user.firstName.toUpperCase().includes(searchUser.toUpperCase()) && (
-      <tr key={index}>
-        <th>
-          <label>
-            <input
-              type="checkbox"
-              className="checkbox"
-              checked={checkedUsers.some((u) => u.id === user.id)}
-              onChange={() => handleCheckboxChange(user)}
-            />
-          </label>
-        </th>
-        <td>
-          <div className="flex items-center gap-3">
-            <AvatarLayoutModal user_array={user} />
-            <div>
-              <div className="font-bold">{user.firstName}</div>
-              <div className="text-sm opacity-50">United States</div>
-            </div>
-          </div>
-        </td>
-      </tr>
-    )
-  ));
 
     return (
-        <dialog id="my_modal_1" className="modal" open={showModal}>
-            <div className="modal-box max-w-sm s" onClick={(e) => e.stopPropagation()}>
-                <input
-                  onChange={(e) => setSearchUser(e.target.value)}
-                  type="text"
-                  placeholder="Recherchez un utilisateur"
-                  className="input input-bordered w-full"
+      <Modal
+        open={task.show_modal_new_conv}
+        onClose={handleClose}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <div class="flex items-center justify-center h-screen">
+          <Box className='bg-white rounded-xl p-5 w-96 h-fit space-y-3 ml-3 mr-3'>
+            <Autocomplete
+              multiple
+              disabled={disableInput}
+              limitTags={2}
+              onChange={(event,value) => setSelected([...jsonCurentUsers, ...value])}
+              id="multiple-limit-tags"
+              options={usersList}
+              loading={loadingAsyncron}
+              noOptionsText='Aucun utilisateur trouvé'
+              getOptionLabel={(option) => option.name}
+              renderInput={(params) => (
+                <TextField
+                  {...params}
+                  label="Choisissez le/les utilisateur"
+                  placeholder="Tappez le nom de l'utilisateur"
+                  InputProps={{
+                    ...params.InputProps,
+                    endAdornment: (
+                      <React.Fragment>
+                        {loadingAsyncron ? <CircularProgress color="inherit" size={20} /> : null}
+                        {params.InputProps.endAdornment}
+                      </React.Fragment>
+                    ),
+                  }}
+                 
                 />
-                <div className="h-96">
-                  <Scrollbars autoHide>
-                    <table className="table">
-                      <tbody>{chatMenuMessages}</tbody>
-                    </table>
-                  </Scrollbars>
-                </div>
-                {selectedUsersBadge}
-                {checkedUsers.length > 1 &&  checkedUsers.length < 3 ? (
-                    <button
-                        className="btn w-full"
-                        onClick={() => {
-                        createNewChat(checkedUsers, closeModal);
-                        }}
-                    >
-                        Créez une nouvelle conversation
-                    </button>
-                    ) : checkedUsers.length > 2 && (
-                      <div className="join flex flex-col md:flex-row lg:flex-row">
-                      <input
-                        className="input input-bordered rounded-sm md:rounded-r-sm join-item w-full md:w-1/2 lg:w-2/3"
-                        placeholder="Nom du groupe"
-                        value={groupName}
-                        onChange={(e) => setGroupName(e.target.value)}
-                      />
-                      <button
-                        className="btn join-item rounded-sm md:rounded-l-sm w-full md:w-1/2 lg:w-1/3"
-                        onClick={() => {
-                          createNewChat(checkedUsers, closeModal);
-                        }}
-                      >
-                        Créez le groupe
-                      </button>
-                    </div>
-                    )}
-            </div>
-            <form method="dialog" className="modal-backdrop">
-                <button onClick={closeModal}>close</button>
-            </form>
-        </dialog>
+              )}
+              renderOption={(props, option) => (
+                (option.id !== task.user_id) && (
+                  <li {...props}>
+                      <Badge color={option.online ? 'success': 'string'} overlap="circular" badgeContent=" " variant="dot" className='mr-3'>
+                        <Avatar alt="Remy Sharp" src={option.avatar}>
+                          {option.name.charAt(0)}
+                        </Avatar>
+                      </Badge>
+                    {option.name}
+                  </li>
+                )
+              )}
+
+              className='w-full'
+            />
+            {selected.length > 2 && (
+              <TextField disabled={disableInput} onChange={handleChange} error={error} required helperText="Veuillez renseignez un nom de groupe" label="Nom du groupe" variant="outlined" className='w-full' />
+            )}
+            <LoadingButton
+              size="small"
+              onClick={createNewChat}
+              className='w-full h-10'
+              loading={loading}
+              loadingPosition="end"
+              variant="contained"
+            >
+              <span>Créer la discution</span>
+            </LoadingButton>
+            <Button className='w-full h-10 border-red-1' onClick={handleClose} variant="outlined">Annuler</Button>
+            
+          </Box>
+        </div>
+      </Modal>
     );
 };
 

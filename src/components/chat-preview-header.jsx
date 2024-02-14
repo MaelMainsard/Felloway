@@ -1,58 +1,86 @@
-import React,{useState,useEffect} from 'react';
-import GetUserAvatar from '../fetcher/fetcher-avatar-chat-preview-header'
-import GetModalNewConv from '../modals/modal-new-conv';
-import MapsUgcIcon from '@mui/icons-material/MapsUgc';
-import { getLoggedUser } from "../config/util";
+import React,{useEffect} from 'react';
+import AddIcon from '@mui/icons-material/Add';
+import {Menu} from '@mui/material';
+import MenuIcon from '@mui/icons-material/Menu';
+import MenuItem from '@mui/material/MenuItem';
+import ListItemText from '@mui/material/ListItemText';
+import ListItemIcon from '@mui/material/ListItemIcon';
+import AddCommentIcon from '@mui/icons-material/AddComment';
+import { Box } from "@mui/material";
 
-const ChatMenuHeader = ({state_show_message,state_set_show_message,set_open_chat,set_chat}) => {
 
-  const [avatar, setAvatar] = useState(null);
-  const [showModalNewConv, setShowModalNewConv] = useState(false);
-  let user_id = getLoggedUser().uid;
-  
-  useEffect(() => {
-    GetUserAvatar({user_id,setAvatar});
-    
-  }, [user_id,state_show_message]);
+const ChatMenuHeader = ({task, updateTask}) => {
 
+  const [anchorEl, setAnchorEl] = React.useState(null);
+
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
+  const open = Boolean(anchorEl);
+  const id = open ? 'simple-popover' : undefined;
 
   return (
-    <>
+    <div className='mr-3 ml-3'>
       <div className="navbar">
         <div className="navbar-start">
-          <div className="dropdown">
-            <div tabIndex={0} role="button" className="btn btn-ghost btn-circle p-0">
-              {avatar}
-            </div>
-            <ul tabIndex={0} className="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-52">
-              <li><a href="/#">A implémenter</a></li>
-            </ul>
-          </div>
+          <MenuIcon className=" text-green-1 font-bold cursor-pointer" style={{ fontSize: '35px' }}/>
         </div>
-        <div className="rounded-full p-1 bg-grey-1">
+        <div className='navbar-center'>
+        <Box className='mt-3' style={{ width: '200px', height: '65px', overflow: 'hidden' }}>
+          <img
+            src="/static/FellowayCombinaison.svg"
+            alt="logo"
+            style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+          />
+        </Box>
+          
+        {/* <div className="rounded-full p-1 bg-grey-1">
         <button
           type="button"  // Assurez-vous d'ajuster le type en fonction de vos besoins
-          className={`w-20 h-8 rounded-full ${!state_show_message ? ' bg-grey-1 text-font-2' : ' bg-blue-1 text-white'}`}
-          onClick={() => state_set_show_message(true)}
+          className={`w-20 h-8 rounded-full ${!task.show_preview_dm ? ' bg-grey-1 text-font-2' : ' bg-yellow-1 text-white'}`}
+          onClick={() => updateTask({show_preview_dm:true})}
         >
           DM
         </button>
         <button
           type="button"
-          className={` w-20 h-8 rounded-full ${state_show_message ? ' bg-grey-1 text-font-2' : ' bg-blue-1 text-white'}`}
-          onClick={() => state_set_show_message(false)}
+          className={` w-20 h-8 rounded-full ${task.show_preview_dm ? ' bg-grey-1 text-font-2' : ' bg-yellow-1 text-white'}`}
+          onClick={() => updateTask({show_preview_dm:false})}
         >
           Groupes
         </button>
+      </div> */}
         </div>
         <div className="navbar-end">
-          <button className="btn btn-ghost btn-circle" onClick={()=> setShowModalNewConv(true)}>
-            <MapsUgcIcon className="h-5 w-5 text-font-2" />
-          </button>
+          <AddIcon className=" text-green-1 font-bold cursor-pointer" style={{fontSize:'35px'}} aria-describedby={id} onClick={task.window_width < 640 ? handleClick : undefined} onMouseEnter={task.window_width >= 640 ? handleClick : undefined}/>
+          <Menu
+            id="basic-menu"
+            anchorEl={anchorEl}
+            open={open}
+            onClose={handleClose}
+            PaperProps={{
+              style: {
+                width: 'fit'
+              },
+            }}
+            transformOrigin={{ horizontal: 'right', vertical: 'top' }}
+            anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
+          >
+            <MenuItem onClick={()=> {updateTask({show_modal_new_conv:true});handleClose()}}>
+              <ListItemIcon>
+                <AddCommentIcon fontSize="small" />
+              </ListItemIcon>
+              <ListItemText>Nouvelle discution</ListItemText>
+            </MenuItem>
+          </Menu>
         </div>
       </div>
-      <GetModalNewConv showModal={showModalNewConv} closeModal={()=>setShowModalNewConv(false)} user_id={user_id} show_conv={state_set_show_message} set_open_chat={set_open_chat} set_chat={set_chat}/>
-    </>
+    </div>
   );
 };
 

@@ -26,3 +26,16 @@ export const NoConv = () => {
   );
 };
 
+
+export const NoAvatarList = () => {
+  return (
+    <Player
+    className="w-40"
+    autoplay
+    loop
+    src="https://lottie.host/97dba3d3-7fd4-4227-87a9-962d227232b3/ZmfgWei3L5.json"
+  >
+  </Player>
+  );
+};
+

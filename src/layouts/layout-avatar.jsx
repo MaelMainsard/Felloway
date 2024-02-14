@@ -10,7 +10,7 @@ export const AvatarLayoutModal = ({ user_array }) => {
           <img src={user_array.avatar} alt="Avatar" className='object-cover rounded-full w-8 avatar' />
           </div>
         ) : (
-            <div className="bg-neutral text-neutral-content rounded-full w-8">
+            <div className="bg-grey-4 text-white rounded-full w-8">
               <span className='text-center justify-center w-8 h-8 pt-2 rounded-full font-semibold avatar'>
                 {name.charAt(0).toUpperCase()}
               </span>
@@ -29,7 +29,26 @@ export const AvatarLayoutPreview = ({ group_preview }) => {
           <img src={group_preview.avatar} alt="Avatar" className='object-cover rounded-full w-14' />
         ) : (
           <div className="avatar placeholder">
-            <div className="bg-neutral text-neutral-content rounded-full w-14">
+            <div className="bg-grey-4 text-white rounded-full w-14">
+              <span className="text-2xl">{group_preview.title.charAt(0).toUpperCase()}</span>
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+};
+
+export const AvatarListPreview = ({ group_preview }) => {
+
+  return (
+    <div className={`avatar mr-3`}>
+      <div className="w-16 rounded-full">
+        {group_preview.avatar ? (
+          <img src={group_preview.avatar} alt="Avatar" className='object-cover rounded-full w-16' />
+        ) : (
+          <div className="avatar placeholder">
+            <div className="bg-grey-4 text-white rounded-full w-16">
               <span className="text-2xl">{group_preview.title.charAt(0).toUpperCase()}</span>
             </div>
           </div>
@@ -50,7 +69,7 @@ export const AvatarLayoutPage = ({ message_preview }) => {
             <img src={message_preview.sender_img} className='object-cover rounded-full w-14' alt="Avatar" />
           </div> :
           <div className="avatar placeholder">
-            <div className="bg-neutral text-neutral-content rounded-full w-10">
+            <div className="bg-grey-4 text-white rounded-full w-10">
               <span className='text-center justify-center w-8 h-8 pt-1 rounded-full font-semibold avatar'>
                 {message_preview.sender_name.charAt(0).toUpperCase()}
               </span>
