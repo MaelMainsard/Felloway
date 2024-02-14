@@ -83,6 +83,7 @@ const ChatPageFooter = ({ task, updateTask }) => {
                         id="file-input"
                         type="file"
                         onChange={handleImageChange}
+                        multiple={true}
                         accept="image/*"
                         ref={fileInputRef}
                         style={{ display: 'none' }} // Cacher l'input file
