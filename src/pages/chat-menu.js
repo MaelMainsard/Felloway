@@ -8,6 +8,7 @@ import GetModalNewConv from '../modals/modal-new-conv';
 import { getLoggedUser } from "../config/util";
 import { NoConv } from '../lib/icon_and_loader';
 import NavBar from "../components/BottomNavBar";
+import PerfectScrollbar from 'react-perfect-scrollbar'
 
 const ChatMenu = () => {
   const [task, updateTask] = useReducer((prev, next) => ({
@@ -59,7 +60,9 @@ const ChatMenu = () => {
         {((task.open_chat_page && task.window_width < 640) || (task.chat_id && task.window_width > 640)) && (
           <div className={` bg-grey-1 w-full flex flex-col justify-between`}>
             <ChatPageHeader task={task} updateTask={updateTask}/>
-            <ChatPageBody task={task} updateTask={updateTask} />
+            <PerfectScrollbar>
+              <ChatPageBody task={task} updateTask={updateTask} />
+            </PerfectScrollbar>
             <ChatPageFooter task={task} updateTask={updateTask} />
           </div>
         )}

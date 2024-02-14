@@ -1,6 +1,5 @@
 import React, { useEffect,useState } from 'react';
 import GetMessagePreview from '../fetcher/fetcher-chat-preview';
-import { Scrollbars } from 'react-custom-scrollbars';
 import SearchIcon from '@mui/icons-material/Search';
 import IconButton from '@mui/material/IconButton';
 import GroupIcon from '@mui/icons-material/Group';
@@ -31,11 +30,11 @@ const ChatMenuBody = ({ task, updateTask }) => {
           <SearchIcon onClick={()=>{updateTask({conv_preview_filter: filter})}} className='text-green-1 absolute mr-3 cursor-pointer' />
         </div>
       </div>
-      <Scrollbars autoHide>
+      {/* <Scrollbars autoHide> */}
         <div className={`p-2 space-y-5 mt-5 carousel`}>
           {task.messages_preview}
         </div>
-      </Scrollbars>
+      {/* </Scrollbars> */}
     </div>
   );
 };
