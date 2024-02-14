@@ -18,7 +18,13 @@ import { motion } from "framer-motion";
 
 import { app } from "../config/Firebase";
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
-import { getFirestore, collection, where, query, getDocs } from "firebase/firestore";
+import {
+  getFirestore,
+  collection,
+  where,
+  query,
+  getDocs,
+} from "firebase/firestore";
 
 const auth = getAuth(app);
 
@@ -41,7 +47,9 @@ const LoginForm = ({ setAuth, setUser }) => {
   const [showPassword, setShowPassword] = useState(false);
 
   const LoginSchema = Yup.object().shape({
-    email: Yup.string().email("Provide a valid email address").required("Email is required"),
+    email: Yup.string()
+      .email("Provide a valid email address")
+      .required("Email is required"),
     password: Yup.string().required("Password is required"),
   });
 
@@ -66,29 +74,42 @@ const LoginForm = ({ setAuth, setUser }) => {
         const userData = querySnapshot.docs[0].data();
 
         if (userData.fournisseur === "password") {
-          const userCredential = await signInWithEmailAndPassword(auth, values.email, values.password);
+          const userCredential = await signInWithEmailAndPassword(
+            auth,
+            values.email,
+            values.password
+          );
           // Signed in
           const user = userCredential.user;
-          setUser(userCredential.user)
-          sessionStorage.setItem("loggedUser", JSON.stringify(userCredential.user));
+          setUser(userCredential.user);
+          sessionStorage.setItem(
+            "loggedUser",
+            JSON.stringify(userCredential.user)
+          );
           setAuth(true);
           navigate(from, { replace: true });
         } else if (userData.fournisseur === "google") {
-          setStatus({ error: "This email is already associated with a Google Account. Please sign in with Google." });
+          setStatus({
+            error:
+              "This email is already associated with a Google Account. Please sign in with Google.",
+          });
           setSubmitting(false);
         }
       } catch (error) {
         if (error.code === "auth/invalid-login-credentials") {
           setStatus({ error: "Email address or password invalid." });
         } else {
-          setStatus({ error: "An unexpected error occurred. Please try again later." });
+          setStatus({
+            error: "An unexpected error occurred. Please try again later.",
+          });
         }
         setSubmitting(false);
       }
     },
   });
 
-  const { status, errors, touched, isSubmitting, handleSubmit, getFieldProps } = formik;
+  const { status, errors, touched, isSubmitting, handleSubmit, getFieldProps } =
+    formik;
 
   return (
     <FormikProvider value={formik}>
@@ -132,8 +153,14 @@ const LoginForm = ({ setAuth, setUser }) => {
               InputProps={{
                 endAdornment: (
                   <InputAdornment position="end">
-                    <IconButton onClick={() => setShowPassword((prev) => !prev)}>
-                      {showPassword ? <Icon icon="eva:eye-fill" /> : <Icon icon="eva:eye-off-fill" />}
+                    <IconButton
+                      onClick={() => setShowPassword((prev) => !prev)}
+                    >
+                      {showPassword ? (
+                        <Icon icon="eva:eye-fill" />
+                      ) : (
+                        <Icon icon="eva:eye-off-fill" />
+                      )}
                     </IconButton>
                   </InputAdornment>
                 ),
@@ -154,12 +181,20 @@ const LoginForm = ({ setAuth, setUser }) => {
             >
               <FormControlLabel
                 control={
-                  <Checkbox {...getFieldProps("remember")} checked={formik.values.remember} />
+                  <Checkbox
+                    {...getFieldProps("remember")}
+                    checked={formik.values.remember}
+                  />
                 }
                 label="Remember me"
               />
 
-              <Link component={RouterLink} variant="subtitle2" to="/forgot-password" underline="hover">
+              <Link
+                component={RouterLink}
+                variant="subtitle2"
+                to="/forgot-password"
+                underline="hover"
+              >
                 Forgot password?
               </Link>
             </Stack>
@@ -173,7 +208,9 @@ const LoginForm = ({ setAuth, setUser }) => {
             >
               {isSubmitting ? "loading..." : "Login"}
             </LoadingButton>
-            {status && status.error && <div style={{ color: "red" }}>{status.error}</div>}
+            {status && status.error && (
+              <div style={{ color: "red" }}>{status.error}</div>
+            )}
           </Box>
         </Box>
       </Form>

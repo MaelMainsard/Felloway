@@ -5,7 +5,7 @@ import styled from "@emotion/styled";
 
 import SocialAuth from "../components/SocialAuth";
 import SignupForm from "../components/SignupForm";
-import LogoText from "../components/LogoText";
+import LogoSimple from "../components/LogoSimple";
 import { motion } from "framer-motion";
 
 //////////////////////////////////
@@ -53,7 +53,7 @@ const Signup = ({ setAuth, setUser }) => {
       <Container maxWidth="sm">
         <ContentStyle>
           <HeadingStyle component={motion.div} {...fadeInUp}>
-            <LogoText />
+            <LogoSimple />
 
             <Typography sx={{ color: "text.secondary", mb: 5 }}>
               Enter your details below.
@@ -61,7 +61,7 @@ const Signup = ({ setAuth, setUser }) => {
           </HeadingStyle>
 
           <Box component={motion.div} {...fadeInUp}>
-            <SocialAuth setAuth={setAuth} setUser={setUser}/>
+            <SocialAuth setAuth={setAuth} setUser={setUser} />
           </Box>
 
           <Divider sx={{ my: 3 }} component={motion.div} {...fadeInUp}>
@@ -70,7 +70,7 @@ const Signup = ({ setAuth, setUser }) => {
             </Typography>
           </Divider>
 
-          <SignupForm setAuth={setAuth} setUser={setUser}/>
+          <SignupForm setAuth={setAuth} setUser={setUser} />
 
           <Typography
             component={motion.p}
