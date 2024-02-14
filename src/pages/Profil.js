@@ -6,7 +6,7 @@ import SettingsIcon from '@mui/icons-material/Settings';
 import { Link } from "react-router-dom";
 import Avatar from '@mui/material/Avatar';
 import { getLoggedUser } from '../config/util';
-import ImageUploader from '../components/ImageUploader';
+import Carousel from '../components/Carousel';
 import Badge from '@mui/material/Badge';
 import PersonIcon from '@mui/icons-material/Person';
 import EditIcon from '@mui/icons-material/Edit';
@@ -115,7 +115,7 @@ const Profil = () => {
         )}
       </div>
 
-      <ImageUploader/>
+      <Carousel/>
       <div style={{ marginTop: "auto", display: "flex", width: "100%" }}>
         <NavBar />
       </div>
