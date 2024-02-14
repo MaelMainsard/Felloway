@@ -70,6 +70,7 @@ const GetMessagePreview = async ({ task, updateTask}) => {
           avatar: !group_data.is_chat ? group_data.group_img : user_data.avatar || null,
           title:  !group_data.is_chat ? group_data.group_name : (user_data.firstName !== undefined || user_data.lastName !== undefined) ? (user_data.firstName + " " + user_data.lastName) : null,
           message: lastMessageData && lastMessageData.content || null,
+          is_image: lastMessageData && lastMessageData.content_img != undefined? true : false,
           timestamp: formatTimestamp(lastMessageData && lastMessageData.timestamp || null),
           notification: messages_not_view,
           online : user_data.online,

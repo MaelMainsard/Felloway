@@ -7,6 +7,7 @@ import { NoConv } from '../lib/icon_and_loader';
 
 const GetMessagePage = async ({ task, updateTask}) => {
 
+
   try {
     
     const docGroups = doc(firestore, "groups", task.chat_id);
@@ -16,6 +17,7 @@ const GetMessagePage = async ({ task, updateTask}) => {
     const q = query(collection(firestore, 'groups', task.chat_id, 'messages'), orderBy('timestamp'));
     const unsubscribe_group = onSnapshot(q, (groupSnapshot) => {
       const messages_preview_list = [];
+      
       let test = false
 
       groupSnapshot.forEach(async(docs) => {

@@ -41,7 +41,7 @@ export const ChatMenuMessage = ({group_preview, task, updateTask}) => {
               </Avatar>
             </Badge>
           </div>
-          <div className={`grid ${group_preview.message ? 'grid-cols-2' : 'grid-cols-1'} gap-1 w-full cursor-pointer`} onClick={() => { updateViewMessage(group_preview.id, task.user_id, updateTask) }} >
+          <div className={`grid ${group_preview.message ? 'grid-cols-2' : 'grid-cols-1'} gap-1 w-full cursor-pointer`} onClick={() => { updateViewMessage(group_preview.id, task.user_id, updateTask); updateTask({chat_id:group_preview.id});updateTask({open_chat_page:true})}} >
             <span className={`line-clamp-1 font-bold text-base ${group_preview.notification !== 0 ? 'font-bold text-green-1' : 'text-black'}`}>{group_preview.title}</span>
             <span  className='text-black line-clamp-1 text-xs italic flex flex-row justify-end items-center'>{group_preview.timestamp}</span>
             <span className={`text-font-2 line-clamp-1  ${group_preview.notification !== 0 ? 'text-font-1' : ''}`}>
@@ -101,8 +101,8 @@ async function deleteGroup(group_id,updateTask){
   updateTask({chat_id:null});
 }
 
-async function updateViewMessage(group_id, user_id, updateTask) {
-  updateTask({open_chat_page:true,chat_id:group_id});
+async function updateViewMessage(group_id, user_id) {
+  
   const q = query(collection(firestore, "groups", group_id, "messages"));
 
   const querySnapshot = await getDocs(q);
