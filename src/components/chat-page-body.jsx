@@ -13,7 +13,7 @@ const ChatPageBody = ({ task, updateTask}) => {
 
   useEffect(() => {
     scrollbarsRef.current.scrollToBottom();
-  }, [task]);
+  }, [task.messages_body]);
 
   return (
     !task.add_pic ? (

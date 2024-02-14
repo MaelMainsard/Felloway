@@ -73,7 +73,7 @@ const GetMessagePreview = async ({ task, updateTask}) => {
           is_image: lastMessageData && lastMessageData.content_img != undefined? true : false,
           timestamp: formatTimestamp(lastMessageData && lastMessageData.timestamp || null),
           notification: messages_not_view,
-          online : user_data.online,
+          online : user_data && user_data.online|| false,
           is_chat: group_data.is_chat
         }
 
