@@ -25,23 +25,22 @@ const Settings = () => {
 
 
   return (
-    <Container
-      component="main"
-      maxWidth="100%"
-      sx={{
-        display: "flex",
-        flexDirection: "column",
-        minHeight: "100vh",
-      }}
-    >
-      <h1>Page Settings</h1>
-      Un formulaire qui change les données le la bdd du user
-     <SettingForm user={user}></SettingForm>
-
-      <div style={{ marginTop: "auto", display: "flex", width: "100%" }}>
-        <BottomNavBar/>
-      </div>
-    </Container>
+    <div className="h-screen flex flex-col justify-between">
+      <Container
+        component="main"
+        maxWidth="100%"
+        sx={{
+          display: "flex",
+          flexDirection: "column",
+          height: "100vh",
+        }}
+      >
+        <h1>Page Settings</h1>
+        Un formulaire qui change les données le la bdd du user
+        <SettingForm user={user}></SettingForm>
+      </Container>
+      <BottomNavBar />
+    </div>
   );
 };
 

@@ -29,21 +29,21 @@ const Home = () => {
   };
 
   return (
-    <Container
-      component="main"
-      maxWidth="100%"
-      sx={{
-        display: "flex",
-        flexDirection: "column",
-        minHeight: "100vh",
-      }}
-    >
-      <Avatar alt="User Avatar" src={image} />
-      <h1>Bonjour {user.displayName}</h1>
-      <div style={{ marginTop: "auto", display: "flex", width: "100%" }}>
-        <BottomNavBar/>
-      </div>
-    </Container>
+    <div className="h-screen flex flex-col justify-between">
+      <Container
+        component="main"
+        maxWidth="100%"
+        sx={{
+          display: "flex",
+          flexDirection: "column",
+          height: "100vh",
+        }}
+      >
+        <Avatar alt="User Avatar" src={image} />
+        <h1>Bonjour {user.displayName}</h1>
+      </Container>
+      <BottomNavBar/>
+    </div>
   );
 };
 
