@@ -1,5 +1,6 @@
 import { Container } from "@mui/material";
 import {BottomNavBar} from "../components/BottomNavBar";
+import {TopNavBar} from "../components/TopNavBar";
 import { useState } from "react";
 import Avatar from '@mui/material/Avatar';
 import { getLoggedUser } from "../config/util";
@@ -30,6 +31,7 @@ const Home = () => {
 
   return (
     <div className="h-screen flex flex-col justify-between">
+      <TopNavBar/>
       <Container
         component="main"
         maxWidth="100%"
