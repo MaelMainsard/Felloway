@@ -1,16 +1,18 @@
 import React from 'react';
 import {BottomNavBar} from "../components/BottomNavBar";
 import {TopNavBar} from "../components/TopNavBar";
-const ChatMenu = () => {
+import {ChatMenu} from "../components/ChatMenu";
 
+const Chat = () => {
+  
   return (
     <div className="h-screen flex flex-col justify-between">
-      <TopNavBar/>
-      <span>Chat page</span>
-      <BottomNavBar/>
+      <TopNavBar />
+      <ChatMenu/>
+      <BottomNavBar />
     </div>
   );
   
 };
 
-export default ChatMenu;
+export default Chat;

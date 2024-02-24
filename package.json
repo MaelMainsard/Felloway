@@ -13,6 +13,7 @@
   "dependencies": {
     "@emotion/styled": "^11.11.0",
     "@iconify/react": "^4.1.1",
+    "@lottiefiles/react-lottie-player": "^3.5.3",
     "@mui/icons-material": "^5.15.10",
     "@mui/lab": "^5.0.0-alpha.165",
     "@mui/material": "^5.15.10",

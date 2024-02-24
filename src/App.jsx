@@ -4,7 +4,7 @@ import { Route, Routes, Navigate, useLocation } from "react-router-dom";
 import Home from "./pages/Home";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
-import ChatMenu from "./pages/chat-menu";
+import Chat from "./pages/Chat";
 import Settings from "./pages/Settings";
 import Profil from "./pages/Profil";
 import PrivateRoute from "./routes/PrivateRoute";
@@ -39,6 +39,9 @@ function App() {
         "text": {
           "primary": "rgba(0, 0, 0, 0.87)",
           "secondary": "rgba(0, 0, 0, 0.54)", "disabled": "rgba(0, 0, 0, 0.38)", "hint": "rgba(0, 0, 0, 0.38)"
+        },
+        "InputText": {
+          "primary": "#F7F7F7"
         }
       }
     }
@@ -56,7 +59,7 @@ function App() {
         <Route path="/login" element={<Login setAuth={setAuth} setUser={setUser}/>} />
         <Route path="/signup" element={<Signup setAuth={setAuth} setUser={setUser}/>} />
         <Route path="/home" element={<PrivateRoute><Home/></PrivateRoute>} />
-        <Route path="/chat" element={<PrivateRoute><ChatMenu /></PrivateRoute>} />
+        <Route path="/chat" element={<PrivateRoute><Chat /></PrivateRoute>} />
         <Route path="/settings" element={<PrivateRoute><Settings/></PrivateRoute>} />
         <Route path="/profil" element={<PrivateRoute><Profil/></PrivateRoute>} />
 
