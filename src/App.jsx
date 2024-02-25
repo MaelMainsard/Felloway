@@ -42,6 +42,9 @@ function App() {
         },
         "InputText": {
           "primary": "#F7F7F7"
+        },
+        "Skelettons": {
+          "light": "#d3d3d3",
         }
       }
     }
