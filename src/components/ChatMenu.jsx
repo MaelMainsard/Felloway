@@ -2,7 +2,6 @@ import { useTheme } from '@mui/material';
 import InputBase from '@mui/material/InputBase';
 import IconButton from '@mui/material/IconButton';
 import SearchIcon from '@mui/icons-material/Search';
-//import { ChatMenuList } from './ChatMenuList';
 import {ChatMenuSkeletton} from './ChatMenuSkeletton';
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -55,14 +54,17 @@ export const ChatMenu = () => {
               if (doc.exists()) {
                 const data = doc.data();
                 groupsData['message'] = data.content || null;
-                groupsData['timestamp'] = (data.timestamp.toDate().toDateString()) || null;
+                var hours = data.timestamp.toDate().getHours();
+                var minutes = data.timestamp.toDate().getMinutes();
+                groupsData['timestamp'] =  hours + ":" + minutes || null;
+
               } else {
-                groupsData['message'] = null;
+                groupsData['message'] = 'Envoyer un message...';
                 groupsData['timestamp'] = null;
               }
             });
             if (messageQuerySnapshot.empty) {
-              groupsData['message'] = null;
+              groupsData['message'] = 'Envoyer un message...';
               groupsData['timestamp'] = null;
             }
     
@@ -106,23 +108,25 @@ export const ChatMenu = () => {
                   <ChatMenuSkeletton key={index} />
                 )) :
                 groups.map((group, index) =>
-                  <div key={index} className='my-6 flex w-auto'>
+                
+                  <div key={index} class="flex items-start gap-2.5 m-4">
                     {group.avatar ?
-                      <Avatar  alt="Message avatar" src={group.avatar} style={{height: 43, width: 43}} /> :
-                      <Avatar  style={{height: 43, width: 43}}>{group.title.charAt(0)}</Avatar>
+                      <Avatar alt="Message avatar" src={group.avatar} style={{ height: 43, width: 43 }} /> :
+                      <Avatar style={{ height: 43, width: 43 }}>{group.title.charAt(0)}</Avatar>
                     }
-                    <div className='flex flex-col'>
-                      <span>{group.title}</span>
-                      <time>{group.message}</time>
+                    <div class="flex flex-col w-full mr-4">
+                        <div class="flex justify-between items-center space-x-2 rtl:space-x-reverse">
+                            <span class="text-sm font-bold font-bree " style={{color: group.notif > 0 ? theme.palette.primary.main : '#000000'}}>{group.title}</span>
+                            {group.message && (
+                              <time class="text-xs font-light italic ">{group.timestamp}</time>
+                            )}
+                        </div>
+                        <div class="flex justify-between items-center space-x-2 rtl:space-x-reverse">
+                            <p class="text-sm font-thin py-2 overflow-hidden whitespace-nowrap max-w-xs overflow-ellipsis mr-10" style={{color: theme.palette.text.secondary}}>{group.message}</p>
+                            <Badge badgeContent={group.notif} color="primary"/>
+                        </div>
                     </div>
-                    <div className='flex flex-col'>
-                        <time>{group.timestamp}</time>
-                        <Badge badgeContent={1} color="primary"/>
-                    </div>
-
-
-
-                  </div>
+                </div>
                 )
               }
             </div>
