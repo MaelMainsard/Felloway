@@ -1,7 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit'
 
 const initialState = {
-  value: 5,
+  value: 5
 }
 
 export const BottomNavBarSlice = createSlice({

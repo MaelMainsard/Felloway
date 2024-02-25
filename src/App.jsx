@@ -36,6 +36,10 @@ function App() {
           "dark": "#d32f2f",
           "contrastText": "#fff"
         },
+        "chatBubble": {
+          'right': "rgba(25, 151, 164, 1)",
+          'left': "#F8AF42"
+        },
         "text": {
           "primary": "rgba(0, 0, 0, 0.87)",
           "secondary": "rgba(0, 0, 0, 0.54)", "disabled": "rgba(0, 0, 0, 0.38)", "hint": "rgba(0, 0, 0, 0.38)"
