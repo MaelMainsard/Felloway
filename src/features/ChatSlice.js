@@ -7,7 +7,8 @@ export const chatSlice = createSlice({
     isLoaded: false,
     convFilter: "",
     group_id: null,
-    message: null
+    message: null,
+    pagination: null
   },
   reducers: {
     updateData: (state, action) => {
@@ -22,10 +23,13 @@ export const chatSlice = createSlice({
     },
     updateMessage: (state, action) => {
       state.message = action.payload;
+    },
+    updatePagination: (state, action) => {
+      state.pagination = action.payload;
     }
   },
 });
 
-export const { updateGroupId , updateData, updateFilter, updateMessage} = chatSlice.actions;
+export const { updateGroupId , updateData, updateFilter, updateMessage, updatePagination} = chatSlice.actions;
 
 export default chatSlice.reducer;

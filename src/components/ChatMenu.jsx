@@ -3,26 +3,33 @@ import InputBase from '@mui/material/InputBase';
 import IconButton from '@mui/material/IconButton';
 import SearchIcon from '@mui/icons-material/Search';
 import {ChatMenuSkeletton} from './ChatMenuSkeletton';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { updateData, updateFilter, updateGroupId } from '../features/ChatSlice';
+import { updateData, updateFilter, updateGroupId, updatePagination } from '../features/ChatSlice';
 import { firestore } from '../config/Firebase';
-import { collection , where, getDocs, query, getDoc, doc, orderBy, limit } from "firebase/firestore";
+import { collection , where, getDocs, query, getDoc, doc, orderBy, limit, startAfter} from "firebase/firestore";
 import { getLoggedUser } from "../config/util";
 import Avatar from '@mui/material/Avatar';
 import Badge from '@mui/material/Badge';
 
-
 export const ChatMenu = () => {
     const theme = useTheme();
     const dispatch = useDispatch();
-    const { data: groups, isLoaded, convFilter } = useSelector(state => state.chat);
+
+    const { data: groups, isLoaded, convFilter, pagination } = useSelector(state => state.chat);
     const user_id = getLoggedUser().uid;
+
 
     useEffect(() => {
       const fetchData = async () => {
         if (!isLoaded) {
-          const q = query(collection(firestore, "groups"), where("users", 'array-contains', user_id));
+          const q = query(
+              collection(firestore, "groups"),
+              where("users", 'array-contains', user_id),
+              orderBy("updated_at", "desc"),
+              limit(10)
+            );
+
           const querySnapshot = await getDocs(q);
           const groupList = [];
     
@@ -58,18 +65,15 @@ export const ChatMenu = () => {
                 var hours = data.timestamp.toDate().getHours();
                 var minutes = data.timestamp.toDate().getMinutes();
                 groupsData['timestamp'] =  hours + ":" + minutes || null;
-                groupsData['real_timestamp'] = data.timestamp;
 
               } else {
                 groupsData['message'] = 'Envoyer un message...';
                 groupsData['timestamp'] = null;
-                groupsData['real_timestamp'] = null;
               }
             });
             if (messageQuerySnapshot.empty) {
               groupsData['message'] = 'Envoyer un message...';
               groupsData['timestamp'] = null;
-              groupsData['real_timestamp'] = null;
             }
     
             const unreadMessageQ = query(collection(firestore, `groups/${group.id}/messages`));
@@ -85,18 +89,6 @@ export const ChatMenu = () => {
     
             groupList.push(groupsData);
           }));
-          groupList.sort((a, b) => {
-            if (a.timestamp === null && b.timestamp === null) {
-                return 0;
-            }
-            if (a.timestamp === null) {
-                return 1; 
-            }
-            if (b.timestamp === null) {
-                return -1; 
-            }
-            return a.timestamp - b.timestamp;
-        });
         
           dispatch(updateData(groupList));
         }
@@ -126,28 +118,32 @@ export const ChatMenu = () => {
                 </IconButton>
             </div>
             <div className='overflow-y-auto' style={{height: '50vh' }}>
-              {!isLoaded ?
-                Array.from({ length: 5 }).map((_, index) => (
-                  <ChatMenuSkeletton key={index} />
-                )) :
+            {!isLoaded ?
+              Array.from({ length: 5 }).map((_, index) => (
+                <ChatMenuSkeletton key={index} />
+              )) :
+              <>
+              {
                 groups.filter(group => group.title.toLowerCase().includes(convFilter.toLowerCase())).map((group, index) =>
-                    <div key={index} onClick={()=>{dispatch(updateGroupId(group.id))}} class="flex items-start gap-2.5 m-4">
-                      <Avatar alt="Message avatar" src={group.avatar} style={{ height: 43, width: 43 }} /> 
-                      <div class="flex flex-col w-full mr-4">
-                          <div class="flex justify-between items-center space-x-2 rtl:space-x-reverse">
-                              <span class="text-sm font-bold font-bree " style={{color: group.notif > 0 ? theme.palette.primary.main : '#000000'}}>{group.title}</span>
-                              {group.message && (
-                                <time class="text-xs font-light italic ">{group.timestamp}</time>
-                              )}
-                          </div>
-                          <div class="flex justify-between items-center space-x-2 rtl:space-x-reverse">
-                              <p class="text-sm font-thin py-2 overflow-hidden whitespace-nowrap max-w-xs overflow-ellipsis mr-10" style={{color: theme.palette.text.secondary}}>{group.message}</p>
-                              <Badge badgeContent={group.notif} color="primary"/>
-                          </div>
-                      </div>
+                <div key={index} onClick={() => { dispatch(updateGroupId(group.id)) }} class="flex items-start gap-2.5 m-4">
+                  <Avatar alt="Message avatar" src={group.avatar} style={{ height: 43, width: 43 }} />
+                  <div class="flex flex-col w-full mr-4">
+                    <div class="flex justify-between items-center space-x-2 rtl:space-x-reverse">
+                      <span class="text-sm font-bold font-bree " style={{ color: group.notif > 0 ? theme.palette.primary.main : '#000000' }}>{group.title}</span>
+                      {group.message && (
+                        <time class="text-xs font-light italic ">{group.timestamp}</time>
+                      )}
                     </div>
-                )
+                    <div class="flex justify-between items-center space-x-2 rtl:space-x-reverse">
+                      <p class="text-sm font-thin py-2 overflow-hidden whitespace-nowrap max-w-xs overflow-ellipsis mr-10" style={{ color: theme.palette.text.secondary }}>{group.message}</p>
+                      <Badge badgeContent={group.notif} color="primary" />
+                    </div>
+                  </div>
+                </div>
+              )
               }
+              </>
+            }
             </div>
         </div>
     );
