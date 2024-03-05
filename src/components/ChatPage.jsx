@@ -61,9 +61,10 @@ export const ChatPage = () => {
     }, [group_id]);
 
     return (
-        <div className="h-full">
-            <div className="h-28 rounded-b-2xl shadow-[0px_6px_5px_0px_#00000024] flex items-center px-4 space-x-2" style={{ backgroundColor: theme.palette.primary.main }}>
+        <div className="h-full overflow-y-hidden">
+            <div className="h-28 rounded-b-2xl shadow-[0px_6px_5px_0px_#00000024] flex items-center px-4 space-x-4" style={{ backgroundColor: theme.palette.primary.main }}>
                 <Avatar alt="Avatar" src={getInfoById(group_id).avatar} style={{ height: 70, width: 70 }} />
+                <span className='text-md font-semibold' style={{ color: theme.palette.primary.contrastText }}>{getInfoById(group_id).title}</span>
             </div>
             <IconButton size="large" onClick={()=>{dispatch(updateGroupId(null))}}>
                 <KeyboardBackspaceIcon sx={{fontSize: 40, color: theme.palette.primary.main}}/> 

@@ -5,7 +5,7 @@ import SearchIcon from '@mui/icons-material/Search';
 import {ChatMenuSkeletton} from './ChatMenuSkeletton';
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { updateData, updateFilter, updateGroupId, updatePagination } from '../features/ChatSlice';
+import { updateData, updateFilter, updateGroupId, clearNotification } from '../features/ChatSlice';
 import { firestore } from '../config/Firebase';
 import { collection , where, getDocs, query, getDoc, doc, orderBy, limit, startAfter} from "firebase/firestore";
 import { getLoggedUser } from "../config/util";
@@ -16,9 +16,8 @@ export const ChatMenu = () => {
     const theme = useTheme();
     const dispatch = useDispatch();
 
-    const { data: groups, isLoaded, convFilter, pagination } = useSelector(state => state.chat);
+    const { data: groups, isLoaded, convFilter } = useSelector(state => state.chat);
     const user_id = getLoggedUser().uid;
-
 
     useEffect(() => {
       const fetchData = async () => {
@@ -125,18 +124,18 @@ export const ChatMenu = () => {
               <>
               {
                 groups.filter(group => group.title.toLowerCase().includes(convFilter.toLowerCase())).map((group, index) =>
-                <div key={index} onClick={() => { dispatch(updateGroupId(group.id)) }} class="flex items-start gap-2.5 m-4">
+                <div key={index} onClick={() => { dispatch(updateGroupId(group.id)); dispatch(clearNotification()) }} class="flex items-start gap-2.5 m-4">
                   <Avatar alt="Message avatar" src={group.avatar} style={{ height: 43, width: 43 }} />
                   <div class="flex flex-col w-full mr-4">
                     <div class="flex justify-between items-center space-x-2 rtl:space-x-reverse">
                       <span class="text-sm font-bold font-bree " style={{ color: group.notif > 0 ? theme.palette.primary.main : '#000000' }}>{group.title}</span>
                       {group.message && (
-                        <time class="text-xs font-light italic ">{group.timestamp}</time>
+                        <time class="text-xs font-light italic">{group.timestamp}</time>
                       )}
                     </div>
                     <div class="flex justify-between items-center space-x-2 rtl:space-x-reverse">
                       <p class="text-sm font-thin py-2 overflow-hidden whitespace-nowrap max-w-xs overflow-ellipsis mr-10" style={{ color: theme.palette.text.secondary }}>{group.message}</p>
-                      <Badge badgeContent={group.notif} color="primary" />
+                      <Badge badgeContent={group.notif} color="primary" style={{marginRight: '10px'}} />
                     </div>
                   </div>
                 </div>

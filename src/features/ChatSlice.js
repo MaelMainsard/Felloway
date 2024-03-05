@@ -26,10 +26,19 @@ export const chatSlice = createSlice({
     },
     updatePagination: (state, action) => {
       state.pagination = action.payload;
-    }
+    },
+    clearNotification: async (state) => {
+      const newDataArray = state.data.map(conv => {
+        if (conv.id === state.group_id) {
+            return { ...conv, notif: 0 };
+        }
+        return conv;
+      });
+      state.data = newDataArray;
+    },
   },
 });
 
-export const { updateGroupId , updateData, updateFilter, updateMessage, updatePagination} = chatSlice.actions;
+export const { updateGroupId , updateData, updateFilter, updateMessage, updatePagination, clearNotification} = chatSlice.actions;
 
 export default chatSlice.reducer;
