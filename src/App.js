@@ -7,6 +7,7 @@ import Signup from "./pages/Signup";
 import ChatMenu from "./pages/chat-menu";
 import Settings from "./pages/Settings";
 import Profil from "./pages/Profil";
+import Formulaire from "./pages/Formulaire";
 import PrivateRoute from "./routes/PrivateRoute";
 import ForgotPassword from "./pages/ForgotPassword";
 import { createTheme, ThemeProvider } from '@mui/material/styles';
@@ -30,6 +31,7 @@ function App() {
         <Route path="/chat" element={<PrivateRoute><ChatMenu /></PrivateRoute>} />
         <Route path="/settings" element={<PrivateRoute><Settings/></PrivateRoute>} />
         <Route path="/profil" element={<PrivateRoute><Profil/></PrivateRoute>} />
+        <Route path="/formulaire" element={<PrivateRoute><Formulaire/></PrivateRoute>} />
 
         <Route
           path="/"

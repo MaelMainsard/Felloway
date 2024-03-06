@@ -1,4 +1,5 @@
 /** @type {import('tailwindcss').Config} */
+const defaultTheme = require('tailwindcss/defaultTheme')
 module.exports = {
   daisyui: {
     themes: [
@@ -49,7 +50,12 @@ module.exports = {
         1: "#F8AF42"
       }
     },
-    extend: {},
+    extend: {
+      fontFamily: {
+        'bree': ['"Bree Serif"', ...defaultTheme.fontFamily.serif],
+        'montserrat': ['"Montserrat"', ...defaultTheme.fontFamily.sans]
+      },
+    },
   },
   plugins: [
     require("daisyui")

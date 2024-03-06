@@ -13,6 +13,7 @@ import EditIcon from '@mui/icons-material/Edit';
 import { getFirestore, collection, doc, getDoc, updateDoc, deleteDoc, query, where, getDocs } from 'firebase/firestore';
 import { getStorage, ref, uploadBytes, getDownloadURL, deleteObject } from 'firebase/storage';
 import { app } from '../config/Firebase';
+import ProfilHeader from "../components/profil-header";
 
 //////////////////////////////////////
 
@@ -68,6 +69,9 @@ const Profil = () => {
   };
 
   return (
+    <>
+    <ProfilHeader user={user} image={image} />
+
     <Container
       component="main"
       maxWidth="100%"
@@ -76,6 +80,8 @@ const Profil = () => {
         flexDirection: "column",
         minHeight: "100vh",
       }}>
+        
+
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
         <h1>Profil</h1>
         <IconButton aria-label="delete"  >
@@ -120,6 +126,7 @@ const Profil = () => {
         <NavBar />
       </div>
     </Container>
+    </>
   );
 };
 
