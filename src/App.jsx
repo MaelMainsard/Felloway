@@ -9,6 +9,8 @@ import Settings from "./pages/Settings";
 import Profil from "./pages/Profil";
 import PrivateRoute from "./routes/PrivateRoute";
 import ForgotPassword from "./pages/ForgotPassword";
+import Destination from "./pages/Destination";
+
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 
 function App() {
@@ -74,6 +76,7 @@ function App() {
         <Route path="/chat" element={<PrivateRoute><Chat /></PrivateRoute>} />
         <Route path="/settings" element={<PrivateRoute><Settings/></PrivateRoute>} />
         <Route path="/profil" element={<PrivateRoute><Profil/></PrivateRoute>} />
+        <Route path="/destination" element={<PrivateRoute><Destination/></PrivateRoute>}/>
 
         <Route
           path="/"
