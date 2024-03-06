@@ -49,6 +49,10 @@ function App() {
         },
         "Skelettons": {
           "light": "#d3d3d3",
+        },
+        "match": {
+          'close': "#F8AF42",
+          'heart': "#FF6B86"
         }
       }
     }
