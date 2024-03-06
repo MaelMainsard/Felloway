@@ -1,4 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
+import { firestore } from '../config/Firebase';
+import { getLoggedUser } from "../config/util";
+import { collection, getDocs, query, updateDoc} from "firebase/firestore";
 
 export const chatSlice = createSlice({
   name: "chat",
@@ -35,6 +38,16 @@ export const chatSlice = createSlice({
         return conv;
       });
       state.data = newDataArray;
+
+      // const user_id = getLoggedUser().uid;
+      // const q = query(collection(firestore, "groups", state.group_id, 'messages'));
+      // const querySnapshot = await getDocs(q);
+
+      // for (const doc of querySnapshot.docs) {
+      //     let users_array = doc.data().view_by;
+      //     users_array.push(user_id);
+      //     await updateDoc(doc.ref, { view_by: users_array });
+      // }
     },
   },
 });

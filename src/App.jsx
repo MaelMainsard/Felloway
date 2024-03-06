@@ -9,6 +9,8 @@ import Settings from "./pages/Settings";
 import Profil from "./pages/Profil";
 import PrivateRoute from "./routes/PrivateRoute";
 import ForgotPassword from "./pages/ForgotPassword";
+import Destination from "./pages/Destination";
+
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 
 function App() {
@@ -43,6 +45,7 @@ function App() {
         "text": {
           "primary": "rgba(0, 0, 0, 0.87)",
           "secondary": "rgba(0, 0, 0, 0.54)", "disabled": "rgba(0, 0, 0, 0.38)", "hint": "rgba(0, 0, 0, 0.38)",
+          "dropdown": "#727171",
           "white": "rgba(255, 255, 255, 1)"
         },
         "InputText": {
@@ -50,6 +53,10 @@ function App() {
         },
         "Skelettons": {
           "light": "#d3d3d3",
+        },
+        "match": {
+          'close': "#F8AF42",
+          'heart': "#FF6B86"
         }
       }
     }
@@ -70,6 +77,7 @@ function App() {
         <Route path="/chat" element={<PrivateRoute><Chat /></PrivateRoute>} />
         <Route path="/settings" element={<PrivateRoute><Settings/></PrivateRoute>} />
         <Route path="/profil" element={<PrivateRoute><Profil/></PrivateRoute>} />
+        <Route path="/destination" element={<PrivateRoute><Destination/></PrivateRoute>}/>
 
         <Route
           path="/"
