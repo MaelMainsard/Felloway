@@ -1,6 +1,8 @@
 import {BottomNavBar} from "../components/BottomNavBar";
 import {TopNavBar} from "../components/TopNavBar";
 import { MatchPage } from "../components/MatchPage";
+import { DestinationPage } from "../components/DestinationPage";
+
 //////////////////////////////////////
 
 const Home = () => {
@@ -8,7 +10,8 @@ const Home = () => {
   return (
     <div className="h-screen flex flex-col">
       <TopNavBar />
-      <MatchPage />
+      {/* <MatchPage/> */}
+      <DestinationPage />
       <BottomNavBar />
       </div>
   );
