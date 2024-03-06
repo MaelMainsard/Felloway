@@ -1,5 +1,5 @@
 import { Container } from "@mui/material";
-import NavBar from "../components/BottomNavBar";
+import {BottomNavBar} from "../components/BottomNavBar";
 import { useState, useEffect } from "react";
 import SettingForm from "../components/SettingForm";
 import { getLoggedUser } from "../config/util";
@@ -25,23 +25,22 @@ const Settings = () => {
 
 
   return (
-    <Container
-      component="main"
-      maxWidth="100%"
-      sx={{
-        display: "flex",
-        flexDirection: "column",
-        minHeight: "100vh",
-      }}
-    >
-      <h1>Page Settings</h1>
-      Un formulaire qui change les données le la bdd du user
-     <SettingForm user={user}></SettingForm>
-
-      <div style={{ marginTop: "auto", display: "flex", width: "100%" }}>
-        <NavBar/>
-      </div>
-    </Container>
+    <div className="h-screen flex flex-col justify-between">
+      <Container
+        component="main"
+        maxWidth="100%"
+        sx={{
+          display: "flex",
+          flexDirection: "column",
+          height: "100vh",
+        }}
+      >
+        <h1>Page Settings</h1>
+        Un formulaire qui change les données le la bdd du user
+        <SettingForm user={user}></SettingForm>
+      </Container>
+      <BottomNavBar />
+    </div>
   );
 };
 

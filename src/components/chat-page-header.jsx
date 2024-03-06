@@ -35,3 +35,4 @@ const ChatPageHeader = ({ task, updateTask }) => {
 };
 
 export default ChatPageHeader;
+

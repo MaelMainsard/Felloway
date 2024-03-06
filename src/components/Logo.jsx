@@ -6,7 +6,7 @@ const Logo = () => {
   return (
     <Box>
       <Link to="/">
-        <Box component="img" src="/static/Felloway.svg" alt="logo" />
+        <Box component="img" src="/Logo.svg" alt="logo" />
       </Link>
     </Box>
   );
