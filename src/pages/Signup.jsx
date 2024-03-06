@@ -56,21 +56,21 @@ const Signup = ({ setAuth, setUser }) => {
             <LogoText />
 
             <Typography sx={{ color: "text.secondary", mb: 5 }}>
-              Enter your details below.
+              Entrez vos informations ci-dessous
             </Typography>
           </HeadingStyle>
 
           <Box component={motion.div} {...fadeInUp}>
-            <SocialAuth setAuth={setAuth} setUser={setUser}/>
+            <SocialAuth setAuth={setAuth} setUser={setUser} />
           </Box>
 
           <Divider sx={{ my: 3 }} component={motion.div} {...fadeInUp}>
             <Typography variant="body2" sx={{ color: "text.secondary" }}>
-              OR
+              OU
             </Typography>
           </Divider>
 
-          <SignupForm setAuth={setAuth} setUser={setUser}/>
+          <SignupForm setAuth={setAuth} setUser={setUser} />
 
           <Typography
             component={motion.p}
@@ -79,13 +79,13 @@ const Signup = ({ setAuth, setUser }) => {
             align="center"
             sx={{ color: "text.secondary", mt: 2 }}
           >
-            By registering, I agree to{" "}
+            En vous inscrivant, j'accepte les{" "}
             <Link underline="always" color="text.primary" href="#">
-              Terms of Service
+              Conditions d'utilisation
             </Link>{" "}
             &{" "}
             <Link underline="always" color="text.primary" href="#">
-              Privacy Policy
+              Politique de confidentialité
             </Link>
             .
           </Typography>
@@ -97,9 +97,9 @@ const Signup = ({ setAuth, setUser }) => {
             align="center"
             sx={{ mt: 3 }}
           >
-            Have an account?{" "}
+            Vous avez un compte ?{" "}
             <Link variant="subtitle2" component={RouterLink} to="/login">
-              Login
+              Connectez-vous ici
             </Link>
           </Typography>
         </ContentStyle>

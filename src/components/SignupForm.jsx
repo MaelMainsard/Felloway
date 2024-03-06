@@ -14,9 +14,19 @@ import { LoadingButton } from "@mui/lab";
 import { Icon } from "@iconify/react";
 import { motion } from "framer-motion";
 
-import { app } from "../config/Firebase"
-import { getAuth, createUserWithEmailAndPassword, fetchSignInMethodsForEmail } from "firebase/auth";
-import { collection, addDoc,setDoc, doc, getFirestore } from "firebase/firestore";
+import { app } from "../config/Firebase";
+import {
+  getAuth,
+  createUserWithEmailAndPassword,
+  fetchSignInMethodsForEmail,
+} from "firebase/auth";
+import {
+  collection,
+  addDoc,
+  setDoc,
+  doc,
+  getFirestore,
+} from "firebase/firestore";
 
 const db = getFirestore(app);
 const auth = getAuth(app);
@@ -56,7 +66,7 @@ const SignupForm = ({ setAuth, setUser }) => {
       .min(8, "Password must be at least 8 characters")
       .matches(
         /^(?=.*[A-Z])(?=.*[!@#$%^&*()_+,\-=\[\]{};':"\\|,.<>\/?])/,
-        'Password must contain at least one uppercase letter and one special character'
+        "Password must contain at least one uppercase letter and one special character"
       ),
   });
 
@@ -70,39 +80,49 @@ const SignupForm = ({ setAuth, setUser }) => {
     validationSchema: SignupSchema,
     onSubmit: async () => {
       try {
-        const userCredential = await createUserWithEmailAndPassword(auth, formik.values.email, formik.values.password);
+        const userCredential = await createUserWithEmailAndPassword(
+          auth,
+          formik.values.email,
+          formik.values.password
+        );
         const user = userCredential.user;
         setUser(userCredential.user);
         console.log("user log", user);
         setAuth(true);
 
-         // Add user to the database
-         await setDoc(doc(db, "users", user.uid), {
+        // Add user to the database
+        await setDoc(doc(db, "users", user.uid), {
           firstName: formik.values.firstName,
           lastName: formik.values.lastName,
           email: formik.values.email,
           fournisseur: auth.currentUser.providerData[0].providerId,
         });
-        sessionStorage.setItem("loggedUser", JSON.stringify(userCredential.user));
-        
+        sessionStorage.setItem(
+          "loggedUser",
+          JSON.stringify(userCredential.user)
+        );
+
         navigate("/", { replace: true });
       } catch (error) {
         switch (error.code) {
-          case 'auth/email-already-in-use':
-            setErrorText(`This email is already associated with an existing account.`);
+          case "auth/email-already-in-use":
+            setErrorText(
+              `This email is already associated with an existing account.`
+            );
             break;
-          case 'auth/invalid-email':
+          case "auth/invalid-email":
             setErrorText(`Email address is invalid.`);
             break;
-          case 'auth/operation-not-allowed':
+          case "auth/operation-not-allowed":
             setErrorText(`Error during sign up.`);
             break;
-          case 'auth/weak-password':
-            setErrorText('Password is not strong enough. Add additional characters including special characters and numbers.');
+          case "auth/weak-password":
+            setErrorText(
+              "Password is not strong enough. Add additional characters including special characters and numbers."
+            );
             break;
         }
       }
-
     },
   });
 
@@ -121,7 +141,7 @@ const SignupForm = ({ setAuth, setUser }) => {
           >
             <TextField
               fullWidth
-              label="First name"
+              label="Prénom"
               {...getFieldProps("firstName")}
               error={Boolean(touched.firstName && errors.firstName)}
               helperText={touched.firstName && errors.firstName}
@@ -129,7 +149,7 @@ const SignupForm = ({ setAuth, setUser }) => {
 
             <TextField
               fullWidth
-              label="Last name"
+              label="Nom"
               {...getFieldProps("lastName")}
               error={Boolean(touched.lastName && errors.lastName)}
               helperText={touched.lastName && errors.lastName}
@@ -146,7 +166,7 @@ const SignupForm = ({ setAuth, setUser }) => {
               fullWidth
               autoComplete="username"
               type="email"
-              label="Email address"
+              label="Email"
               {...getFieldProps("email")}
               error={Boolean(touched.email && errors.email)}
               helperText={touched.email && errors.email}
@@ -156,7 +176,7 @@ const SignupForm = ({ setAuth, setUser }) => {
               fullWidth
               autoComplete="current-password"
               type={showPassword ? "text" : "password"}
-              label="Password"
+              label="Mot de passe"
               {...getFieldProps("password")}
               InputProps={{
                 endAdornment: (
@@ -197,7 +217,7 @@ const SignupForm = ({ setAuth, setUser }) => {
               variant="contained"
               loading={isSubmitting}
             >
-              Sign up
+              S'inscrire
             </LoadingButton>
           </Box>
         </Stack>
