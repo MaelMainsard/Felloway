@@ -14,6 +14,7 @@ import EditIcon from '@mui/icons-material/Edit';
 import { getFirestore, collection, doc, getDoc, updateDoc, deleteDoc, query, where, getDocs } from 'firebase/firestore';
 import { getStorage, ref, uploadBytes, getDownloadURL, deleteObject } from 'firebase/storage';
 import { app } from '../config/Firebase';
+import ProfilHeader from "../components/profil-header";
 
 //////////////////////////////////////
 
@@ -71,14 +72,21 @@ const Profil = () => {
   return (
     <div className="h-screen flex flex-col justify-between">
       <TopNavBar/>
+
+      <ProfilHeader/>
+
+      
       <Container
         component="main"
         maxWidth="100%"
         sx={{
           display: "flex",
           flexDirection: "column",
-          height: "100vh",
+          minHeight: "100vh",
         }}>
+          
+        
+
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
           <h1>Profil</h1>
           <IconButton aria-label="delete"  >
@@ -93,7 +101,7 @@ const Profil = () => {
             <Badge
               overlap="circular"
               anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
-              badgeContent={
+              badgeContent={              
                 <label htmlFor="upload-file">
                   <IconButton aria-label="edit" component="span" sx={{ p: '4px' }}>
                     <EditIcon />
@@ -109,7 +117,7 @@ const Profil = () => {
               }
               sx={{ width: '50%', height: 'auto', margin: 'auto' }}
             >
-              <Avatar alt="User Avatar" src={image} sx={{ width: '100%', height: 'auto', borderRadius: '50%' }} />
+              <Avatar alt="User Avatar" src={image} sx={{ width: '100%', height: 'auto', borderRadius: '50%' }}/>
             </Badge>
           ) : (
             <Avatar alt="User Avatar" sx={{ width: '150px', height: '150px', margin: 'auto' }}>
@@ -117,7 +125,9 @@ const Profil = () => {
             </Avatar>
           )}
         </div>
-
+        <Carousel/>
+          <div style={{ marginTop: "auto", display: "flex", width: "100%" }}>
+          </div>
         <Carousel />
       </Container>
       <BottomNavBar/>
