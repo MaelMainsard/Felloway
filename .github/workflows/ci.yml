@@ -90,6 +90,9 @@ jobs:
           name: felloway-build-v${{ steps.get_version.outputs.PACKAGE_VERSION }}.zip
           path: ./
 
+      - name: Afficher le contenu du répertoire
+        run: ls ./
+        
       - name: Mis en ligne sur Firebase Hosting
         uses: FirebaseExtended/action-hosting-deploy@v0
         with:
