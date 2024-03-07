@@ -84,15 +84,16 @@ jobs:
         id: get_version
         run: echo "PACKAGE_VERSION=$(node -e "console.log(require('./package.json').version)")" >> $GITHUB_OUTPUT
 
+      - name : Creation d'un répertoire pour le deploy
+        run: mkdir dist
+
       - name: Téléchargement de la release
         uses: actions/download-artifact@v4
         with:
           name: felloway-build-v${{ steps.get_version.outputs.PACKAGE_VERSION }}.zip
-          path: ./
+          path: ./dist
 
-      - name: Afficher le contenu du répertoire
-        run: ls ./
-        
+
       - name: Mis en ligne sur Firebase Hosting
         uses: FirebaseExtended/action-hosting-deploy@v0
         with:
