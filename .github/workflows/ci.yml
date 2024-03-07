@@ -1,0 +1,50 @@
+name: CI pour l'application Felloway
+
+on:
+  push:
+    branches:
+      - deploy
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout du repository
+        uses: actions/checkout@v4
+
+      - name: Utilisation de Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+
+      - name: Installations des dépendances
+        run: npm install
+
+      - name: Récupération de la dernière version taguée
+        id: get_version
+        run: echo ::set-output name=VERSION::$(git describe --tags --abbrev=0)
+
+      - name: Extraction du numéro de version
+        id: extract_version
+        run: echo ::set-output name=BUILD_VERSION::${{ steps.get_version.outputs.VERSION }}
+
+      - name: Incrémentation du numéro de build
+        id: increment_build
+        run: echo ::set-output name=BUILD_NUMBER::$(node -e "const [prefix, major, minor, patch] = '${{ steps.extract_version.outputs.BUILD_VERSION }}'.match(/^([^-]+)-v(\d+)\.(\d+)\.(\d+)$/); console.log(prefix + '-v' + major + '.' + minor + '.' + (parseInt(patch) + 1));")
+
+      - name: Build du projet
+        run: npm run build
+
+      - name: Archivage des fichiers de build
+        uses: montudor/action-zip@v0.2
+        with:
+          args: zip -r felloway-build-${{ steps.increment_build.outputs.BUILD_NUMBER }}.zip dist
+
+      - name: Upload d'artéfacts
+        uses: actions/upload-artifact@v4
+        with: 
+          name: felloway-build-${{ steps.increment_build.outputs.BUILD_NUMBER }}
+          path: felloway-build-${{ steps.increment_build.outputs.BUILD_NUMBER }}.zip
+
+
