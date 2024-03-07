@@ -23,7 +23,7 @@ jobs:
 
       - name: Récupération du numéro de version depuis package.json
         id: get_version
-        run: echo ::set-output name=PACKAGE_VERSION::$(node -e "console.log(require('./package.json').version)")
+        run: echo "PACKAGE_VERSION=$(node -e "console.log(require('./package.json').version)")" >> $GITHUB_OUTPUT
 
 
       - name: Build du projet
