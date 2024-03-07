@@ -4,6 +4,7 @@ import FavoriteIcon from '@mui/icons-material/Favorite';
 import { useTheme } from '@mui/material';
 import { motion } from 'framer-motion';
 import { faker } from '@faker-js/faker';
+import { useSwipeable } from 'react-swipeable';
 
 export const MatchPage = () => {
     const theme = useTheme();
@@ -39,26 +40,34 @@ export const MatchPage = () => {
         }
     ]
 
+    const handlers = useSwipeable({
+        onSwipedLeft: () => swipe(false),
+        onSwipedRight: () => swipe(true),
+        swipeDuration: 500,
+        preventScrollOnSwipe: true,
+        trackMouse: true
+      });
+
 
 
 
     return(
-        <div className="h-full overflow-y-hidden flex flex-col items-center overflow-x-hidden">
-            <div className='my-5'>
-                <div style={{ backgroundColor: theme.palette.common.white}} className='w-80 h-96 absolute rounded-2xl shadow-[0px_3px_10px_7px_#4870621F]'></div>
-                <div style={{ backgroundColor: theme.palette.common.white}} className='w-80 h-96 absolute rotate-6 rounded-2xl shadow-[0px_3px_10px_7px_#4870621F]'></div>
-                {/* Lui il est utilisé pour afficher le prochain user */}
-                <div style={{ backgroundColor: theme.palette.common.white}} className='w-80 h-96 p-4 absolute  -rotate-3 rounded-2xl shadow-[0px_3px_10px_7px_#4870621F]'>
+        <div className="h-full w-full flex flex-col overflow-y-auto overflow-x-hidden relative justify-between mb-10">
+            <div className='mt-10 w-full flex justify-center'>
+                <div style={{ backgroundColor: theme.palette.common.white}} className='w-9/12 h-96 absolute rounded-2xl shadow-[0px_3px_10px_7px_#4870621F]'></div>
+                <div style={{ backgroundColor: theme.palette.common.white}} className='w-9/12 h-96 absolute rotate-6 rounded-2xl shadow-[0px_3px_10px_7px_#4870621F]'></div>
+                <div style={{ backgroundColor: theme.palette.common.white}} className='w-9/12 h-96 p-4 absolute  -rotate-3 rounded-2xl shadow-[0px_3px_10px_7px_#4870621F]'>
                     <img className='object-cover rounded-2xl h-full w-full' src={userTest[0].image}/>
                 </div>
-                {/* Et lui c'est celui qui va bouger à droite ou à gauche */}
+
                 <motion.div
                     initial={{ rotate: 0.5 }}
                     variants={variants}
                     animate={accept != null ? accept ? "accept" : "decline" : "normal"}
-                    transition={{ duration: 0.2}}
+                    transition={{ duration: 0.2}} 
+                    className='w-full flex justify-center'
                 >
-                    <div style={{ backgroundColor: theme.palette.common.white}} className='w-80 h-96 p-4  rounded-2xl shadow-[0px_3px_10px_7px_#4870621F]'>
+                    <div {...handlers} style={{ backgroundColor: theme.palette.common.white}} className='w-9/12 h-96 p-4  rounded-2xl shadow-[0px_3px_10px_7px_#4870621F]'>
                         <img className='object-cover rounded-2xl h-full w-full' src={userTest[0].image}/>
                     </div>
                 </motion.div>
