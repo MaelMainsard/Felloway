@@ -52,7 +52,7 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: felloway-build-v${{ steps.get_version.outputs.PACKAGE_VERSION }}.zip
-          path: felloway-build-v${{ steps.get_version.outputs.PACKAGE_VERSION }}.zip
+          path: ./
 
       - name: Creation de la release
         id: create_release
