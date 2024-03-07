@@ -56,7 +56,7 @@ jobs:
 
       - name: Creation de la release
         id: create_release
-        uses: actions/create-release@v1
+        uses: actions/create-release@v4
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
@@ -64,7 +64,7 @@ jobs:
           release_name: Felloway Realease v${{ steps.get_version.outputs.PACKAGE_VERSION }}
         
       - name: Upload de la release
-        uses: actions/upload-release-asset@v1
+        uses: actions/upload-release-asset@v4
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
