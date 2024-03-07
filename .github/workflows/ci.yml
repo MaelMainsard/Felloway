@@ -3,7 +3,7 @@ name: CI pour l'application Felloway
 on:
   push:
     branches:
-      - deploy
+      - prod
 
 jobs:
   build:
