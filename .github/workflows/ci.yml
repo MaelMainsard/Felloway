@@ -52,10 +52,10 @@ jobs:
       - name: Download de l'artificat
         uses: actions/download-artifact@v4
         with:
-          name: felloway-build-v${{ steps.get_version.outputs.PACKAGE_VERSION }}
-          path: felloway-build-v${{ steps.get_version.outputs.PACKAGE_VERSION }}.zip
+          name: felloway-build-v${{ steps.get_version.outputs.PACKAGE_VERSION }}.zip
+          path: ./
 
-      - name: Creatation de la release
+      - name: Creation de la release
         id: create_release
         uses: actions/create-release@v1
         env:
