@@ -10,7 +10,7 @@ const Chat = () => {
   const { group_id } = useSelector(state => state.chat);
   
   return (
-      <div className="h-screen flex flex-col">
+      <div className="h-screen w-full flex flex-col justify-between">
       <TopNavBar />
       {!group_id ?
         <ChatMenu />:

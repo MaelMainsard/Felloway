@@ -97,7 +97,7 @@ export const ChatMenu = () => {
     }, [dispatch, isLoaded]);
 
     return (
-        <div className="h-full"> 
+        <div className="h-full overflow-y-hidden"> 
             <div className="h-28 rounded-b-2xl shadow-[0px_6px_5px_0px_#00000024] flex items-center px-4 overflow-x-auto" style={{ backgroundColor: theme.palette.primary.main}}>
               <div className='flex items-center space-x-2 overflow-x-auto'>
                 {groups.filter(group => group.title.toLowerCase().includes(convFilter.toLowerCase())).map((group, index) =>
@@ -116,7 +116,7 @@ export const ChatMenu = () => {
                     <SearchIcon sx={{ fontSize: 30, color: theme.palette.primary.main }}/>
                 </IconButton>
             </div>
-            <div className='overflow-y-auto' style={{height: '50vh' }}>
+            <div className='overflow-y-auto h-full'>
             {!isLoaded ?
               Array.from({ length: 5 }).map((_, index) => (
                 <ChatMenuSkeletton key={index} />
