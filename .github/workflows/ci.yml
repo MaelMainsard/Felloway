@@ -62,7 +62,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           tag_name: v${{ steps.get_version.outputs.PACKAGE_VERSION }}
-          release_name: felloway-realease-v${{ steps.get_version.outputs.PACKAGE_VERSION }}
+          release_name: Felloway Realease v${{ steps.get_version.outputs.PACKAGE_VERSION }}
         
       - name: Upload de la release
         uses: actions/upload-release-asset@v1
@@ -71,7 +71,7 @@ jobs:
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
           asset_path: felloway-build-v${{ steps.get_version.outputs.PACKAGE_VERSION }}.zip
-          asset_name: felloway-realease-v${{ steps.get_version.outputs.PACKAGE_VERSION }}.zip
+          asset_name: felloway-build-v${{ steps.get_version.outputs.PACKAGE_VERSION }}.zip
           asset_content_type: application/zip
 
 
