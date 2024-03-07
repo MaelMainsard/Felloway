@@ -36,10 +36,8 @@ jobs:
       - name: Build du projet
         run: npm run build
 
-      - name: Archivage des fichiers de build
-        uses: montudor/action-zip@v0.2
-        with:
-          args: zip -r felloway-build-${{ steps.increment_build.outputs.BUILD_NUMBER }}.zip dist
+      - name : Archivage des fichiers de build
+        run: zip -r felloway-build-${{ steps.increment_build.outputs.BUILD_NUMBER }}.zip dist
 
       - name: Upload d'artéfacts
         uses: actions/upload-artifact@v4
