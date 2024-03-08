@@ -1,4 +1,4 @@
-name: CI pour l'application Felloway
+name: CI de prod pour l'application Felloway
 
 on:
   push:
