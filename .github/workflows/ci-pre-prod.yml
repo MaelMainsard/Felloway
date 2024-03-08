@@ -1,0 +1,36 @@
+name: CI de pre prod pour l'application Felloway
+
+on:
+  push:
+    branches:
+      - pre-prod
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout du repository
+        uses: actions/checkout@v4
+
+      - name: Utilisation de Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+
+      - name: Installations des dépendances
+        run: npm install
+
+      - name: Build du projet
+        run: npm run build
+
+      - name: Mis en ligne de la preprod sur Firebase Hosting
+        uses: FirebaseExtended/action-hosting-deploy@v0
+        with:
+          repoToken: '${{ secrets.GITHUB_TOKEN }}'
+          firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT_FELLOWAY_30160 }}'
+          channelId: preview
+          projectId: felloway-30160
+          folder: ./dist
+
+
+

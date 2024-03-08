@@ -69,7 +69,7 @@ export const DestinationPage = () => {
 
 
     return(
-        <div className="h-full flex flex-col items-center overflow-x-hidden px-6">
+        <div className="h-full flex flex-col items-center overflow-x-hidden overflow-y-auto px-6">
             <span className=" font-bold text-2xl" style={{ color: theme.palette.primary.main}}>Destinations</span>
 
             <FormControl fullWidth>
@@ -109,20 +109,24 @@ export const DestinationPage = () => {
                     ))}
                 </Select>
 
-                <div className='flex space-x-2 my-6 ml-2'>
-                    <span>Du</span>
-                    <div style={{backgroundColor: theme.palette.InputText}}>
-                        <span className=' shadow-md px-6 py-2 rounded-full' style={{color:theme.palette.text.dropdown}}>jj/mm/aaaa</span>
+                <div className='flex flex-wrap text-center space-x-2 space-y-4 my-6 justify-center'>
+                    <div className='flex items-center space-x-2 mt-4'>
+                        <span>Du</span>
+                        <div style={{backgroundColor: theme.palette.InputText}}>
+                            <span className=' shadow-md px-6 py-2 rounded-full' style={{color:theme.palette.text.dropdown}}>jj/mm/aaaa</span>
+                        </div>
                     </div>
-                    <span>au</span>
-                    <div style={{backgroundColor: theme.palette.InputText}}>
-                        <span className=' shadow-md px-6 py-2 rounded-full' style={{color:theme.palette.text.dropdown}}>jj/mm/aaaa</span>
+                    <div className='flex items-center space-x-2'>
+                        <span>au</span>
+                        <div style={{backgroundColor: theme.palette.InputText}}>
+                            <span className=' shadow-md px-6 py-2 rounded-full' style={{color:theme.palette.text.dropdown}}>jj/mm/aaaa</span>
+                        </div>
                     </div>
                 </div>
             </FormControl>
 
             <span className=" font-bold text-xl my-8" style={{ color: theme.palette.primary.main}}>Mood du voyage</span>
-            <div className='grid grid-cols-2 gap-6'>
+            <div className='flex flex-wrap gap-6 w-full justify-center'>
                 {moodArray.map((mood, index) => (
                     <div key={index} onClick={() => handleMoodClick(index)} 
                     className={`w-36 h-36 shadow-md rounded-xl relative flex justify-center items-center ${

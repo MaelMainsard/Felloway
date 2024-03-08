@@ -7,11 +7,11 @@ import { MatchPage } from "../components/MatchPage";
 const Home = () => {
 
   return (
-    <div className="h-screen flex flex-col">
+    <div className="h-screen w-full flex flex-col justify-between">
       <TopNavBar />
       <MatchPage/>
       <BottomNavBar />
-      </div>
+    </div>
   );
 };
 
