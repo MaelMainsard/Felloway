@@ -80,19 +80,16 @@ jobs:
       - name: Checkout du repository
         uses: actions/checkout@v4
 
-      - name: Récupération du numéro de version depuis package.json
-        id: get_version
-        run: echo "PACKAGE_VERSION=$(node -e "console.log(require('./package.json').version)")" >> $GITHUB_OUTPUT
-
-      - name : Creation d'un répertoire pour le deploy
-        run: mkdir dist
-
-      - name: Téléchargement de la release
-        uses: actions/download-artifact@v4
+      - name: Utilisation de Node.js
+        uses: actions/setup-node@v4
         with:
-          name: felloway-build-v${{ steps.get_version.outputs.PACKAGE_VERSION }}.zip
-          path: ./dist
+          node-version: '18'
 
+      - name: Installations des dépendances
+        run: npm install
+
+      - name: Build du projet
+        run: npm run build
 
       - name: Mis en ligne sur Firebase Hosting
         uses: FirebaseExtended/action-hosting-deploy@v0
