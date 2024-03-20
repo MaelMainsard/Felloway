@@ -30,7 +30,8 @@ function App() {
           "light": "rgba(248, 189, 102, 1)",
           "main": "rgba(247, 173, 65, 1)",
           "dark": "rgba(197, 138, 52, 1)",
-          "contrastText": "rgba(255, 255, 255, 1)"
+          "contrastText": "rgba(255, 255, 255, 1)",
+          "lightBlue": "#1998A5"
         },
         "error": {
           "light": "#e57373",
