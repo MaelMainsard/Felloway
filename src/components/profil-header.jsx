@@ -9,6 +9,11 @@ import { app } from '../config/Firebase';
 import { getLoggedUser } from '../config/util';
 import { FormikProvider, Form, Field, useFormik } from 'formik';
 import * as Yup from 'yup';
+import dayjs from 'dayjs';
+import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 
 
 const ProfilHeader = () => {
@@ -20,7 +25,6 @@ const ProfilHeader = () => {
 
   const [userinfos, setUserinfos] = useState({
     image: '',
-    age: '',
     location: '',
     preference: '',
     firstName: '',
@@ -32,6 +36,7 @@ const ProfilHeader = () => {
   const [editMode, setEditMode] = useState(false); // État pour suivre le mode d'édition
   const [image, setImage] = useState([]);
   const [uploading, setUploading] = useState(false);
+  const [dateBirthday, setDateBirthday] = useState(null);
   
 
   useEffect(() => {
@@ -45,11 +50,11 @@ const ProfilHeader = () => {
           setUserinfos(userData);
           const userAvatar = userData.avatar; // Récupération de l'avatar depuis les données de l'utilisateur
           setImage(userAvatar); // Mettre à jour l'état de l'avatar
+          setDateBirthday(userData.birthday ? dayjs(userData.birthday, 'DD/MM/YYYY') : null); // Définir dateBirthday
           formik.setValues({
             firstName: userData.firstName || '',
             lastName: userData.lastName || '',
             birthday: userData.birthday || '',
-            age: userData.age || '',
             location: userData.location || '',
             preference: userData.preference || '',
             description: userData.description || '',
@@ -87,12 +92,52 @@ const ProfilHeader = () => {
       // Gérer l'erreur d'upload
     }
   };
-  
+
+  const calculateAge = (birthday) => {
+    const birthDate = dayjs(birthday, 'DD/MM/YYYY');
+    const today = dayjs();
+    
+    let age = today.diff(birthDate, 'year');
+    
+    const birthDateThisYear = birthDate.set('year', today.year());
+    if (today.isBefore(birthDateThisYear)) {
+        age--;
+    }
+    return age;
+};
+
+
+  const DatepickerField = ({
+      field, 
+      form, 
+    }) => (
+      <LocalizationProvider dateAdapter={AdapterDayjs}>
+        <DemoContainer components={['DatePicker']}
+          sx={{ paddingTop: '0px', border: 'none', borderWidth:'0px' }}>
+          <DatePicker
+          value={dateBirthday}
+          format="DD/MM/YYYY"
+          onChange={(newValue) => setDateBirthday(newValue)}
+          sx={{
+            '& input': {
+              color: 'white', // Couleur du texte en blanc
+              padding: '0px', // Ajoutez le padding souhaité ici
+              border: 'none', // Supprime la bordure
+              outline: 'none', // Supprime également l'effet d'ombre
+              paddingTop: '0px', // Ajoutez le padding souhaité ici
+              width: '80px', // Largeur de l'élément
+              borderWidth: '0px', // Largeur de la bordure
+            },
+          }}      
+         />
+        </DemoContainer>
+      </LocalizationProvider>
+    );
+
   const initialValues = {
     firstName: userinfos.firstName || '',
     lastName: userinfos.lastName || '',
     birthday: userinfos.birthday || '',
-    age: userinfos.age || '',
     location: userinfos.location || '',
     preference: userinfos.preference || '',
     description: userinfos.description || '',
@@ -114,8 +159,7 @@ const ProfilHeader = () => {
         await updateDoc(userDocRef, {
           firstName: values.firstName,
           lastName: values.lastName,
-          birthday: values.birthday,
-          age: values.age,
+          birthday: dateBirthday ? dateBirthday.format('DD/MM/YYYY') : values.birthday,
           location: values.location,
           description: values.description
         });
@@ -124,8 +168,7 @@ const ProfilHeader = () => {
           ...userinfos,
           firstName: values.firstName,
           lastName: values.lastName,
-          birthday: values.birthday,
-          age: values.age,
+          birthday: dateBirthday ? dateBirthday.format('DD/MM/YYYY') : values.birthday,
           location: values.location,
           description: values.description
         });
@@ -150,7 +193,7 @@ const ProfilHeader = () => {
 
   return (
     <>
-      <div className={'rounded-b-2xl shadow-md p-1'} style={{ display: 'flex', justifyContent: 'space-between', backgroundColor: theme.palette.secondary.main, color: theme.palette.text.primary }}>
+      <div className={'rounded-b-2xl shadow-md p-1 w-full'} style={{ display: 'flex', justifyContent: 'space-between', backgroundColor: theme.palette.secondary.main, color: theme.palette.text.primary }}>
         {!editMode && (
           <>
             <div className='p-3' style={{ display: 'flex', alignItems: 'center' }}>
@@ -164,7 +207,7 @@ const ProfilHeader = () => {
               <div style={{ marginLeft: '20px' }}>
                 {/* Affichage des informations utilisateur */}
                 <p className="text-white font-bree font-bold">{userinfos.firstName} {userinfos.lastName}</p>
-                <p className="text-white font-bree ">{userinfos.age} ans</p>
+                <p className="text-white font-bree ">{calculateAge(userinfos.birthday)} ans</p>
                 <p className="text-white font-bree">{userinfos.location}</p>
                 <p className="text-white text-xs mt-1 font-montserrat font-light italic">"{userinfos.description}"</p>
                 {/* Ajoutez d'autres informations de profil selon vos besoins */}
@@ -224,15 +267,13 @@ const ProfilHeader = () => {
                     <label htmlFor="lastName" className='text-white' style={{ textAlign: 'right', marginBottom: '5px',  fontFamily: 'bree' }}>Nom :</label>
                     <label htmlFor="firstName" className='text-white' style={{ textAlign: 'right', marginBottom: '5px',  fontFamily: 'bree' }}>Prénom :</label>
                     <label htmlFor="birthday" className='text-white' style={{ textAlign: 'right', marginBottom: '5px',  fontFamily: 'bree' }}>Date de naissance :</label>
-                    <label htmlFor="age" className='text-white' style={{ textAlign: 'right', marginBottom: '5px',  fontFamily: 'bree' }}>Age :</label>
                     <label htmlFor="location" className='text-white' style={{ textAlign: 'right', marginBottom: '5px',  fontFamily: 'bree' }}>Ville :</label>
                     <label htmlFor="description" className='text-white' style={{ textAlign: 'right', marginBottom: '5px',  fontFamily: 'bree' }}>Description :</label>
                   </div>
                   <div style={{ display: 'flex', flexDirection: 'column' }}>
                     <Field type="text" id="lastName" name="lastName" style={{ marginBottom: '5px', backgroundColor: 'rgba(0, 0, 0, 0)', color: '#ffffff',  fontFamily: 'bree' }} />
                     <Field type="text" id="firstName" name="firstName" style={{ marginBottom: '5px', backgroundColor: 'rgba(0, 0, 0, 0)', color: '#ffffff',  fontFamily: 'bree' }} />
-                    <Field type="text" id="birthday" name="birthday" style={{ marginBottom: '5px', backgroundColor: 'rgba(0, 0, 0, 0)', color: '#ffffff',  fontFamily: 'bree' }} />
-                    <Field type="text" id="age" name="age" style={{ marginBottom: '5px', backgroundColor: 'rgba(0, 0, 0, 0)', color: '#ffffff',  fontFamily: 'bree' }} />
+                    <Field id="birthday" name="birthday" component={DatepickerField} style={{ marginBottom: '5px', backgroundColor: 'rgba(0, 0, 0, 0)', color: '#ffffff',  fontFamily: 'bree' }}/>
                     <Field type="text" id="location" name="location" style={{ marginBottom: '5px', backgroundColor: 'rgba(0, 0, 0, 0)', color: '#ffffff',  fontFamily: 'bree' }} />
                     <Field type="text" id="description" name="description" style={{ marginBottom: '5px', backgroundColor: 'rgba(0, 0, 0, 0)', color: '#ffffff',  fontFamily: 'bree' }} />
                   </div>
