@@ -30,7 +30,8 @@ function App() {
           "light": "rgba(248, 189, 102, 1)",
           "main": "rgba(247, 173, 65, 1)",
           "dark": "rgba(197, 138, 52, 1)",
-          "contrastText": "rgba(255, 255, 255, 1)"
+          "contrastText": "rgba(255, 255, 255, 1)",
+          "lightBlue": "#1998A5"
         },
         "error": {
           "light": "#e57373",
@@ -58,6 +59,17 @@ function App() {
           'close': "#F8AF42",
           'heart': "#FF6B86"
         }
+      },
+      components: {
+        MuiSvgIcon: {
+          styleOverrides: {
+            root: {
+              color: '#fff',
+              borderWidth: 0,
+              border: '0px solid',
+            }
+          }
+        },
       }
     }
   );
