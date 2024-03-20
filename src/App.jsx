@@ -58,6 +58,61 @@ function App() {
           'close': "#F8AF42",
           'heart': "#FF6B86"
         }
+      },
+      components: {
+        MuiInputBase: {
+          styleOverrides: {
+            root: {
+              color: '#fff',
+              borderWidth: 0,
+              border: '0px solid',
+              fontFamily: 'bree',
+            },
+            input: {
+              color: '#fff',
+              border: '0px solid',
+              fontFamily: 'bree',
+              margin: '0px',
+              padding: '0px',
+            },
+            outlined: {
+              color: '#fff',
+              border: '0px solid',
+              fontFamily: 'bree',
+            }
+          }
+        },MuiFormControl: {
+          styleOverrides: {
+            root: {
+              color: '#fff',
+              borderWidth: 0,
+              border: '0px solid',
+              fontFamily: 'bree',
+            }
+          }
+        },
+        MuiSvgIcon: {
+          styleOverrides: {
+            root: {
+              color: '#fff',
+              borderWidth: 0,
+              border: '0px solid',
+            }
+          }
+        },
+        MuiStack: {
+          styleOverrides: {
+            root: {
+              color: '#fff',
+              borderWidth: 0,
+              border: '0px solid',
+              margin: '0px',
+              padding: '0px',
+              paddingTop: '0px',
+              marginBottom: '5px',
+            }
+          }
+        },
       }
     }
   );
